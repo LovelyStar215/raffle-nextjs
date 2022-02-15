@@ -1,4 +1,4 @@
-# Blockchain raffle
+# Blockchain raffle (Next.js frontend)
 User interface (Next.js) for the blockchain raffle contracts (Solidity).
 
 Leveraging web3.js, currently only supports MetaMask.
