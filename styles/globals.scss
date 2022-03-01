@@ -30,6 +30,10 @@ header {
   }
 }
 
+.games {
+  background-color: rgb(67, 77, 27);
+}
+
 .container {
   width: 100%;
   padding: 1.25em;
@@ -57,6 +61,7 @@ h1, h2, h3 {
   cursor: pointer;
   font-weight: 700;
   font-size: 1em;
+  margin: 0 .5em;
   &:focus, &:hover {
     background-color: #ccc;
   }

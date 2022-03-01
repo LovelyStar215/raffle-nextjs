@@ -4,12 +4,13 @@ const Wallet = ({
 }) => {
 	return (
 		<header>
-			<div>Address: { address }</div>
+			{/* <div>Address: { address }</div> */}
+			<div>Wallet</div>
 			<div>
-				<button onClick={() => (connected ? () => {setAddress(null);setConnected(false)} : null)}>
+				<button onClick={() => (connected ? () => {setConnected(false)} : null)}>
 					{ connected ?
 						(
-							address.length > 10 ? address.slice(0,6) + '...' + address.slice(-4) : address
+							address.length > 10 ? address.slice(0,4) + '...' + address.slice(-4) : address
 						)
 						: 'Connect'
 					}
