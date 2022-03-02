@@ -1,6 +1,36 @@
 @import '../node_modules/reset-css/sass/reset';
 
+@function headings($from:1, $to:6) {
+  @if $from == $to {
+      @return 'h#{$from}';
+  } @else {
+      @return 'h#{$from},' + headings($from+1, $to);
+  }
+}
+
 $body-font: sans-serif;
+
+%root {
+  font-size: 1rem;
+}
+
+#{headings(1,6)} {
+  margin-bottom: .5em;
+}
+
+h4 {
+  font-size: 2em;
+}
+
+
+
+* {
+  box-sizing: border-box;
+}
+
+strong {
+  font-weight: 700;
+}
 
 html,
 body {
@@ -30,12 +60,53 @@ header {
   }
 }
 
+.tools {
+  background-color: #461b4d;
+}
+
 .games {
-  background-color: rgb(67, 77, 27);
+  background-color: #1b464d;
+  font-size: 0;
+  > .container {
+    @extend %root;
+    padding: 1em;
+  }
+  .game {
+    display: inline-block;
+    width: 50%;
+    padding: .5em;
+    > .container {
+      background-color: #000;
+      border-radius: 1em;
+      .items {
+        > div {
+          display: inline-block;
+          width: 50%;
+          margin-bottom: .75em;
+          > div > * {
+            display: block;
+            width: 100%;
+            padding: .25em;
+            text-align: center;
+          }
+        }
+        &.mirrored > div > div > * {
+          display: inline-block;
+          width: 50%;
+          text-align: right;
+          &:last-child {
+            text-align: left;
+          }
+        }
+      }
+    }
+  }
 }
 
 .container {
+  margin: 0 auto;
   width: 100%;
+  max-width: 1200px;
   padding: 1.25em;
 }
 

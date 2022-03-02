@@ -4,8 +4,7 @@ const Wallet = ({
 }) => {
 	return (
 		<header>
-			{/* <div>Address: { address }</div> */}
-			<div>Wallet</div>
+			<h3>Wallet</h3>
 			<div>
 				<button onClick={() => (connected ? () => {setConnected(false)} : null)}>
 					{ connected ?

@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import useDeepCompareEffect from 'use-deep-compare-effect'
 import Web3 from 'web3'
 
 import { gameABI, gameTokenABI, oracleABI } from '../features/configure/abi.js'
@@ -56,6 +57,58 @@ function MyApp({ Component, pageProps }) {
 
   const [games, setGames] = useState([])
 
+
+  // GET GAME STATE
+
+  const setGameState = (data) => {
+    console.log('setGameState');
+    console.log(data);
+    let _games = games;
+    _games[data.gameNumber] = Object.assign({}, data, _games[data.gameNumber] || {});
+    console.log('games');
+    console.log(_games);
+    setGames(_games);
+  }
+
+  const getGameState = async (web3, gameContract, games, gameNumber) => {
+    let results = await gameContract.methods.getGameState(gameNumber).call();
+    // console.log(results);
+    results.gameNumber = gameNumber;
+    setGameState(results);
+  }
+
+
+  // TESTING: START GAME
+
+  const startGame = async (web3, gameContract, games) => {
+    let results = await gameContract.methods.startGame(
+
+      // Token address
+      tokenAddress,
+
+      // Game fee address
+      feeAddress,
+
+      // Game fee percent
+      2,
+
+      // Ticket price
+      10,
+
+      // Max players
+      100,
+
+      // Max player tickets
+      1
+
+    ).send({from: srcAddress});
+
+    // setGameState(results);
+    getGameState(web3, gameContract, games, results.gameNumber);
+  }
+
+
+
   // Listen for connection
   useEffect(() => {
     let now = new Date().toLocaleString('en-us', { weekday:"long", year:"numeric", month:"short", day:"numeric", hour:"numeric", minute:"numeric", second:"numeric"});
@@ -84,7 +137,7 @@ function MyApp({ Component, pageProps }) {
 
   // Listen for game events
   useEffect(() => {
-    if (gameContract) {
+    if (connected && gameContract) {
       gameContract.events.GameStart({}, (error, data) => { //GameStarted
         console.log('EVENT: GameStarted');
         if (error) {
@@ -93,7 +146,7 @@ function MyApp({ Component, pageProps }) {
         } else {
           console.log(data);
           if (data.returnValues) {
-            setGameState(games, data.returnValues);
+            setGameState(data.returnValues);
           }
         }
       });
@@ -105,7 +158,7 @@ function MyApp({ Component, pageProps }) {
         } else {
           console.log(data);
           if (data.returnValues) {
-            setGameState(games, data.returnValues);
+            setGameState(data.returnValues);
           }
         }
       });
@@ -117,7 +170,7 @@ function MyApp({ Component, pageProps }) {
         } else {
           console.log(data);
           if (data.returnValues) {
-            setGameState(games, data.returnValues);
+            setGameState(data.returnValues);
           }
         }
       });
@@ -125,59 +178,18 @@ function MyApp({ Component, pageProps }) {
   }, [gameContract])
 
 
-  useEffect(async () => {
-    if (games.length == 0) {
-      // Get games
-      console.log('Get latest games');
-
-      this.getGameState(web3, gameContract, games, 0);
+  useDeepCompareEffect(() => {
+    if (connected && gameContract) {
+      if (games.length == 0) {
+        // Get games
+        console.log('Get latest games');
+  
+        getGameState(web3, gameContract, games, 0);
+      } else {
+        console.log('games changed');
+      }
     }
-
-    // Process games
-    console.log('Games changed');
-  }, [games])
-
-
-  // GET GAME STATE
-
-  let getGameState = async function(web3, gameContract, games, gameNumber) {
-    let results = await gameContract.methods.getGameState(gameNumber).call();
-    console.log(results);
-    // setGameState(games, results);
-    console.log('setGameState: ' + data.gameNumber);
-    games[data.gameNumber] = Object.assign({}, data, games[data.gameNumber] || {});
-    setGames(games);
-  }
-
-
-  // TESTING: START GAME
-
-  let startGame = async function(web3, gameContract) {
-    let results = await gameContract.methods.startGame(
-
-      // Token address
-      tokenAddress,
-
-      // Game fee address
-      feeAddress,
-
-      // Game fee percent
-      2,
-
-      // Ticket price
-      10,
-
-      // Max players
-      100,
-
-      // Max player tickets
-      1
-
-    ).send({from: srcAddress});
-
-    return { ...results };
-  }
-
+  }, [games]);
 
   return (
     <>
@@ -185,13 +197,16 @@ function MyApp({ Component, pageProps }) {
         address={address}
         connected={connected}
       />
+      <div className="tools">
+        <div className="container">
+          <h3>Dev</h3>
+          <button onClick={() => startGame(web3, gameContract)}>startGame</button>
+          <button onClick={() => getGameState(web3, gameContract, games, 0)}>getGameState (0)</button>
+        </div>
+      </div>
       <Games
         games={games}
       />
-      <div className="container">
-        <button onClick={() => this.startGame(web3, gameContract)}>startGame</button>
-        <button onClick={() => this.getGameState(web3, gameContract, games, 0)}>getGameState (0)</button>
-      </div>
       <div className="container">
         <Component {...pageProps} />
       </div>
