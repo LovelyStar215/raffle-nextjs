@@ -38,7 +38,7 @@ export const gameABI = [
         "type": "uint256"
       }
     ],
-    "name": "GameEnd",
+    "name": "GameEnded",
     "type": "event"
   },
   {
@@ -87,7 +87,7 @@ export const gameABI = [
         "type": "uint256"
       }
     ],
-    "name": "GameStart",
+    "name": "GameStarted",
     "type": "event"
   },
   {
@@ -112,7 +112,7 @@ export const gameABI = [
         "type": "uint256"
       }
     ],
-    "name": "GameTicket",
+    "name": "GameTicketBought",
     "type": "event"
   },
   {
@@ -676,7 +676,7 @@ export const gameABI = [
     "type": "function"
   }
 ];
-export const gameTokenABI = [
+export const ERC20TokenABI = [
   {
     "inputs": [
       {
