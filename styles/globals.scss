@@ -1,5 +1,11 @@
 @import '../node_modules/reset-css/sass/reset';
 
+@import url('https://rsms.me/inter/inter.css');
+$body-font: 'Inter', sans-serif;
+@supports (font-variation-settings: normal) {
+  $body-font: 'Inter var', sans-serif;
+}
+
 @function headings($from:1, $to:6) {
   @if $from == $to {
       @return 'h#{$from}';
@@ -8,7 +14,7 @@
   }
 }
 
-$body-font: sans-serif;
+// $body-font: sans-serif;
 
 %root {
   font-size: 1rem;
@@ -134,15 +140,50 @@ h1, h2, h3 {
   cursor: pointer;
   font-weight: 700;
   font-size: 1em;
+  font-family: $body-font;
   margin: 0 .5em;
   &:focus, &:hover {
     background-color: #ccc;
   }
 }
 
-button,
 .button {
   @extend %button;
+  display: inline-block;
+  > * {
+    display: inline-block;
+    background-color: transparent;
+    padding: 0;
+    border: 0;
+    font-size: 1em;
+    font-weight: 700;
+    font-family: $body-font;
+  }
+  input {
+    background-color: #fff;
+    padding: .25em;
+    border-width: 2px .25em;
+    border-style: solid;
+    border-color: #666;
+    &:focus, &:hover {
+      background-color: #ccc;
+    }
+  }
+}
+
+.buttons {
+  border-top: 2px solid #ccc;
+  padding-top: 1em;
+}
+
+div.button {
+  padding: 0;
+  > button {
+    padding: .75em .75em .75em 1em;
+  }
+  > input {
+    margin-right: 1em;
+  }
 }
 
 @media (max-width: 600px) {

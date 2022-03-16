@@ -49,9 +49,18 @@ const Games = ({
 					// });
 
 					const gameItems = Object.entries(game).map(([key, val]) => {
+
+						// Shorten address
 						if (key.substring((key.length - 7)) === 'Address') {
-							val = val > 10 ? val.slice(0,5) + '...' + val.slice(-4) : val;
+							// console.log(parseInt(val));
+							val = val.length > 10
+								? val.slice(0,5) + '...' + val.slice(-4)
+								: (parseInt(val) == 0
+									? '&ndash;'
+									: val
+								);
 						}
+							
 
 						return (
 							<div>
@@ -66,12 +75,14 @@ const Games = ({
 							<div className="container">
 								<h4>Game #{game.gameNumber}</h4>
 								<div className="items"><div>{gameItems}</div></div>
-								<div className="button">
-									<button onClick={() => {gameToken.methods.approve(gameAddress, approvalAmount).send({from: srcAddress})}}>Approve funds</button>
-									<button onClick={() => {buyTicket(gameContract, game.gameNumber, numberOfTickets)}}>Buy tickets</button>
-									<input defaultValue={game.maxTicketsPlayer} max={game.maxTicketsPlayer} min="1" onChange={event => {
-										numberOfTickets = event.target.value;
-									}} type="number" />
+								<div className="buttons">
+									<button className="button" onClick={() => {gameToken.methods.approve(gameAddress, approvalAmount).send({from: srcAddress})}}>Approve funds</button>
+									<div className="button">
+										<button onClick={() => {buyTicket(gameContract, game.gameNumber, numberOfTickets)}}>Buy tickets</button>
+										<input defaultValue={game.maxTicketsPlayer} size="3" max={game.maxTicketsPlayer} min="1" onChange={event => {
+											numberOfTickets = event.target.value;
+										}} type="number" />
+									</div>
 								</div>
 							</div>
 						</div>

@@ -265,10 +265,12 @@ function MyApp({ Component, pageProps }) {
       <div className="tools">
         <div className="container">
           <h3>Dev</h3>
-          <button onClick={() => sendFunds(tokenAddress, gameAddress, srcAddress, 1000)}>sendFunds (1000 LPT) (A0)</button>
-          <button onClick={() => startGame(web3, gameContract)}>startGame (A0)</button>
-          <button onClick={() => getGameState(web3, gameContract, games, gameId)}>getGameState</button>
-          <input defaultValue="0" onChange={event => setGameId(event.target.value)} type="number" />
+          <button className="button" onClick={() => sendFunds(tokenAddress, gameAddress, srcAddress, 1000)}>sendFunds (1000 LPT) (A0)</button>
+          <button className="button" onClick={() => startGame(web3, gameContract)}>startGame (A0)</button>
+          <div className="button">
+            <button onClick={() => getGameState(web3, gameContract, games, gameId)}>getGameState</button>
+            <input defaultValue="0" size="3" min="0" onChange={event => setGameId(event.target.value)} type="number" />
+          </div>
         </div>
       </div>
       <Games
