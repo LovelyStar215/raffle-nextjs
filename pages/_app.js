@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import useDeepCompareEffect from 'use-deep-compare-effect'
 import Web3 from 'web3'
 
-import { gameABI, ERC20TokenABI, oracleABI } from '../features/configure/abi.js'
+import { gameABI, ERC20TokenABI } from '../features/configure/abi.js'
 
 import '../styles/globals.scss'
 
@@ -12,39 +12,17 @@ import Games from '../components/games'
 
 // ENVIRONMENT
 
-const gameAddress = '0x02918a29f6a5d5BBd0a97C08B771d58083104B80';//process.env.ADDRESS_GAME || '0x6394e1342D2BAE843227C55F87D1131437F98873';
-const tokenAddress = '0xB215477DB33Da8CdfbC31A091FDb57b75985f0C2';//process.env.ADDRESS_TOKEN || '0x652Eac604B056D09d37Dd5ED16A984B2f0955f7F';
+const gameAddress = process.env.ADDRESS_GAME;
+const tokenAddress = process.env.ADDRESS_TOKEN;
 
-
-const srcAddress = '0xb1aBDb990F253FB59839A7481dDa107B541C1F7b'; //A0
-const feeAddress = '0xD164eA889594Bdbf91E3929AeBBf84357EF11bAB'; //A1
+const srcAddress = process.env.TESTA0_ADDRESS;
+const feeAddress = process.env.TESTA1_ADDRESS;
 
 const chain = process.env.CHAIN || 'local';
 
 const chainRpcs = {
   local: 'http://192.168.2.10:7545/',
 };
-
-// GET GAME STATE
-
-// async function getWeb3GameState(web3, gameContract, games, gameNumber) {
-//   let results = await gameContract.methods.getGameState(gameNumber).call();
-//   console.log(results);
-//   // setGameState(games, results);
-//   console.log('setGameState: ' + data.gameNumber);
-//   games[data.gameNumber] = Object.assign({}, data, games[data.gameNumber] || {});
-//   setGames(games);
-// }
-
-// SET GAME STATE
-
-// function setGameState(games, data) {
-//   // let game = games[data.gameNumber] || {};
-//   // if (games.indexOf(data.gameNumber))
-//   console.log('setGameState: ' + data.gameNumber);
-//   games[data.gameNumber] = Object.assign({}, data, games[data.gameNumber] || {});
-//   setGames(games);
-// }
 
 // APP
 
