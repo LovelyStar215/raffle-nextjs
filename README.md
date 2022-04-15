@@ -15,4 +15,4 @@ Run `npm run dev` then visit http://localhost:3200/
 A Docker solution for hot-reloading issues on WSL
 ```
 docker-compose up
-```c
+```
