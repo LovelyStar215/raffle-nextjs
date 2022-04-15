@@ -1,22 +1,22 @@
-import React, {useState, useEffect} from 'react';
-import useDeepCompareEffect from 'use-deep-compare-effect'
+import React, { useState, useEffect, useRef } from 'react';
+// import useDeepCompareEffect from 'use-deep-compare-effect'
 import Web3 from 'web3'
+// import { BN } from 'bn.js';
 
-import { gameABI, ERC20TokenABI } from '../features/configure/abi.js'
+import { gameABI, ERC20TokenABI, oracleABI } from '../features/configure/abi.js'
 
 import '../styles/globals.scss'
 
 import Wallet from '../components/wallet'
 // import Banner from '../components/banner'
-import Games from '../components/games'
+import GamesList from '../components/gamesList'
 
 // ENVIRONMENT
+const gameAddress = '0x76aAfB8d7F9b64d53a5e42019b68E3E0Ce81aBBB';//process.env.GAME_ADDRESS || null;
+const tokenAddress = '0xEb250E898c3BC66588DbB635f99d2503e041eC8f';//process.env.TOKEN_ADDRESS || null;
+const feeAddress = '0xD164eA889594Bdbf91E3929AeBBf84357EF11bAB';//process.env.TESTA1_ADDRESS || null; //A1
 
-const gameAddress = process.env.ADDRESS_GAME;
-const tokenAddress = process.env.ADDRESS_TOKEN;
-
-const srcAddress = process.env.TESTA0_ADDRESS;
-const feeAddress = process.env.TESTA1_ADDRESS;
+console.log(process.env);
 
 const chain = process.env.CHAIN || 'local';
 
@@ -24,19 +24,80 @@ const chainRpcs = {
   local: 'http://192.168.2.10:7545/',
 };
 
+const LOCAL_STORAGE_KEY = process.env.LOCAL_STORAGE_KEY;
+
 // APP
 
 function MyApp({ Component, pageProps }) {
   const [web3, setWeb3] = useState(null)
-  const [address, setAddress] = useState(null)
-  const [connected, setConnected] = useState(null)
+  const [activeAddress, setAddress] = useState(null)
+  // const [addresses, setAddresses] = useState(null)
+  const [connected, setConnected] = useState(false)
 
   const [gameContract, setGameContract] = useState(null)
 
   const [games, setGames] = useState([])
 
-  const [gameId, setGameId] = useState(0)
+  const gameId = useRef();
 
+  const sendFundsFrom = useRef();
+  const sendFundsTo = useRef();
+  const sendFundsAmount = useRef();
+
+	useEffect(() => {
+		console.log('Loaded from local storage');
+		const storedGames = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY));
+    console.log(storedGames);
+		if (storedGames)
+			setGames(storedGames);
+	}, [])
+
+	useEffect(() => {
+		console.log('Games changed');
+		console.log(games);
+		const storedGames = JSON.stringify(games);
+		localStorage.setItem(LOCAL_STORAGE_KEY, storedGames);
+	}, [games])
+
+
+  const disconnect = () => {
+    console.log('disconnect()');
+    setAddress(null)
+    setWeb3(null)
+    setGameContract(null)
+    setConnected(false)
+  };
+
+
+  const connect = () => {
+    console.log('connect()');
+    let now = new Date().toLocaleString('en-us', { weekday:"long", year:"numeric", month:"short", day:"numeric", hour:"numeric", minute:"numeric", second:"numeric"});
+    window.ethereum ?
+      ethereum.request({ method: "eth_requestAccounts" }).then((accounts) => {
+        console.log(accounts);
+        // setAddresses(accounts)
+        setAddress(accounts[0])
+        setConnected(true)
+        let w3 = new Web3(ethereum)
+        w3.eth.defaultAccount = accounts[0];
+        setWeb3(w3)
+        // setGameContract(new w3.eth.Contract(
+        //   gameABI,
+        //   gameAddress
+        // ))
+        console.log(now +  ': Connected');
+
+        ethereum.on('accountsChanged', (accounts) => {
+          console.log(now +  ': Changed');
+          if (accounts.length)
+            setAddress(accounts[0])
+          else
+            setAddress(null)
+        })
+      })
+      .catch((err) => console.log(err))
+      : console.log(now +  ": Please install MetaMask")
+  };
 
   // GET GAME STATE
 
@@ -44,8 +105,12 @@ function MyApp({ Component, pageProps }) {
     // console.log('setGameState');
     console.log(JSON.stringify(data));
     let _games = games;
-    _games[data.gameNumber] = Object.assign({}, data, _games[data.gameNumber] || {});
-    // console.log('setGameState-new');
+    const currGame = _games[data.gameNumber];
+    const newGame = { ...currGame, ...data };
+    // console.log('setGameState-newGame');
+    // console.log(newGame);
+    _games[data.gameNumber] = newGame;
+    // console.log('setGameState-newGames');
     // console.log(_games);
     setGames([..._games]);
   }
@@ -81,9 +146,14 @@ function MyApp({ Component, pageProps }) {
 
   const sendFunds = async (_tokenAddress, _fromAddress, _toAddress, _amount) => {
     let tokenContract = new web3.eth.Contract(ERC20TokenABI, _tokenAddress);
+
+    let decimals = web3.utils.toBN(18);
+    // let decimals = await tokenContract.methods.decimals().call();
+    // console.log(decimals);
+    let value = web3.utils.toBN(_amount).mul(web3.utils.toBN(10).pow(decimals));
     
-    await tokenContract.methods.approve(_fromAddress, _amount).send({from: srcAddress});
-    // await tokenContract.methods.approve(srcAddress, _amount).send({from: srcAddress});
+    await tokenContract.methods.approve(_fromAddress, value).send({from: activeAddress});
+    // await tokenContract.methods.approve(srcAddress, value).send({from: srcAddress});
 
     let results = await tokenContract.methods.transferFrom(
 
@@ -94,39 +164,53 @@ function MyApp({ Component, pageProps }) {
       _toAddress,
 
       // Amount
-      1000
+      value
 
-    ).send({from: srcAddress});
+    ).send({from: activeAddress});
   }
 
 
-  const startGame = async (web3, gameContract, games) => {
-    let results = await gameContract.methods.startGame(
+  const startGame = async (gameContract) => {
+    if (!gameContract || !activeAddress) {
+      console.log('Not ready');
+    } else {
+      let results = await gameContract.methods.startGame(
 
-      // Token address
-      tokenAddress,
+        // Token address
+        tokenAddress,
+  
+        // Game fee address
+        feeAddress,
+  
+        // Game fee percent
+        2,
+  
+        // Ticket price
+        1,
+  
+        // Max players
+        10000,
+  
+        // Max player tickets
+        100
+  
+      ).send({from: activeAddress});
+  
+      // setGameState(results);
+      // console.log('startGame');
+      // console.log(results.gameNumber);
+      // getGameState(web3, gameContract, games, results.gameNumber);
+    }
+  }
 
-      // Game fee address
-      feeAddress,
 
-      // Game fee percent
-      2,
+  const endGame = async (_gameContract, _gameNumber) => {
+    await _gameContract.methods.endGame(
 
-      // Ticket price
-      1,
+      // Game number
+      _gameNumber
 
-      // Max players
-      10000,
-
-      // Max player tickets
-      100
-
-    ).send({from: srcAddress});
-
-    // setGameState(results);
-    // console.log('startGame');
-    // console.log(results.gameNumber);
-    // getGameState(web3, gameContract, games, results.gameNumber);
+    ).send({from: activeAddress});
   }
 
 
@@ -143,42 +227,62 @@ function MyApp({ Component, pageProps }) {
       // Number of tickets to buy
       _numberOfTickets
 
-    ).send({from: srcAddress});
+    ).send({from: activeAddress});
     console.log(results);
   }
 
 
 
   // Listen for connection
+  // useEffect(() => {
+  //   let now = new Date().toLocaleString('en-us', { weekday:"long", year:"numeric", month:"short", day:"numeric", hour:"numeric", minute:"numeric", second:"numeric"});
+  //   if (!connected) {
+  //     window.ethereum ?
+  //     ethereum.request({ method: "eth_requestAccounts" }).then((accounts) => {
+  //       setAddress(accounts[0])
+  //       setConnected('1')
+  //       let w3 = new Web3(ethereum)
+  //       w3.eth.defaultAccount = accounts[0];
+  //       setWeb3(w3)
+  //       setGameContract(new w3.eth.Contract(
+  //         gameABI,
+  //         gameAddress
+  //       ))
+  //       console.log(now +  ': Connected');
+  //     }).catch((err) => console.log(err))
+  //     : console.log(now +  ": Please install MetaMask")
+  //   } else {
+  //     // Disconnect
+  //     console.log(now +  ': Disconnect');
+  //   }
+  // }, [connected])
   useEffect(() => {
-    let now = new Date().toLocaleString('en-us', { weekday:"long", year:"numeric", month:"short", day:"numeric", hour:"numeric", minute:"numeric", second:"numeric"});
-    if (!connected) {
-      window.ethereum ?
-      ethereum.request({ method: "eth_requestAccounts" }).then((accounts) => {
-        setAddress(accounts[0])
-        setConnected('1')
-        let w3 = new Web3(ethereum)
-        w3.eth.defaultAccount = accounts[0];
-        setWeb3(w3)
-        setGameContract(new w3.eth.Contract(
-          gameABI,
-          gameAddress
-        ))
-        console.log(now +  ': Connected');
-      }).catch((err) => console.log(err))
-      : console.log(now +  ": Please install MetaMask")
-    } else {
-      // Disconnect
-      console.log(now +  ': Disconnect');
+    if (web3) {
+      setGameContract(new web3.eth.Contract(
+        gameABI,
+        gameAddress
+      ))
     }
-  }, [connected])
+  }, [web3])
+
+
+
+  // useEffect(() => {
+  //   let now = new Date().toLocaleString('en-us', { weekday:"long", year:"numeric", month:"short", day:"numeric", hour:"numeric", minute:"numeric", second:"numeric"});
+  //   console.log(now +  ': Disconnect');
+  // }, [web3])
+
+
+
+
+  
 
 
 
   // Listen for game events
   useEffect(() => {
-    if (connected && gameContract) {
-      gameContract.events.GameStarted({}, (error, data) => { //GameStarted
+    if (web3 && gameContract) {
+      gameContract.events.GameStarted({}, (error, data) => {
         console.log('EVENT: GameStarted');
         if (error) {
           console.error(error.message);
@@ -191,7 +295,7 @@ function MyApp({ Component, pageProps }) {
           }
         }
       });
-      gameContract.events.GameEnded({}, (error, data) => { //GameEnded
+      gameContract.events.GameEnded({}, (error, data) => {
         console.log('EVENT: GameEnded');
         if (error) {
           console.error(error.message);
@@ -204,8 +308,8 @@ function MyApp({ Component, pageProps }) {
           }
         }
       });
-      gameContract.events.GameTicketBought({}, (error, data) => { //GameTicketBought
-        console.log('EVENT: GameTicketBought');
+      gameContract.events.TicketBought({}, (error, data) => {
+        console.log('EVENT: TicketBought');
         if (error) {
           console.error(error.message);
 
@@ -221,44 +325,80 @@ function MyApp({ Component, pageProps }) {
   }, [gameContract])
 
 
-  useDeepCompareEffect(() => {
-    if (connected && gameContract) {
-      if (games.length == 0) {
-        // Get games
-        console.log('Get latest games');
+  // useDeepCompareEffect(() => {
+  //   if (web3 && gameContract) {
+  //     if (games.length == 0) {
+  //       // Get games
+  //       console.log('Get latest games');
   
-        getGameState(web3, gameContract, games, 0);
-      } else {
-        console.log('games changed');
-      }
-    }
-  }, [games]);
+  //       getGameState(web3, gameContract, games, 0);
+  //     } else {
+  //       console.log('games changed');
+  //     }
+  //   }
+  // }, [games]);
 
   return (
     <>
-      <Wallet
-        address={address}
-        connected={connected}
-      />
+      <header>
+        <h3>Wallet</h3>
+        <div>
+          <button className="button" onClick={() => (connected ? disconnect() : connect())}>
+            { connected
+              ? activeAddress.length > 10 ? activeAddress.slice(0,4) + '...' + activeAddress.slice(-4) : activeAddress
+              : 'Connect'
+            }
+          </button>
+        </div>
+      </header>
       <div className="tools">
         <div className="container">
           <h3>Dev</h3>
-          <button className="button" onClick={() => sendFunds(tokenAddress, gameAddress, srcAddress, 1000)}>sendFunds (1000 LPT) (A0)</button>
-          <button className="button" onClick={() => startGame(web3, gameContract)}>startGame (A0)</button>
+          {/* <button className="button" onClick={() => sendFunds(tokenAddress, activeAddress, '0x53725f4B897217C460Cb0E388f1E3d1c868702fb', 1000)}>sendFunds (1000 LPT) (A0)</button> */}
           <div className="button">
-            <button onClick={() => getGameState(web3, gameContract, games, gameId)}>getGameState</button>
-            <input defaultValue="0" size="3" min="0" onChange={event => setGameId(event.target.value)} type="number" />
+            <button onClick={() => sendFunds(tokenAddress, sendFundsFrom.current.value, sendFundsTo.current.value, sendFundsAmount.current.value)}>sendFunds (LPT)</button>
+            <input
+              ref={sendFundsFrom}
+              defaultValue={activeAddress}
+              placeholder="From"
+              size="8"
+              type="text"
+            />
+            <input
+              ref={sendFundsTo}
+              defaultValue={gameAddress}
+              placeholder="To"
+              size="8"
+              type="text"
+            />
+            <input
+              ref={sendFundsAmount}
+              defaultValue="1000"
+              size="4"
+              min="0"
+              type="number"
+            />
+          </div>
+          <button className="button" onClick={() => startGame(gameContract)}>startGame (A0)</button>
+          <div className="button">
+            <button onClick={() => endGame(gameContract, gameId.current.value)}>endGame (A0)</button>
+            <input ref={gameId} defaultValue="0" size="2" min="0" type="number" />
+          </div>
+          <div className="button">
+            <button onClick={() => getGameState(web3, gameContract, games, gameId.current.value)}>getGameState</button>
+            <input ref={gameId} defaultValue="0" size="2" min="0" type="number" />
           </div>
         </div>
       </div>
-      <Games
+      <GamesList
         games={games}
         web3={web3}
         ERC20TokenABI={ERC20TokenABI}
         gameAddress={gameAddress}
         gameContract={gameContract}
-        srcAddress={srcAddress}
+        activeAddress={activeAddress}
         buyTicket={buyTicket}
+        setGames={setGames}
       />
       <div className="container">
         <Component {...pageProps} />

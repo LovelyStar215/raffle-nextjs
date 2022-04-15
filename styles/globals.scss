@@ -141,7 +141,7 @@ h1, h2, h3 {
   font-weight: 700;
   font-size: 1em;
   font-family: $body-font;
-  margin: 0 .5em;
+  margin: .5em;
   &:focus, &:hover {
     background-color: #ccc;
   }
@@ -162,7 +162,7 @@ h1, h2, h3 {
   input {
     background-color: #fff;
     padding: .25em;
-    border-width: 2px .25em;
+    border-width: 2px;
     border-style: solid;
     border-color: #666;
     &:focus, &:hover {

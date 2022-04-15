@@ -6,7 +6,7 @@ const Wallet = ({
     <header>
       <h3>Wallet</h3>
       <div>
-        <button className="button" onClick={() => (connected ? () => {setConnected(false)} : null)}>
+        <button onClick={() => (connected ? () => {setConnected(false)} : null)}>
           { connected ?
             (
               address.length > 10 ? address.slice(0,4) + '...' + address.slice(-4) : address

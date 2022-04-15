@@ -95,31 +95,6 @@ export const gameABI = [
     "inputs": [
       {
         "indexed": true,
-        "internalType": "address",
-        "name": "playerAddress",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "gameNumber",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "numberOfTickets",
-        "type": "uint256"
-      }
-    ],
-    "name": "GameTicketBought",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
         "internalType": "bytes32",
         "name": "role",
         "type": "bytes32"
@@ -188,6 +163,37 @@ export const gameABI = [
       }
     ],
     "name": "RoleRevoked",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "playerAddress",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "gameNumber",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "playerCount",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "ticketCount",
+        "type": "uint256"
+      }
+    ],
+    "name": "TicketBought",
     "type": "event"
   },
   {
@@ -1224,36 +1230,36 @@ export const ERC20TokenABI = [
   }
 ];
 export const oracleABI = [
-    {
-      "inputs": [],
-      "stateMutability": "nonpayable",
-      "type": "constructor"
-    },
-    {
-      "inputs": [],
-      "name": "rand",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function",
-      "constant": true
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "uint256",
-          "name": "_rand",
-          "type": "uint256"
-        }
-      ],
-      "name": "feedRandomness",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    }
+  {
+    "inputs": [],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
+    "inputs": [],
+    "name": "rand",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function",
+    "constant": true
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_rand",
+        "type": "uint256"
+      }
+    ],
+    "name": "feedRandomness",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }
 ];
