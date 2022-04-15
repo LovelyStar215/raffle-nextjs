@@ -2,12 +2,13 @@
   "name": "caedmons-game-front",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -p 3200",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
+    "bn.js": "^5.2.0",
     "eth-multicall": "^1.4.0",
     "next": "12.0.10",
     "react": "17.0.2",

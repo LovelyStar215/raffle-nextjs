@@ -9,10 +9,10 @@ Leveraging web3.js, currently only supports MetaMask.
 https://github.com/AlexanderGW/raffle-contracts
 
 ## Development
-Run `npm run dev` then visit http://localhost:3000/
+Run `npm run dev` then visit http://localhost:3200/
 
 ### Windows
 A Docker solution for hot-reloading issues on WSL
 ```
 docker-compose up
-```
+```c
