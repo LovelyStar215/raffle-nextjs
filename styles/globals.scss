@@ -84,6 +84,24 @@ header {
     > .container {
       background-color: #000;
       border-radius: 1em;
+      .result {
+        margin: 0 auto .75em;
+        width: 75%;
+        border-radius: 1em;
+        padding: .5em 0;
+        background-color: #2c9d39;
+        &.active {
+          background-color: #2c399d;
+        }
+        > div {
+          font-size: 1.125em;
+          line-height: 1.5;
+          > div {
+            display: inline-block;
+            padding: 0 .5em;
+          }
+        }
+      }
       .items {
         > div {
           > div {

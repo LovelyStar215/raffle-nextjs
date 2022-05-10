@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import Web3 from 'web3'
 // import { BN } from 'bn.js';
 
-import { gameABI, ERC20TokenABI, oracleABI } from '../features/configure/abi.js'
+import { gameABI, IERC20MetadataABI, oracleABI } from '../features/configure/abi.js'
 
 import '../styles/globals.scss'
 
@@ -12,17 +12,21 @@ import Wallet from '../components/wallet'
 import GamesList from '../components/gamesList'
 
 // ENVIRONMENT
-const gameAddress = '0x76aAfB8d7F9b64d53a5e42019b68E3E0Ce81aBBB';//process.env.GAME_ADDRESS || null;
-const tokenAddress = '0xEb250E898c3BC66588DbB635f99d2503e041eC8f';//process.env.TOKEN_ADDRESS || null;
-const feeAddress = '0xD164eA889594Bdbf91E3929AeBBf84357EF11bAB';//process.env.TESTA1_ADDRESS || null; //A1
+const gameAddress = '0xA25Ba3b605a5Cf91490E435A4e692c7EbA7Ab52a';//process.env.GAME_ADDRESS || null;
+const tokenAddress = '0x8551Fa6d7d0d5fB1eDf7CB51Fbc4cDe54dc27528';//process.env.TOKEN_ADDRESS || null;
+const feeAddress = '0x16318951352A701DaB6C5B30DA64f8f8c1b3de70';//process.env.TESTA1_ADDRESS || null; //A1
 
-console.log(process.env);
 
 const chain = process.env.CHAIN || 'local';
 
 const chainRpcs = {
-  local: 'http://192.168.2.10:7545/',
+  local: 'http://192.168.2.3:7545/',
 };
+
+
+
+console.log(process.env);
+
 
 const LOCAL_STORAGE_KEY = process.env.LOCAL_STORAGE_KEY;
 
@@ -38,7 +42,8 @@ function MyApp({ Component, pageProps }) {
 
   const [games, setGames] = useState([])
 
-  const gameId = useRef();
+  const endGameId = useRef();
+  const getGameStateId = useRef();
 
   const sendFundsFrom = useRef();
   const sendFundsTo = useRef();
@@ -81,14 +86,10 @@ function MyApp({ Component, pageProps }) {
         let w3 = new Web3(ethereum)
         w3.eth.defaultAccount = accounts[0];
         setWeb3(w3)
-        // setGameContract(new w3.eth.Contract(
-        //   gameABI,
-        //   gameAddress
-        // ))
-        console.log(now +  ': Connected');
+        console.log(now + ': Connected');
 
         ethereum.on('accountsChanged', (accounts) => {
-          console.log(now +  ': Changed');
+          console.log(now + ': Changed');
           if (accounts.length)
             setAddress(accounts[0])
           else
@@ -96,7 +97,7 @@ function MyApp({ Component, pageProps }) {
         })
       })
       .catch((err) => console.log(err))
-      : console.log(now +  ": Please install MetaMask")
+      : console.log(now + ": Please install MetaMask")
   };
 
   // GET GAME STATE
@@ -110,8 +111,8 @@ function MyApp({ Component, pageProps }) {
     // console.log('setGameState-newGame');
     // console.log(newGame);
     _games[data.gameNumber] = newGame;
-    // console.log('setGameState-newGames');
-    // console.log(_games);
+    console.log('setGameState-newGames');
+    console.log(_games);
     setGames([..._games]);
   }
 
@@ -121,6 +122,8 @@ function MyApp({ Component, pageProps }) {
     console.log(results);
     if (results) {
       // let keys = Object.keys(results);
+
+      // Clear out indexed array entries
       let len = Object.keys(results).length/2;
       let items = Object.keys(results).slice(len).reduce((result, key) => {
         // console.log('key: ' + key);
@@ -128,32 +131,57 @@ function MyApp({ Component, pageProps }) {
         if (typeof val === 'boolean') {
           val = val ? 'true' : 'false';
         }
-        // if (key.substring((key.length - 7)) === 'Address' && val.length > 10) {
-        //   val = val.slice(0,4) + '...' + val.slice(-4);
-        // }
 
-        result[key] = val;
+        if (key === 'winnerResult') {
+          console.log(val);
+          result['_winnerResult'] = val;
+        } else {
+          result[key] = val;
+        }
 
         return result;
       }, {});
-      items.gameNumber = gameNumber;
+      items.gameNumber = gameNumber.toString();
+
+      let gameToken = new web3.eth.Contract(IERC20MetadataABI, items.tokenAddress);
+      
+      const  result = await gameToken.methods.name().call();
+      console.log('name: ' + result);
+      if (result) {
+        items._name = result;
+      }
+      
+      result = await gameToken.methods.symbol().call();
+      console.log('symbol: ' + result);
+      if (result) {
+        items._symbol = result;
+      }
+
+      result = await gameToken.methods.decimals().call();
+      console.log('decimals: ' + result);
+      if (result) {
+        items._decimals = result;
+      }
+
+      console.log(items);
+      console.log('setGameData call');
       setGameState(items);
     }
   }
 
 
-  // TESTING: SEND LPT FUNDS
+
+
+
+  // TESTING: SEND CGT FUNDS
 
   const sendFunds = async (_tokenAddress, _fromAddress, _toAddress, _amount) => {
-    let tokenContract = new web3.eth.Contract(ERC20TokenABI, _tokenAddress);
-
-    let decimals = web3.utils.toBN(18);
-    // let decimals = await tokenContract.methods.decimals().call();
-    // console.log(decimals);
-    let value = web3.utils.toBN(_amount).mul(web3.utils.toBN(10).pow(decimals));
+    const decimals = web3.utils.toBN(18);
+    let tokenContract = new web3.eth.Contract(IERC20MetadataABI, _tokenAddress);
+    let _value = web3.utils.toBN(_amount).mul(web3.utils.toBN(10).pow(decimals));
     
-    await tokenContract.methods.approve(_fromAddress, value).send({from: activeAddress});
-    // await tokenContract.methods.approve(srcAddress, value).send({from: srcAddress});
+    await tokenContract.methods.approve(_fromAddress, _value).send({from: activeAddress});
+    // await tokenContract.methods.approve(srcAddress, _value).send({from: srcAddress});
 
     let results = await tokenContract.methods.transferFrom(
 
@@ -164,7 +192,7 @@ function MyApp({ Component, pageProps }) {
       _toAddress,
 
       // Amount
-      value
+      _value
 
     ).send({from: activeAddress});
   }
@@ -174,6 +202,12 @@ function MyApp({ Component, pageProps }) {
     if (!gameContract || !activeAddress) {
       console.log('Not ready');
     } else {
+      const decimals = web3.utils.toBN(18);
+      let feePercent = web3.utils.toBN(1);//web3.utils.toBN(2).mul(web3.utils.toBN(10).pow(decimals));
+      let ticketPrice = web3.utils.toBN(100000000000000000); // 0.1
+      let maxPlayers = web3.utils.toBN(100000);
+      let maxTicketsPlayer = web3.utils.toBN(20);
+
       let results = await gameContract.methods.startGame(
 
         // Token address
@@ -183,34 +217,30 @@ function MyApp({ Component, pageProps }) {
         feeAddress,
   
         // Game fee percent
-        2,
+        feePercent,
   
         // Ticket price
-        1,
+        ticketPrice,
   
         // Max players
-        10000,
+        maxPlayers,
   
         // Max player tickets
-        100
+        maxTicketsPlayer
   
       ).send({from: activeAddress});
-  
-      // setGameState(results);
-      // console.log('startGame');
-      // console.log(results.gameNumber);
-      // getGameState(web3, gameContract, games, results.gameNumber);
     }
   }
 
 
   const endGame = async (_gameContract, _gameNumber) => {
-    await _gameContract.methods.endGame(
+    let results = await _gameContract.methods.endGame(
 
       // Game number
       _gameNumber
 
     ).send({from: activeAddress});
+    console.log(results);
   }
 
 
@@ -234,28 +264,6 @@ function MyApp({ Component, pageProps }) {
 
 
   // Listen for connection
-  // useEffect(() => {
-  //   let now = new Date().toLocaleString('en-us', { weekday:"long", year:"numeric", month:"short", day:"numeric", hour:"numeric", minute:"numeric", second:"numeric"});
-  //   if (!connected) {
-  //     window.ethereum ?
-  //     ethereum.request({ method: "eth_requestAccounts" }).then((accounts) => {
-  //       setAddress(accounts[0])
-  //       setConnected('1')
-  //       let w3 = new Web3(ethereum)
-  //       w3.eth.defaultAccount = accounts[0];
-  //       setWeb3(w3)
-  //       setGameContract(new w3.eth.Contract(
-  //         gameABI,
-  //         gameAddress
-  //       ))
-  //       console.log(now +  ': Connected');
-  //     }).catch((err) => console.log(err))
-  //     : console.log(now +  ": Please install MetaMask")
-  //   } else {
-  //     // Disconnect
-  //     console.log(now +  ': Disconnect');
-  //   }
-  // }, [connected])
   useEffect(() => {
     if (web3) {
       setGameContract(new web3.eth.Contract(
@@ -267,15 +275,6 @@ function MyApp({ Component, pageProps }) {
 
 
 
-  // useEffect(() => {
-  //   let now = new Date().toLocaleString('en-us', { weekday:"long", year:"numeric", month:"short", day:"numeric", hour:"numeric", minute:"numeric", second:"numeric"});
-  //   console.log(now +  ': Disconnect');
-  // }, [web3])
-
-
-
-
-  
 
 
 
@@ -325,18 +324,6 @@ function MyApp({ Component, pageProps }) {
   }, [gameContract])
 
 
-  // useDeepCompareEffect(() => {
-  //   if (web3 && gameContract) {
-  //     if (games.length == 0) {
-  //       // Get games
-  //       console.log('Get latest games');
-  
-  //       getGameState(web3, gameContract, games, 0);
-  //     } else {
-  //       console.log('games changed');
-  //     }
-  //   }
-  // }, [games]);
 
   return (
     <>
@@ -354,9 +341,9 @@ function MyApp({ Component, pageProps }) {
       <div className="tools">
         <div className="container">
           <h3>Dev</h3>
-          {/* <button className="button" onClick={() => sendFunds(tokenAddress, activeAddress, '0x53725f4B897217C460Cb0E388f1E3d1c868702fb', 1000)}>sendFunds (1000 LPT) (A0)</button> */}
+          {/* <button className="button" onClick={() => sendFunds(tokenAddress, activeAddress, '0x53725f4B897217C460Cb0E388f1E3d1c868702fb', 1000)}>sendFunds (1000 CGT) (A0)</button> */}
           <div className="button">
-            <button onClick={() => sendFunds(tokenAddress, sendFundsFrom.current.value, sendFundsTo.current.value, sendFundsAmount.current.value)}>sendFunds (LPT)</button>
+            <button onClick={() => sendFunds(tokenAddress, sendFundsFrom.current.value, sendFundsTo.current.value, sendFundsAmount.current.value)}>sendFunds (CGT)</button>
             <input
               ref={sendFundsFrom}
               defaultValue={activeAddress}
@@ -381,19 +368,56 @@ function MyApp({ Component, pageProps }) {
           </div>
           <button className="button" onClick={() => startGame(gameContract)}>startGame (A0)</button>
           <div className="button">
-            <button onClick={() => endGame(gameContract, gameId.current.value)}>endGame (A0)</button>
-            <input ref={gameId} defaultValue="0" size="2" min="0" type="number" />
+            <button onClick={() => {
+              console.log('endGame ID: ' + endGameId.current.value);
+              endGame(
+                gameContract,
+                web3.utils.toBN(endGameId.current.value)
+              )
+            }}>endGame (A0)</button>
+            <input ref={endGameId} defaultValue="0" size="2" min="0" type="number" />
           </div>
           <div className="button">
-            <button onClick={() => getGameState(web3, gameContract, games, gameId.current.value)}>getGameState</button>
-            <input ref={gameId} defaultValue="0" size="2" min="0" type="number" />
+            <button onClick={() => {
+              getGameState(
+                web3,
+                gameContract,
+                games,
+                web3.utils.toBN(getGameStateId.current.value)
+              )
+            }}>getGameState</button>
+            <input ref={getGameStateId} defaultValue="0" size="2" min="0" type="number" />
           </div>
+          {/* <button
+						className="button"
+						onClick={() => {
+              const decimals = web3.utils.toBN(18);
+              let tokenContract = new web3.eth.Contract(IERC20MetadataABI, tokenAddress);
+							let _totalCost = web3.utils.toBN(100000000).mul(web3.utils.toBN(10).pow(decimals));
+							tokenContract.methods.approve(
+								activeAddress,
+								_totalCost
+							).send({from: activeAddress})
+						}}>
+						Approve funds
+					</button> */}
+          <button
+						className="button"
+						onClick={async () => {
+              let tokenContract = new web3.eth.Contract(IERC20MetadataABI, tokenAddress);
+							let value = await tokenContract.methods.balanceOf(
+								gameAddress
+							).call({from: activeAddress})
+              console.log(value);
+						}}>
+						Get contract balance
+					</button>
         </div>
       </div>
       <GamesList
         games={games}
         web3={web3}
-        ERC20TokenABI={ERC20TokenABI}
+        IERC20MetadataABI={IERC20MetadataABI}
         gameAddress={gameAddress}
         gameContract={gameContract}
         activeAddress={activeAddress}

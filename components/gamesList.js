@@ -5,7 +5,7 @@ import Game from './game'
 const GamesList = ({
 	games,
 	web3,
-	ERC20TokenABI,
+	IERC20MetadataABI,
 	gameAddress,
 	gameContract,
 	activeAddress,
@@ -32,10 +32,9 @@ const GamesList = ({
 
 					return (
 						<Game
-							key={game.gameNumber}
 							game={game}
 							web3={web3}
-							ERC20TokenABI={ERC20TokenABI}
+							IERC20MetadataABI={IERC20MetadataABI}
 							gameAddress={gameAddress}
 							gameContract={gameContract}
 							activeAddress={activeAddress}

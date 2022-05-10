@@ -1,10 +1,9 @@
 import React, { useRef } from 'react';
-// import { BN } from 'bn.js';
 
 const Game = ({
 	game,
 	web3,
-	ERC20TokenABI,
+	IERC20MetadataABI,
 	gameAddress,
 	gameContract,
 	activeAddress,
@@ -13,13 +12,12 @@ const Game = ({
 }) => {
 	const numberOfTickets = useRef();
 
-	let approvalAmount = game.ticketPrice * game.maxTicketsPlayer;//numberOfTickets; //game.maxTicketsPlayer;
+	let gameToken = new web3.eth.Contract(IERC20MetadataABI, game.tokenAddress);
 
-	let gameToken = new web3.eth.Contract(ERC20TokenABI, game.tokenAddress);
-
-	let hasEnded = !game.status;
+	let hasEnded = game.status !== 'true';
 
 	const gameItems = Object.entries(game).map(([key, val]) => {
+		if (key.substring(0, 1) === '_') return null;
 
 		// Shorten address
 		if (key.substring((key.length - 7)) === 'Address') {
@@ -31,7 +29,12 @@ const Game = ({
 					: val
 				);
 		}
-			
+		
+		// Format wei by decimals, and add symbol
+		else if(key === 'pot' || key === 'ticketPrice') {
+			val = game._decimals === '18' ? web3.utils.fromWei(val) : val; // game._decimals
+			if (game._symbol) val += ' ' + game._symbol;
+		}
 
 		return (
 			<div>
@@ -41,11 +44,38 @@ const Game = ({
 		)
 	});
 
+	const gameStateBanner = () => {
+		if (game.status === 'true') {
+			return (
+				<div className="result active">
+					<div>
+						<div><strong>Game in progress</strong></div>
+					</div>
+				</div>
+			);
+		}
+
+		const winnerResult = game._winnerResult.join(', ');
+		// console.log('winnerResult: ' + winnerResult);
+
+		return (
+			<div className="result">
+				<div>
+					<div><strong>Winning ticket:</strong></div>
+					<div><p>{winnerResult}</p></div>
+				</div>
+			</div>
+		)
+	};
+
 	return (
 		<div key={`game-${game.gameNumber}`} className="game">
 			<div className="container">
 				<h4>Game #{game.gameNumber}</h4>
-				<div className="items"><div>{gameItems}</div></div>
+				{gameStateBanner()}
+				<div className="items">
+					<div>{gameItems}</div>
+				</div>
 				<div className="buttons">
 					<button
 						className="button"
@@ -56,17 +86,23 @@ const Game = ({
 						disabled={hasEnded}
 						className="button"
 						onClick={() => {
-							let decimals = web3.utils.toBN(18);
-							let value = web3.utils.toBN(approvalAmount).mul(web3.utils.toBN(10).pow(decimals));
-							gameToken.methods.approve(gameAddress, value).send({from: activeAddress})
+							let _totalCost = web3.utils.toBN(game.ticketPrice).mul(web3.utils.toBN(game.maxTicketsPlayer));
+							gameToken.methods.approve(
+								gameAddress,
+								_totalCost
+							).send({from: activeAddress})
 						}}>
-						Approve funds
+						Approve
 					</button>
 					<div className="button">
 						<button
 							disabled={hasEnded}
 							onClick={() => {
-								buyTicket(gameContract, game.gameNumber, numberOfTickets.current.value)
+								buyTicket(
+									gameContract,
+									web3.utils.toBN(game.gameNumber),
+									web3.utils.toBN(numberOfTickets.current.value)
+								)
 							}}>
 							Buy tickets
 						</button>
