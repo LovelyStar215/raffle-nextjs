@@ -89,7 +89,7 @@ header {
         width: 75%;
         border-radius: 1em;
         padding: .5em 0;
-        line-height: 2.25em;
+        line-height: 3em;
         background-color: #2c9d39;
         &.active {
           background-color: #2c399d;
@@ -101,15 +101,17 @@ header {
         }
         .items {
           text-align: center;
+          font-weight: 700;
           div {
             display: inline-block;
-            background-color: #fff;
-            color: #000;
+            background-color: rgba(0, 0, 0, .6);
+            border: .125em solid #fff;
+            color: #fff;
             border-radius: 50%;
             margin: 0 .25em;
             line-height: 2.25em;
             min-height: 2.25em;
-            min-width: 2.25em;
+            min-width: 2.5em;
           }
         }
       }
