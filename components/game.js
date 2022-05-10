@@ -55,14 +55,18 @@ const Game = ({
 			);
 		}
 
-		const winnerResult = game._winnerResult.join(', ');
+		const winnerResult = game._winnerResult.map(([val]) => {
+			return (
+				<div>{val}</div>
+			);
+		});
 		// console.log('winnerResult: ' + winnerResult);
 
 		return (
 			<div className="result">
 				<div>
 					<div><strong>Winning ticket:</strong></div>
-					<div><p>{winnerResult}</p></div>
+					<div className="items">{winnerResult}</div>
 				</div>
 			</div>
 		)
