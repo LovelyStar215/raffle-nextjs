@@ -172,6 +172,19 @@ function MyApp({ Component, pageProps }) {
 
 
 
+  const getGamePlayerState = async (gameContract, gameNumber, playerAddress) => {
+    let results = await gameContract.methods.getGamePlayerState(
+      gameNumber,
+      playerAddress
+    ).call();
+    console.log('getGamePlayerState = ' + gameNumber + '; address = ' + playerAddress);
+    console.log(results);
+    return results;
+  }
+
+
+
+
 
   // TESTING: SEND CGT FUNDS
 
