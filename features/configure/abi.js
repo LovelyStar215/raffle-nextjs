@@ -1,4 +1,4 @@
-export const gameABI = [
+export const gameMasterABI = [
   {
     "inputs": [
       {
@@ -9,6 +9,19 @@ export const gameABI = [
     ],
     "stateMutability": "nonpayable",
     "type": "constructor"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint32",
+        "name": "gameNumber",
+        "type": "uint32"
+      }
+    ],
+    "name": "GameChanged",
+    "type": "event"
   },
   {
     "anonymous": false,
@@ -27,21 +40,38 @@ export const gameABI = [
       },
       {
         "indexed": true,
-        "internalType": "uint256",
+        "internalType": "uint32",
         "name": "gameNumber",
-        "type": "uint256"
+        "type": "uint32"
       },
       {
         "indexed": false,
-        "internalType": "uint256[]",
+        "internalType": "uint32[]",
         "name": "winnerResult",
-        "type": "uint256[]"
+        "type": "uint32[]"
       },
       {
+        "components": [
+          {
+            "internalType": "uint248",
+            "name": "value",
+            "type": "uint248"
+          },
+          {
+            "internalType": "uint8",
+            "name": "assetType",
+            "type": "uint8"
+          },
+          {
+            "internalType": "address",
+            "name": "assetAddress",
+            "type": "address"
+          }
+        ],
         "indexed": false,
-        "internalType": "uint256",
+        "internalType": "struct GameMaster.GamePot[]",
         "name": "pot",
-        "type": "uint256"
+        "type": "tuple[]"
       }
     ],
     "name": "GameEnded",
@@ -64,33 +94,33 @@ export const gameABI = [
       },
       {
         "indexed": true,
-        "internalType": "uint256",
+        "internalType": "uint32",
         "name": "gameNumber",
-        "type": "uint256"
+        "type": "uint32"
       },
       {
         "indexed": false,
-        "internalType": "uint256",
+        "internalType": "uint8",
         "name": "feePercent",
-        "type": "uint256"
+        "type": "uint8"
       },
       {
         "indexed": false,
-        "internalType": "uint256",
+        "internalType": "uint128",
         "name": "ticketPrice",
-        "type": "uint256"
+        "type": "uint128"
       },
       {
         "indexed": false,
-        "internalType": "uint256",
+        "internalType": "uint16",
         "name": "maxPlayers",
-        "type": "uint256"
+        "type": "uint16"
       },
       {
         "indexed": false,
-        "internalType": "uint256",
+        "internalType": "uint16",
         "name": "maxTicketsPlayer",
-        "type": "uint256"
+        "type": "uint16"
       }
     ],
     "name": "GameStarted",
@@ -182,21 +212,21 @@ export const gameABI = [
       },
       {
         "indexed": true,
-        "internalType": "uint256",
+        "internalType": "uint32",
         "name": "gameNumber",
-        "type": "uint256"
+        "type": "uint32"
       },
       {
         "indexed": false,
-        "internalType": "uint256",
+        "internalType": "uint16",
         "name": "playerCount",
-        "type": "uint256"
+        "type": "uint16"
       },
       {
         "indexed": false,
-        "internalType": "uint256",
+        "internalType": "uint24",
         "name": "ticketCount",
-        "type": "uint256"
+        "type": "uint24"
       }
     ],
     "name": "TicketBought",
@@ -310,6 +340,40 @@ export const gameABI = [
   {
     "inputs": [
       {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bytes",
+        "name": "",
+        "type": "bytes"
+      }
+    ],
+    "name": "onERC721Received",
+    "outputs": [
+      {
+        "internalType": "bytes4",
+        "name": "",
+        "type": "bytes4"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "bytes32",
         "name": "role",
         "type": "bytes32"
@@ -394,9 +458,9 @@ export const gameABI = [
   {
     "inputs": [
       {
-        "internalType": "uint256",
+        "internalType": "uint32",
         "name": "_gameNumber",
-        "type": "uint256"
+        "type": "uint32"
       }
     ],
     "name": "resetGame",
@@ -417,24 +481,24 @@ export const gameABI = [
         "type": "address"
       },
       {
-        "internalType": "uint256",
+        "internalType": "uint8",
         "name": "_gameFeePercent",
-        "type": "uint256"
+        "type": "uint8"
       },
       {
-        "internalType": "uint256",
+        "internalType": "uint128",
         "name": "_ticketPrice",
-        "type": "uint256"
+        "type": "uint128"
       },
       {
-        "internalType": "uint256",
+        "internalType": "uint16",
         "name": "_maxPlayers",
-        "type": "uint256"
+        "type": "uint16"
       },
       {
-        "internalType": "uint256",
+        "internalType": "uint16",
         "name": "_maxTicketsPlayer",
-        "type": "uint256"
+        "type": "uint16"
       }
     ],
     "name": "startGame",
@@ -445,14 +509,14 @@ export const gameABI = [
   {
     "inputs": [
       {
-        "internalType": "uint256",
+        "internalType": "uint32",
         "name": "_gameNumber",
-        "type": "uint256"
+        "type": "uint32"
       },
       {
-        "internalType": "uint256",
+        "internalType": "uint8",
         "name": "_numberOfTickets",
-        "type": "uint256"
+        "type": "uint8"
       }
     ],
     "name": "buyTicket",
@@ -463,9 +527,9 @@ export const gameABI = [
   {
     "inputs": [
       {
-        "internalType": "uint256",
+        "internalType": "uint32",
         "name": "_gameNumber",
-        "type": "uint256"
+        "type": "uint32"
       }
     ],
     "name": "endGame",
@@ -476,52 +540,181 @@ export const gameABI = [
   {
     "inputs": [
       {
-        "internalType": "uint256",
+        "internalType": "uint32",
         "name": "_gameNumber",
+        "type": "uint32"
+      },
+      {
+        "internalType": "uint248",
+        "name": "_assetValue",
+        "type": "uint248"
+      },
+      {
+        "internalType": "address",
+        "name": "_assetAddress",
+        "type": "address"
+      }
+    ],
+    "name": "addGamePotERC20Asset",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint32",
+        "name": "_gameNumber",
+        "type": "uint32"
+      },
+      {
+        "internalType": "uint248",
+        "name": "_assetValue",
+        "type": "uint248"
+      },
+      {
+        "internalType": "address",
+        "name": "_assetAddress",
+        "type": "address"
+      }
+    ],
+    "name": "addGamePotERC721Asset",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint32",
+        "name": "_gameNumber",
+        "type": "uint32"
+      },
+      {
+        "internalType": "uint248",
+        "name": "_assetValue",
+        "type": "uint248"
+      },
+      {
+        "internalType": "address",
+        "name": "_assetAddress",
+        "type": "address"
+      }
+    ],
+    "name": "removeGamePotERC20Asset",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint32",
+        "name": "_gameNumber",
+        "type": "uint32"
+      },
+      {
+        "internalType": "uint248",
+        "name": "_assetValue",
+        "type": "uint248"
+      },
+      {
+        "internalType": "address",
+        "name": "_assetAddress",
+        "type": "address"
+      }
+    ],
+    "name": "removeGamePotERC721Asset",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_total",
         "type": "uint256"
+      }
+    ],
+    "name": "getActiveGames",
+    "outputs": [
+      {
+        "internalType": "uint256[]",
+        "name": "gameNumbers",
+        "type": "uint256[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function",
+    "constant": true
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint32",
+        "name": "_gameNumber",
+        "type": "uint32"
       }
     ],
     "name": "getGameState",
     "outputs": [
       {
-        "internalType": "bool",
+        "internalType": "uint8",
         "name": "status",
-        "type": "bool"
+        "type": "uint8"
       },
       {
-        "internalType": "uint256",
+        "components": [
+          {
+            "internalType": "uint248",
+            "name": "value",
+            "type": "uint248"
+          },
+          {
+            "internalType": "uint8",
+            "name": "assetType",
+            "type": "uint8"
+          },
+          {
+            "internalType": "address",
+            "name": "assetAddress",
+            "type": "address"
+          }
+        ],
+        "internalType": "struct GameMaster.GamePot[]",
         "name": "pot",
-        "type": "uint256"
+        "type": "tuple[]"
       },
       {
-        "internalType": "uint256",
+        "internalType": "uint16",
         "name": "playerCount",
-        "type": "uint256"
+        "type": "uint16"
       },
       {
-        "internalType": "uint256",
+        "internalType": "uint24",
         "name": "ticketCount",
-        "type": "uint256"
+        "type": "uint24"
       },
       {
-        "internalType": "uint256",
+        "internalType": "uint16",
         "name": "maxPlayers",
-        "type": "uint256"
+        "type": "uint16"
       },
       {
-        "internalType": "uint256",
+        "internalType": "uint16",
         "name": "maxTicketsPlayer",
-        "type": "uint256"
+        "type": "uint16"
       },
       {
-        "internalType": "uint256",
+        "internalType": "uint128",
         "name": "ticketPrice",
-        "type": "uint256"
+        "type": "uint128"
       },
       {
-        "internalType": "uint256",
+        "internalType": "uint8",
         "name": "feePercent",
-        "type": "uint256"
+        "type": "uint8"
       },
       {
         "internalType": "address",
@@ -539,9 +732,9 @@ export const gameABI = [
         "type": "address"
       },
       {
-        "internalType": "uint256[]",
+        "internalType": "uint32[]",
         "name": "winnerResult",
-        "type": "uint256[]"
+        "type": "uint32[]"
       }
     ],
     "stateMutability": "view",
@@ -551,129 +744,9 @@ export const gameABI = [
   {
     "inputs": [
       {
-        "internalType": "uint256",
+        "internalType": "uint32",
         "name": "_gameNumber",
-        "type": "uint256"
-      },
-      {
-        "internalType": "address",
-        "name": "_token",
-        "type": "address"
-      }
-    ],
-    "name": "setGameToken",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "sufficient",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_gameNumber",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_price",
-        "type": "uint256"
-      }
-    ],
-    "name": "setTicketPrice",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "sufficient",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_gameNumber",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_max",
-        "type": "uint256"
-      }
-    ],
-    "name": "setMaxPlayers",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "sufficient",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_gameNumber",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_max",
-        "type": "uint256"
-      }
-    ],
-    "name": "setMaxTicketsPerPlayer",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "sufficient",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_gameNumber",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_percent",
-        "type": "uint256"
-      }
-    ],
-    "name": "setGameFeePercent",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "sufficient",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_gameNumber",
-        "type": "uint256"
+        "type": "uint32"
       },
       {
         "internalType": "address",
@@ -681,16 +754,17 @@ export const gameABI = [
         "type": "address"
       }
     ],
-    "name": "setGameFeeAddress",
+    "name": "getGamePlayerState",
     "outputs": [
       {
-        "internalType": "bool",
-        "name": "sufficient",
-        "type": "bool"
+        "internalType": "uint24[]",
+        "name": "tickets",
+        "type": "uint24[]"
       }
     ],
-    "stateMutability": "nonpayable",
-    "type": "function"
+    "stateMutability": "view",
+    "type": "function",
+    "constant": true
   }
 ];
 export const IERC20MetadataABI = [
