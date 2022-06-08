@@ -28,7 +28,9 @@ const chainRpcs = {
 console.log(process.env);
 
 
-const LOCAL_STORAGE_KEY = process.env.LOCAL_STORAGE_KEY;
+const LOCAL_STORAGE_KEY_GAMES = process.env.LOCAL_STORAGE_KEY_GAMES | 'caedmon.games';
+const LOCAL_STORAGE_KEY_TICKETS = process.env.LOCAL_STORAGE_KEY_TICKETS | 'caedmon.tickets';
+const LOCAL_STORAGE_KEY_TOKENS = process.env.LOCAL_STORAGE_KEY_TOKENS | 'caedmon.tokens';
 
 // APP
 
@@ -42,6 +44,10 @@ function MyApp({ Component, pageProps }) {
 
   const [games, setGames] = useState([])
 
+  const [tickets, setTickets] = useState([])
+
+  const [tokens, setTokens] = useState([])
+
   const endGameId = useRef();
   const getGameStateId = useRef();
 
@@ -51,19 +57,42 @@ function MyApp({ Component, pageProps }) {
 
 	useEffect(() => {
 		console.log('Loaded from local storage');
-		const storedGames = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY));
+		const storedGames = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY_GAMES));
     console.log(storedGames);
 		if (storedGames)
 			setGames(storedGames);
+
+    const storedTickets = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY_TICKETS));
+    console.log(storedTickets);
+    if (storedTickets)
+      setTickets(storedTickets);
+
+    const storedTokens = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY_TOKENS));
+    console.log(storedTokens);
+    if (storedTokens)
+      setTickets(storedTokens);
 	}, [])
 
 	useEffect(() => {
 		console.log('Games changed');
 		console.log(games);
 		const storedGames = JSON.stringify(games);
-		localStorage.setItem(LOCAL_STORAGE_KEY, storedGames);
+		localStorage.setItem(LOCAL_STORAGE_KEY_GAMES, storedGames);
 	}, [games])
 
+	useEffect(() => {
+		console.log('Tickets changed');
+		console.log(tickets);
+		const storedTickets = JSON.stringify(tickets);
+		localStorage.setItem(LOCAL_STORAGE_KEY_TICKETS, storedTickets);
+	}, [tickets])
+
+	useEffect(() => {
+		console.log('Tokens changed');
+		console.log(tokens);
+		const storedTokens = JSON.stringify(tokens);
+		localStorage.setItem(LOCAL_STORAGE_KEY_TOKENS, storedTokens);
+	}, [tokens])
 
   const disconnect = () => {
     console.log('disconnect()');
