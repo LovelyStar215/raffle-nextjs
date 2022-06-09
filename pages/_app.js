@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import Web3 from 'web3'
 // import { BN } from 'bn.js';
 
-import { gameABI, IERC20MetadataABI, oracleABI } from '../features/configure/abi.js'
+import { gameMasterABI, IERC20MetadataABI, oracleABI } from '../features/configure/abi.js'
 
 import '../styles/globals.scss'
 
@@ -12,25 +12,43 @@ import Wallet from '../components/wallet'
 import GamesList from '../components/gamesList'
 
 // ENVIRONMENT
-const gameAddress = '0xA25Ba3b605a5Cf91490E435A4e692c7EbA7Ab52a';//process.env.GAME_ADDRESS || null;
-const tokenAddress = '0x8551Fa6d7d0d5fB1eDf7CB51Fbc4cDe54dc27528';//process.env.TOKEN_ADDRESS || null;
-const feeAddress = '0x16318951352A701DaB6C5B30DA64f8f8c1b3de70';//process.env.TESTA1_ADDRESS || null; //A1
+const gameAddress = '0x81D2Ef94CC380C501bF696538eB1a8C924E0C235';//process.env.GAME_ADDRESS || null;
+const tokenAddress = '0xC399979F65d1418248593dB74aA0B8fF134a2C23';//process.env.TOKEN_ADDRESS || null;
+const feeAddress = '0xF7CbB70c591677E2408d784395e23049399Fb361';//process.env.TESTA1_ADDRESS || null; //A1
 
 
 const chain = process.env.CHAIN || 'local';
 
 const chainRpcs = {
-  local: 'http://192.168.2.3:7545/',
+  local: 'http://192.168.2.4:7545/',
 };
 
+// ENVIRONMENT
+// const gameAddress = '0x11a305dcb346f4bb48e18f430191fbdea648d242';//process.env.GAME_ADDRESS || null;
+// const tokenAddress = '0xbf92a8d662dadbc8bcd8b96545b932a8f79f12b3';//process.env.TOKEN_ADDRESS || null;
+// const feeAddress = '0x3d31312F65E90c76f0bf95b574EADCf81Cf2B566';//process.env.TESTA1_ADDRESS || null; //A1
 
 
-console.log(process.env);
+// const chain = 'rinkeby';
+
+// const chainRpcs = {
+//   local: 'http://192.168.2.4:7545/',
+//   rinkeby: 'https://mainnet.infura.io/v3/ddf47ec4f3e2420bbd5eed733573e6aa'
+// };
 
 
-const LOCAL_STORAGE_KEY_GAMES = process.env.LOCAL_STORAGE_KEY_GAMES | 'caedmon.games';
-const LOCAL_STORAGE_KEY_TICKETS = process.env.LOCAL_STORAGE_KEY_TICKETS | 'caedmon.tickets';
-const LOCAL_STORAGE_KEY_TOKENS = process.env.LOCAL_STORAGE_KEY_TOKENS | 'caedmon.tokens';
+
+// console.log(process.env);
+
+// TODO: state for tokens, to reduce calls.
+// token rendering
+// game pot rendering
+// getactivegames implment if empty storage
+
+
+const LOCAL_STORAGE_KEY_GAMES = process.env.LOCAL_STORAGE_KEY_GAMES || 'caedmon.games';
+const LOCAL_STORAGE_KEY_TICKETS = process.env.LOCAL_STORAGE_KEY_TICKETS || 'caedmon.tickets';
+const LOCAL_STORAGE_KEY_TOKENS = process.env.LOCAL_STORAGE_KEY_TOKENS || 'caedmon.tokens';
 
 // APP
 
@@ -70,7 +88,7 @@ function MyApp({ Component, pageProps }) {
     const storedTokens = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY_TOKENS));
     console.log(storedTokens);
     if (storedTokens)
-      setTickets(storedTokens);
+      setTokens(storedTokens);
 	}, [])
 
 	useEffect(() => {
@@ -129,6 +147,72 @@ function MyApp({ Component, pageProps }) {
       : console.log(now + ": Please install MetaMask")
   };
 
+  const setToken = (data) => {
+    console.log('setToken');
+    console.log(JSON.stringify(data));
+    let _tokens = tokens;
+    const currToken = _tokens[data.address];
+    const newToken = { ...currToken, ...data };
+    console.log('setGameState-newToken');
+    console.log(newToken);
+    _tokens[data.address] = newToken;
+    console.log('setToken-tokens');
+    console.log(_tokens);
+    setTokens([..._tokens]);
+  }
+
+  const getToken = async (address) => {
+    if (tokens[address]) {
+      console.log('token exists');
+      return tokens[address];
+    }
+
+    let gameToken = new web3.eth.Contract(IERC20MetadataABI, address);
+
+    let token = {
+      address
+    };
+    
+    const result = await gameToken.methods.name().call();
+    console.log('name: ' + result);
+    if (result) {
+      token.name = result;
+    }
+    
+    result = await gameToken.methods.symbol().call();
+    console.log('symbol: ' + result);
+    if (result) {
+      token.symbol = result;
+    }
+
+    result = await gameToken.methods.decimals().call();
+    console.log('decimals: ' + result);
+    if (result) {
+      token.decimals = result;
+    }
+
+    console.log(token);
+    setToken(token);
+  };
+
+
+
+  const setGameTickets = (_gameNumber, data) => {
+    // console.log('setGameState');
+    console.log(JSON.stringify(data));
+    let _tickets = tickets;
+    const currGame = _gameNumber;
+    const newGame = { ...currGame, ...data };
+    // console.log('setGameState-newGame');
+    // console.log(newGame);
+    _tickets[_gameNumber] = newGame;
+    console.log('setGameTickets-newGames');
+    console.log(_tickets);
+    setTickets([..._tickets]);
+  };
+
+
+
   // GET GAME STATE
 
   const setGameState = (data) => {
@@ -161,9 +245,10 @@ function MyApp({ Component, pageProps }) {
           val = val ? 'true' : 'false';
         }
 
-        if (key === 'winnerResult') {
+        if (key === 'winnerResult' || key === 'pot' || key === 'status') {
           console.log(val);
-          result['_winnerResult'] = val;
+          let newKey = `_${key}`;
+          result[newKey] = val;
         } else {
           result[key] = val;
         }
@@ -172,27 +257,35 @@ function MyApp({ Component, pageProps }) {
       }, {});
       items.gameNumber = gameNumber.toString();
 
-      let gameToken = new web3.eth.Contract(IERC20MetadataABI, items.tokenAddress);
-      
-      const  result = await gameToken.methods.name().call();
-      console.log('name: ' + result);
-      if (result) {
-        items._name = result;
-      }
-      
-      result = await gameToken.methods.symbol().call();
-      console.log('symbol: ' + result);
-      if (result) {
-        items._symbol = result;
-      }
+      // if (!tokens[items.tokenAddress]) {
+      //   let gameToken = new web3.eth.Contract(IERC20MetadataABI, items.tokenAddress);
 
-      result = await gameToken.methods.decimals().call();
-      console.log('decimals: ' + result);
-      if (result) {
-        items._decimals = result;
-      }
+      //   let token = {
+      //     address: items.tokenAddress
+      //   };
+        
+      //   const result = await gameToken.methods.name().call();
+      //   console.log('name: ' + result);
+      //   if (result) {
+      //     token.name = result;
+      //   }
+        
+      //   result = await gameToken.methods.symbol().call();
+      //   console.log('symbol: ' + result);
+      //   if (result) {
+      //     token.symbol = result;
+      //   }
 
-      console.log(items);
+      //   result = await gameToken.methods.decimals().call();
+      //   console.log('decimals: ' + result);
+      //   if (result) {
+      //     token.decimals = result;
+      //   }
+
+      //   console.log(token);
+      //   setToken(token);
+      // }
+      
       console.log('setGameData call');
       setGameState(items);
     }
@@ -201,14 +294,15 @@ function MyApp({ Component, pageProps }) {
 
 
 
-  const getGamePlayerState = async (gameContract, gameNumber, playerAddress) => {
+  const getGamePlayerState = async (_gameNumber, _playerAddress) => {
     let results = await gameContract.methods.getGamePlayerState(
-      gameNumber,
-      playerAddress
+      _gameNumber,
+      _playerAddress
     ).call();
-    console.log('getGamePlayerState = ' + gameNumber + '; address = ' + playerAddress);
-    console.log(results);
-    return results;
+    console.log('getGamePlayerState = ' + _gameNumber + '; address = ' + _playerAddress);
+    // console.log(results);
+    setGameTickets(_gameNumber, results);
+    // return results;
   }
 
 
@@ -247,7 +341,7 @@ function MyApp({ Component, pageProps }) {
       const decimals = web3.utils.toBN(18);
       let feePercent = web3.utils.toBN(1);//web3.utils.toBN(2).mul(web3.utils.toBN(10).pow(decimals));
       let ticketPrice = web3.utils.toBN(100000000000000000); // 0.1
-      let maxPlayers = web3.utils.toBN(100000);
+      let maxPlayers = web3.utils.toBN(50000);
       let maxTicketsPlayer = web3.utils.toBN(20);
 
       let results = await gameContract.methods.startGame(
@@ -309,7 +403,7 @@ function MyApp({ Component, pageProps }) {
   useEffect(() => {
     if (web3) {
       setGameContract(new web3.eth.Contract(
-        gameABI,
+        gameMasterABI,
         gameAddress
       ))
     }
@@ -331,7 +425,19 @@ function MyApp({ Component, pageProps }) {
         } else {
           // console.log(data);
           if (data.returnValues) {
-            // setGameState(data.returnValues);
+            setGameState(data.returnValues);
+            getGameState(web3, gameContract, games, data.returnValues.gameNumber);
+          }
+        }
+      });
+      gameContract.events.GameChanged({}, (error, data) => {
+        console.log('EVENT: GameChanged');
+        if (error) {
+          console.error(error.message);
+
+        } else {
+          // console.log(data);
+          if (data.returnValues) {
             getGameState(web3, gameContract, games, data.returnValues.gameNumber);
           }
         }
@@ -359,6 +465,10 @@ function MyApp({ Component, pageProps }) {
           if (data.returnValues) {
             // setGameState(data.returnValues);
             getGameState(web3, gameContract, games, data.returnValues.gameNumber);
+            getGamePlayerState(
+              data.returnValues.gameNumber,
+              activeAddress
+            )
           }
         }
       });
@@ -395,7 +505,6 @@ function MyApp({ Component, pageProps }) {
             />
             <input
               ref={sendFundsTo}
-              defaultValue={gameAddress}
               placeholder="To"
               size="8"
               type="text"
@@ -457,6 +566,8 @@ function MyApp({ Component, pageProps }) {
         </div>
       </div>
       <GamesList
+        tickets={tickets}
+        getToken={getToken}
         games={games}
         web3={web3}
         IERC20MetadataABI={IERC20MetadataABI}
@@ -464,6 +575,7 @@ function MyApp({ Component, pageProps }) {
         gameContract={gameContract}
         activeAddress={activeAddress}
         buyTicket={buyTicket}
+        getGamePlayerState={getGamePlayerState}
         setGames={setGames}
       />
       <div className="container">

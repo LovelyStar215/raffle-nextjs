@@ -1,20 +1,30 @@
-import React, { useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 const Game = ({
+	getToken,
 	game,
+	gameTickets,
 	web3,
 	IERC20MetadataABI,
 	gameAddress,
 	gameContract,
 	activeAddress,
 	buyTicket,
+	getGamePlayerState,
 	hideGame
 }) => {
+	// getGamePlayerState(
+	// 	game.gameNumber,
+	// 	activeAddress
+	// )
+
 	const numberOfTickets = useRef();
 
 	let gameToken = new web3.eth.Contract(IERC20MetadataABI, game.tokenAddress);
 
-	let hasEnded = game.status !== 'true';
+	let hasEnded = game._status == 0;
+
+	let ticketItems = '';
 
 	const gameItems = Object.entries(game).map(([key, val]) => {
 		if (key.substring(0, 1) === '_') return null;
@@ -23,7 +33,7 @@ const Game = ({
 		if (key.substring((key.length - 7)) === 'Address') {
 			// console.log(parseInt(val));
 			val = val.length > 10
-				? val.slice(0,5) + '...' + val.slice(-4)
+				? val.slice(0,6) + '...' + val.slice(-4)
 				: (parseInt(val) == 0
 					? '&ndash;'
 					: val
@@ -31,23 +41,84 @@ const Game = ({
 		}
 		
 		// Format wei by decimals, and add symbol
-		else if(key === 'pot' || key === 'ticketPrice') {
-			val = game._decimals === '18' ? web3.utils.fromWei(val) : val; // game._decimals
-			if (game._symbol) val += ' ' + game._symbol;
+		else if(key === 'ticketPrice') {
+			// let token = getToken(game.tokenAddress);
+			let token = false;
+			// console.log('token');
+			// console.log(token);
+			if (token) {
+				val = token.decimals === '18' ? web3.utils.fromWei(val) : val; // game._decimals
+				if (token.symbol) val += ' ' + token.symbol;
+			}
 		}
 
 		return (
-			<div>
+			<div key={`game-${game.gameNumber}-${key}`}>
 				<strong>{key}</strong>
 				<span>{val}</span>
 			</div>
 		)
 	});
 
-	const gameStateBanner = () => {
-		if (game.status === 'true') {
+	const gamePots = (pots) => {
+		// console.log('pots');
+		// console.log(pots);
+
+		if (!pots) return false;
+
+		let len = pots.length/2;
+		let items = pots.slice(len).map((result, key) => {
+			console.log('pot');
+			console.log(result);
+
+			let assetAddress = result.assetAddress.slice(0,6) + '...' + result.assetAddress.slice(-4)
+
 			return (
-				<div className="result active">
+				<div className="pot" key={`game-${game.gameNumber}-pot-${key}`}>
+					<div>{result.assetType == 0 ? 'Token' : 'NFT'}</div>
+					<div>{assetAddress}</div>
+					<div>{result.value}</div>
+				</div>
+			);
+		}, {});
+		
+		return (
+			<div className="result pots">
+				<div>
+					<div><strong>Pots</strong></div>
+				</div>
+				{items}
+			</div>
+		)
+	};
+
+	const gameTicketItems = () => {
+		let items = '';
+		if (gameTickets) {
+			items = Object.keys(gameTickets).map((val, key) => {
+				return (
+					<div className="ticket" key={`game-${game.gameNumber}-ticket-${key}`}>
+						<span>#{val}</span>
+					</div>
+				);
+			}, {});
+		}
+
+		return (
+			<div className="result tickets">
+				<div>
+					<div><strong>Tickets</strong></div>
+					{items}
+				</div>
+			</div>
+		)
+		
+	};
+
+	const gameStateBanner = () => {
+		if (game._status > 0) {
+			return (
+				<div className="result state active">
 					<div>
 						<div><strong>Game in progress</strong></div>
 					</div>
@@ -55,15 +126,17 @@ const Game = ({
 			);
 		}
 
-		const winnerResult = game._winnerResult.map(([val]) => {
+		const winnerResult = game?._winnerResult?.map((val, idx) => {
+			// console.log(idx);
+			// console.log(`winnerResult-${game.gameNumber}-${idx}`);
 			return (
-				<div>{val}</div>
+				<div key={`winnerResult-${game.gameNumber}-${idx}`}>{val}</div>
 			);
 		});
 		// console.log('winnerResult: ' + winnerResult);
 
 		return (
-			<div className="result">
+			<div className="result state">
 				<div>
 					<div><strong>Winning ticket:</strong></div>
 					<div className="items">{winnerResult}</div>
@@ -80,6 +153,8 @@ const Game = ({
 				<div className="items">
 					<div>{gameItems}</div>
 				</div>
+				{gameTicketItems()}
+				{gamePots(game._pot)}
 				<div className="buttons">
 					<button
 						className="button"
@@ -97,6 +172,26 @@ const Game = ({
 							).send({from: activeAddress})
 						}}>
 						Approve
+					</button>
+					<button
+						disabled={hasEnded}
+						className="button"
+						onClick={() => {
+							getGamePlayerState(
+								game.gameNumber,
+								activeAddress
+							)
+						}}>
+						Show tickets
+					</button>
+					<button
+						className="button"
+						onClick={() => {
+							getToken(
+								game.tokenAddress,
+							)
+						}}>
+						Get token
 					</button>
 					<div className="button">
 						<button
