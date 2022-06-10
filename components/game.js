@@ -27,6 +27,7 @@ const Game = ({
 	let ticketItems = '';
 
 	const gameItems = Object.entries(game).map(([key, val]) => {
+		console.log('gameItems');
 		if (key.substring(0, 1) === '_') return null;
 
 		// Shorten address
@@ -42,11 +43,12 @@ const Game = ({
 		
 		// Format wei by decimals, and add symbol
 		else if(key === 'ticketPrice') {
-			// let token = getToken(game.tokenAddress);
-			let token = false;
-			// console.log('token');
-			// console.log(token);
+			let token = getToken(game.tokenAddress);
+			// let token = false;
 			if (token) {
+				token = token.pop();
+				console.log('gameItems-getToken');
+				console.log(token);
 				val = token.decimals === '18' ? web3.utils.fromWei(val) : val; // game._decimals
 				if (token.symbol) val += ' ' + token.symbol;
 			}
@@ -68,16 +70,33 @@ const Game = ({
 
 		let len = pots.length/2;
 		let items = pots.slice(len).map((result, key) => {
-			console.log('pot');
-			console.log(result);
+			// console.log('pot');
+			// console.log(result);
 
-			let assetAddress = result.assetAddress.slice(0,6) + '...' + result.assetAddress.slice(-4)
+			let displayAddress =
+				result?.assetAddress?.slice(0,6)
+				+ '...'
+				+ result?.assetAddress?.slice(-4)
+
+			let token = getToken(result.assetAddress);
+			let value = result.value;
+			if (token) {
+				token = token.pop();
+				console.log('gamePots-getToken');
+				console.log(token);
+				value =
+					token.decimals === '18'
+					? web3.utils.fromWei(result.value)
+					: result.value; // game._decimals
+				
+				if (token.symbol) value += ' ' + token.symbol;
+			}
 
 			return (
 				<div className="pot" key={`game-${game.gameNumber}-pot-${key}`}>
 					<div>{result.assetType == 0 ? 'Token' : 'NFT'}</div>
-					<div>{assetAddress}</div>
-					<div>{result.value}</div>
+					<div>{displayAddress}</div>
+					<div>{value}</div>
 				</div>
 			);
 		}, {});
@@ -187,9 +206,11 @@ const Game = ({
 					<button
 						className="button"
 						onClick={() => {
-							getToken(
+							let result = getToken(
 								game.tokenAddress,
 							)
+							console.log('getToken()');
+							console.log(result);
 						}}>
 						Get token
 					</button>

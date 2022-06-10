@@ -153,46 +153,54 @@ function MyApp({ Component, pageProps }) {
     let _tokens = tokens;
     const currToken = _tokens[data.address];
     const newToken = { ...currToken, ...data };
-    console.log('setGameState-newToken');
+    console.log('setToken-newToken');
     console.log(newToken);
-    _tokens[data.address] = newToken;
+    _tokens[_tokens.length] = newToken;
     console.log('setToken-tokens');
     console.log(_tokens);
     setTokens([..._tokens]);
   }
 
-  const getToken = async (address) => {
-    if (tokens[address]) {
-      console.log('token exists');
-      return tokens[address];
+  const getToken = (_address) => {
+    let token;
+    if (tokens?.length) {
+      console.log('token exists: ' + _address);
+      token = tokens.filter(token => token.address == _address);
+      console.log(token);
     }
 
-    let gameToken = new web3.eth.Contract(IERC20MetadataABI, address);
+    if (!token) {
+      async (_address) => {
+        let gameToken = new web3.eth.Contract(IERC20MetadataABI, _address);
 
-    let token = {
-      address
-    };
-    
-    const result = await gameToken.methods.name().call();
-    console.log('name: ' + result);
-    if (result) {
-      token.name = result;
-    }
-    
-    result = await gameToken.methods.symbol().call();
-    console.log('symbol: ' + result);
-    if (result) {
-      token.symbol = result;
+        token = {
+          _address
+        };
+        
+        const result = await gameToken.methods.name().call();
+        console.log('name: ' + result);
+        if (result) {
+          token.name = result;
+        }
+        
+        result = await gameToken.methods.symbol().call();
+        console.log('symbol: ' + result);
+        if (result) {
+          token.symbol = result;
+        }
+
+        result = await gameToken.methods.decimals().call();
+        console.log('decimals: ' + result);
+        if (result) {
+          token.decimals = result;
+        }
+
+        console.log(token);
+        setToken(token);
+      }
     }
 
-    result = await gameToken.methods.decimals().call();
-    console.log('decimals: ' + result);
-    if (result) {
-      token.decimals = result;
-    }
-
-    console.log(token);
-    setToken(token);
+    return token;
   };
 
 
@@ -216,13 +224,13 @@ function MyApp({ Component, pageProps }) {
   // GET GAME STATE
 
   const setGameState = (data) => {
-    // console.log('setGameState');
+    console.log('setGameState');
     console.log(JSON.stringify(data));
     let _games = games;
     const currGame = _games[data.gameNumber];
     const newGame = { ...currGame, ...data };
-    // console.log('setGameState-newGame');
-    // console.log(newGame);
+    console.log('setGameState-newGame');
+    console.log(newGame);
     _games[data.gameNumber] = newGame;
     console.log('setGameState-newGames');
     console.log(_games);
