@@ -161,43 +161,50 @@ function MyApp({ Component, pageProps }) {
     setTokens([..._tokens]);
   }
 
-  const getToken = (_address) => {
-    let token;
-    if (tokens?.length) {
-      console.log('token exists: ' + _address);
-      token = tokens.filter(token => token.address == _address);
-      console.log(token);
+  const _getToken = async (_address) => {
+    let gameToken = new web3.eth.Contract(IERC20MetadataABI, _address);
+    let token, name, symbol, decimals;
+    
+    const result = await gameToken.methods.name().call();
+    console.log('name: ' + result);
+    if (result) {
+      name = result;
+    }
+    
+    result = await gameToken.methods.symbol().call();
+    console.log('symbol: ' + result);
+    if (result) {
+      symbol = result;
     }
 
-    if (!token) {
-      async (_address) => {
-        let gameToken = new web3.eth.Contract(IERC20MetadataABI, _address);
+    result = await gameToken.methods.decimals().call();
+    console.log('decimals: ' + result);
+    if (result) {
+      decimals = result;
+    }
 
-        token = {
-          _address
-        };
-        
-        const result = await gameToken.methods.name().call();
-        console.log('name: ' + result);
-        if (result) {
-          token.name = result;
-        }
-        
-        result = await gameToken.methods.symbol().call();
-        console.log('symbol: ' + result);
-        if (result) {
-          token.symbol = result;
-        }
+    if (name.length && symbol.length && decimals.length) {
+      token = {
+        address: _address,
+        name,
+        symbol,
+        decimals
+      };
+      console.log(token);
+      setToken(token);
+    }
+  };
 
-        result = await gameToken.methods.decimals().call();
-        console.log('decimals: ' + result);
-        if (result) {
-          token.decimals = result;
-        }
-
-        console.log(token);
-        setToken(token);
-      }
+  const getToken = (_address) => {
+    let token;
+    if (tokens.length) {
+      console.log('token exists: ' + _address);
+      token = tokens.filter(_token => _token.address == _address);
+      token = token.pop();
+    } else {
+      console.log('lookup token: ' + _address);
+      _getToken(_address);
+      token = tokens[_address];
     }
 
     return token;
@@ -206,15 +213,16 @@ function MyApp({ Component, pageProps }) {
 
 
   const setGameTickets = (_gameNumber, data) => {
-    // console.log('setGameState');
+    console.log('setGameTickets: ' + _gameNumber);
     console.log(JSON.stringify(data));
     let _tickets = tickets;
-    const currGame = _gameNumber;
-    const newGame = { ...currGame, ...data };
-    // console.log('setGameState-newGame');
-    // console.log(newGame);
-    _tickets[_gameNumber] = newGame;
-    console.log('setGameTickets-newGames');
+    // const currTickets = _tickets[_gameNumber];
+    // console.log(currTickets);
+    // const newTickets = data;
+    // console.log('setGameTickets-newTickets');
+    // console.log(newTickets);
+    _tickets[_gameNumber] = data;
+    console.log('setGameTickets-_tickets');
     console.log(_tickets);
     setTickets([..._tickets]);
   };

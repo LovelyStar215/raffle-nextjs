@@ -44,9 +44,9 @@ const Game = ({
 		// Format wei by decimals, and add symbol
 		else if(key === 'ticketPrice') {
 			let token = getToken(game.tokenAddress);
-			// let token = false;
+			console.log('ticketPrice-token')
+			console.log(token);
 			if (token) {
-				token = token.pop();
 				console.log('gameItems-getToken');
 				console.log(token);
 				val = token.decimals === '18' ? web3.utils.fromWei(val) : val; // game._decimals
@@ -81,9 +81,8 @@ const Game = ({
 			let token = getToken(result.assetAddress);
 			let value = result.value;
 			if (token) {
-				token = token.pop();
-				console.log('gamePots-getToken');
-				console.log(token);
+				// console.log('gamePots-getToken');
+				// console.log(token);
 				value =
 					token.decimals === '18'
 					? web3.utils.fromWei(result.value)
