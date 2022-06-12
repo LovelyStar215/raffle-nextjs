@@ -317,7 +317,11 @@ function MyApp({ Component, pageProps }) {
     ).call();
     console.log('getGamePlayerState = ' + _gameNumber + '; address = ' + _playerAddress);
     // console.log(results);
-    setGameTickets(_gameNumber, results);
+    let newTickets = tickets[_gameNumber] || [];
+    newTickets[_playerAddress] = results;
+    console.log('newTickets');
+    console.log(newTickets);
+    setGameTickets(_gameNumber, newTickets);
     // return results;
   }
 

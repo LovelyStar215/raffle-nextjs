@@ -112,8 +112,11 @@ const Game = ({
 
 	const gameTicketItems = () => {
 		let items = '';
-		if (gameTickets) {
-			items = gameTickets.map((val, key) => {
+		if (gameTickets && gameTickets[activeAddress]) {
+			console.log('gameTickets');
+			// console.log(gameTickets);
+			console.log(typeof gameTickets[activeAddress]);
+			items = gameTickets[activeAddress].map((val, key) => {
 				return (
 					<div className="ticket" key={`game-${game.gameNumber}-ticket-${key}`}>
 						<span>#{val}</span>
