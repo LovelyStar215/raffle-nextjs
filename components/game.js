@@ -113,7 +113,7 @@ const Game = ({
 	const gameTicketItems = () => {
 		let items = '';
 		if (gameTickets) {
-			items = Object.keys(gameTickets).map((val, key) => {
+			items = gameTickets.map((val, key) => {
 				return (
 					<div className="ticket" key={`game-${game.gameNumber}-ticket-${key}`}>
 						<span>#{val}</span>
