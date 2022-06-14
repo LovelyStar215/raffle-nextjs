@@ -111,25 +111,62 @@ const Game = ({
 	};
 
 	const gameTicketItems = () => {
-		let items = '';
+		let ticketItems = '';
+		let totalShareValue, totalSharePercentage, totalSharePercentageString;
 		if (gameTickets && gameTickets[activeAddress]) {
-			console.log('gameTickets');
-			// console.log(gameTickets);
-			console.log(typeof gameTickets[activeAddress]);
-			items = gameTickets[activeAddress].map((val, key) => {
+			ticketItems = gameTickets[activeAddress].map((val, key) => {
 				return (
 					<div className="ticket" key={`game-${game.gameNumber}-ticket-${key}`}>
 						<span>#{val}</span>
 					</div>
 				);
 			}, {});
+
+			// Players current pot share (value and percentage), in play
+			let token = getToken(game.tokenAddress);
+			if (token) {
+				console.log('game.ticketPrice');
+				console.log(game.ticketPrice);
+				console.log('ticketCount');
+				let ticketCount = gameTickets[activeAddress].length;
+				let ticketCountBN = web3.utils.toBN(ticketCount);
+				// console.log(ticketCount);
+				// let decimals = web3.utils.toBN(token.decimals);
+				// console.log('token.decimals');
+				// console.log(decimals);
+				// totalShareValue = web3.utils
+				// 	.toBN(game.ticketPrice)
+				// 	.mul(ticketCount);
+				// console.log('shareBN');
+				// console.log(totalShareValue.toString());
+				// totalShareValue = web3.utils
+				// 	.toBN(game.ticketPrice).div(
+				// 		web3.utils
+				// 		.toBN(10)
+				// 		.pow(decimals)
+				// 	)
+				// 	.toString() + ' ' + token.symbol;
+				totalShareValue = web3.utils.fromWei(web3.utils.toBN(game.ticketPrice).mul(ticketCountBN));
+				if (token.symbol) totalShareValue += ' ' + token.symbol;
+
+				totalSharePercentage = (ticketCount * parseInt(game.ticketCount)).toFixed(2);
+				if (totalSharePercentage)
+					totalSharePercentageString = `(${totalSharePercentage}%)`;
+			}
 		}
 
 		return (
-			<div className="result tickets">
+			<div className="result pots">
 				<div>
-					<div><strong>Tickets</strong></div>
-					{items}
+					<div><strong>Your play</strong></div>
+				</div>
+				<div className="pot">
+					<div><strong>Tickets ({ticketCount})</strong></div>
+					{ticketItems}
+				</div>
+				<div className="pot">
+					<div><strong>Share of pot</strong></div>
+					{totalShareValue} {totalSharePercentageString}
 				</div>
 			</div>
 		)
