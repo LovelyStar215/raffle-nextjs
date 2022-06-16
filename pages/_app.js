@@ -304,6 +304,11 @@ function MyApp({ Component, pageProps }) {
       
       console.log('setGameData call');
       setGameState(items);
+
+      getGamePlayerState(
+      	gameNumber,
+      	activeAddress
+      )
     }
   }
 
