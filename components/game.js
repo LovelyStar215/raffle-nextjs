@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { IERC20MetadataABI } from '../features/configure/abi.js';
 
 const Game = ({
 	getToken,
 	game,
 	gameTickets,
 	web3,
-	IERC20MetadataABI,
 	gameAddress,
 	gameContract,
 	activeAddress,

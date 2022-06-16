@@ -7,7 +7,6 @@ const GamesList = ({
 	getToken,
 	games,
 	web3,
-	IERC20MetadataABI,
 	gameAddress,
 	gameContract,
 	activeAddress,
@@ -41,7 +40,6 @@ const GamesList = ({
 							game={game}
 							gameTickets={tickets[game.gameNumber]}
 							web3={web3}
-							IERC20MetadataABI={IERC20MetadataABI}
 							gameAddress={gameAddress}
 							gameContract={gameContract}
 							activeAddress={activeAddress}

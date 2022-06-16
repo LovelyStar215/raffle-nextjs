@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import Web3 from 'web3'
 // import { BN } from 'bn.js';
 
-import { gameMasterABI, IERC20MetadataABI, oracleABI } from '../features/configure/abi.js'
+import { gameMasterABI, IERC20MetadataABI } from '../features/configure/abi.js'
 
 import '../styles/globals.scss'
 
@@ -590,7 +590,6 @@ function MyApp({ Component, pageProps }) {
         getToken={getToken}
         games={games}
         web3={web3}
-        IERC20MetadataABI={IERC20MetadataABI}
         gameAddress={gameAddress}
         gameContract={gameContract}
         activeAddress={activeAddress}
