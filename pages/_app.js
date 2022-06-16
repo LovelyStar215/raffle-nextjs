@@ -490,10 +490,10 @@ function MyApp({ Component, pageProps }) {
           if (data.returnValues) {
             // setGameState(data.returnValues);
             getGameState(web3, gameContract, games, data.returnValues.gameNumber);
-            getGamePlayerState(
-              data.returnValues.gameNumber,
-              activeAddress
-            )
+            // getGamePlayerState(
+            //   data.returnValues.gameNumber,
+            //   activeAddress
+            // )
           }
         }
       });
