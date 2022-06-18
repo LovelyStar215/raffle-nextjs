@@ -13,11 +13,6 @@ const Game = ({
 	getGamePlayerState,
 	hideGame
 }) => {
-	// getGamePlayerState(
-	// 	game.gameNumber,
-	// 	activeAddress
-	// )
-
 	const numberOfTickets = useRef();
 
 	let gameToken = new web3.eth.Contract(IERC20MetadataABI, game.tokenAddress);

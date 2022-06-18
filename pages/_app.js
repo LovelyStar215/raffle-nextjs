@@ -274,38 +274,7 @@ function MyApp({ Component, pageProps }) {
 
         return result;
       }, {});
-      // console.log('ITEMS');
-      // console.log(items);
       items.gameNumber = gameNumber.toString();
-
-      // if (!tokens[items.tokenAddress]) {
-      //   let gameToken = new web3.eth.Contract(IERC20MetadataABI, items.tokenAddress);
-
-      //   let token = {
-      //     address: items.tokenAddress
-      //   };
-        
-      //   const result = await gameToken.methods.name().call();
-      //   console.log('name: ' + result);
-      //   if (result) {
-      //     token.name = result;
-      //   }
-        
-      //   result = await gameToken.methods.symbol().call();
-      //   console.log('symbol: ' + result);
-      //   if (result) {
-      //     token.symbol = result;
-      //   }
-
-      //   result = await gameToken.methods.decimals().call();
-      //   console.log('decimals: ' + result);
-      //   if (result) {
-      //     token.decimals = result;
-      //   }
-
-      //   console.log(token);
-      //   setToken(token);
-      // }
       
       console.log('setGameData call');
       setGameState(items);
@@ -350,7 +319,6 @@ function MyApp({ Component, pageProps }) {
     let _value = web3.utils.toBN(_amount).mul(web3.utils.toBN(10).pow(decimals));
     
     await tokenContract.methods.approve(_fromAddress, _value).send({from: activeAddress});
-    // await tokenContract.methods.approve(srcAddress, _value).send({from: srcAddress});
 
     let results = await tokenContract.methods.transferFrom(
 
@@ -572,19 +540,6 @@ function MyApp({ Component, pageProps }) {
             }}>getGameState</button>
             <input ref={getGameStateId} defaultValue="0" size="2" min="0" type="number" />
           </div>
-          {/* <button
-						className="button"
-						onClick={() => {
-              const decimals = web3.utils.toBN(18);
-              let tokenContract = new web3.eth.Contract(IERC20MetadataABI, tokenAddress);
-							let _totalCost = web3.utils.toBN(100000000).mul(web3.utils.toBN(10).pow(decimals));
-							tokenContract.methods.approve(
-								activeAddress,
-								_totalCost
-							).send({from: activeAddress})
-						}}>
-						Approve funds
-					</button> */}
           <button
 						className="button"
 						onClick={async () => {
