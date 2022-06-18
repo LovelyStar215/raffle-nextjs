@@ -311,7 +311,7 @@ function MyApp({ Component, pageProps }) {
 
 
 
-  // TESTING: SEND CGT FUNDS
+  // TESTING: SEND GBT FUNDS
 
   const sendFunds = async (_tokenAddress, _fromAddress, _toAddress, _amount) => {
     const decimals = web3.utils.toBN(18);
@@ -494,9 +494,8 @@ function MyApp({ Component, pageProps }) {
       <div className="tools">
         <div className="container">
           <h3>Dev</h3>
-          {/* <button className="button" onClick={() => sendFunds(tokenAddress, activeAddress, '0x53725f4B897217C460Cb0E388f1E3d1c868702fb', 1000)}>sendFunds (1000 CGT) (A0)</button> */}
           <div className="button">
-            <button onClick={() => sendFunds(tokenAddress, sendFundsFrom.current.value, sendFundsTo.current.value, sendFundsAmount.current.value)}>sendFunds (CGT)</button>
+            <button onClick={() => sendFunds(tokenAddress, sendFundsFrom.current.value, sendFundsTo.current.value, sendFundsAmount.current.value)}>sendFunds (GBT)</button>
             <input
               ref={sendFundsFrom}
               defaultValue={activeAddress}
@@ -540,7 +539,7 @@ function MyApp({ Component, pageProps }) {
             }}>getGameState</button>
             <input ref={getGameStateId} defaultValue="0" size="2" min="0" type="number" />
           </div>
-          <button
+          {/* <button
 						className="button"
 						onClick={async () => {
               let tokenContract = new web3.eth.Contract(IERC20MetadataABI, tokenAddress);
@@ -550,7 +549,7 @@ function MyApp({ Component, pageProps }) {
               console.log(value);
 						}}>
 						Get contract balance
-					</button>
+					</button> */}
         </div>
       </div>
       <GamesList
