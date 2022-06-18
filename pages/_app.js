@@ -210,18 +210,16 @@ function MyApp({ Component, pageProps }) {
     return token;
   };
 
-
-
   const setGameTickets = (_gameNumber, data) => {
     console.log('setGameTickets: ' + _gameNumber);
-    console.log(JSON.stringify(data));
+    console.log((data));
     let _tickets = tickets;
     // const currTickets = _tickets[_gameNumber];
     // console.log(currTickets);
-    // const newTickets = data;
-    // console.log('setGameTickets-newTickets');
-    // console.log(newTickets);
-    _tickets[_gameNumber] = data;
+    const newTickets = { ...data };
+    console.log('setGameTickets-newTickets');
+    console.log(newTickets);
+    _tickets[_gameNumber] = newTickets;
     console.log('setGameTickets-_tickets');
     console.log(_tickets);
     setTickets([..._tickets]);
@@ -241,7 +239,7 @@ function MyApp({ Component, pageProps }) {
     console.log(newGame);
     _games[data.gameNumber] = newGame;
     console.log('setGameState-newGames');
-    console.log(_games);
+    console.log([..._games]);
     setGames([..._games]);
   }
 
@@ -321,9 +319,12 @@ function MyApp({ Component, pageProps }) {
       _playerAddress
     ).call();
     console.log('getGamePlayerState = ' + _gameNumber + '; address = ' + _playerAddress);
-    // console.log(results);
+    console.log(results);
     let newTickets = tickets[_gameNumber] || [];
     newTickets[_playerAddress] = results;
+    // newTickets = {
+    //   _playerAddress: results
+    // };
     console.log('newTickets');
     console.log(newTickets);
     setGameTickets(_gameNumber, newTickets);
@@ -490,10 +491,10 @@ function MyApp({ Component, pageProps }) {
           if (data.returnValues) {
             // setGameState(data.returnValues);
             getGameState(web3, gameContract, games, data.returnValues.gameNumber);
-            // getGamePlayerState(
-            //   data.returnValues.gameNumber,
-            //   activeAddress
-            // )
+            getGamePlayerState(
+              data.returnValues.gameNumber,
+              activeAddress
+            )
           }
         }
       });
