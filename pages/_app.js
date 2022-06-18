@@ -248,19 +248,24 @@ function MyApp({ Component, pageProps }) {
     console.log('getGameState = ' + gameNumber);
     console.log(results);
     if (results) {
-      // let keys = Object.keys(results);
-
-      // Clear out indexed array entries
       let len = Object.keys(results).length/2;
       let items = Object.keys(results).slice(len).reduce((result, key) => {
-        // console.log('key: ' + key);
         let val = results[key];
         if (typeof val === 'boolean') {
           val = val ? 'true' : 'false';
         }
 
-        if (key === 'winnerResult' || key === 'pot' || key === 'status') {
-          console.log(val);
+        if (key === 'pot') {
+          let potRecord = [];
+          val.forEach((pot, potIdx) => {
+            let potLen = Object.keys(pot).length/2;
+            potRecord[potIdx] = Object.fromEntries(Object.entries(pot).slice(potLen));
+          }, {});
+          // console.log(potRecord);
+          let newKey = `_${key}`;
+          result[newKey] = potRecord;
+        } else if (key === 'winnerResult' || key === 'status') {
+          // console.log(val);
           let newKey = `_${key}`;
           result[newKey] = val;
         } else {
@@ -269,6 +274,8 @@ function MyApp({ Component, pageProps }) {
 
         return result;
       }, {});
+      // console.log('ITEMS');
+      // console.log(items);
       items.gameNumber = gameNumber.toString();
 
       // if (!tokens[items.tokenAddress]) {

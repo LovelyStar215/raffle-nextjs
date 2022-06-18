@@ -62,50 +62,48 @@ const Game = ({
 		)
 	});
 
-	const gamePots = (pots) => {
+	const gamePots = () => {
 		// console.log('pots');
-		// console.log(pots);
+		// console.log(game._pot);
+		// console.log(game._pot.length);
 
-		if (!pots) return false;
-
-		let len = pots.length/2;
-		let items = pots.slice(len).map((result, key) => {
-			// console.log('pot');
-			// console.log(result);
-
-			let displayAddress =
-				result?.assetAddress?.slice(0,6)
-				+ '...'
-				+ result?.assetAddress?.slice(-4)
-
-			let token = getToken(result.assetAddress);
-			let value = result.value;
-			if (token) {
-				// console.log('gamePots-getToken');
-				// console.log(token);
-				value =
-					token.decimals === '18'
-					? web3.utils.fromWei(result.value)
-					: result.value; // game._decimals
-				
-				if (token.symbol) value += ' ' + token.symbol;
-			}
-
-			return (
-				<div className="pot" key={`game-${game.gameNumber}-pot-${key}`}>
-					<div>{result.assetType == 0 ? 'Token' : 'NFT'}</div>
-					<div>{displayAddress}</div>
-					<div>{value}</div>
-				</div>
-			);
-		}, {});
+		if (!game._pot) return false;
 		
 		return (
 			<div className="result pots">
 				<div>
 					<div><strong>Pots</strong></div>
 				</div>
-				{items}
+				{game._pot.map((pot, key) => {
+					// console.log('potItem: ' + key);
+					// console.log(pot);
+
+					let displayAddress =
+					pot?.assetAddress?.slice(0,6)
+						+ '...'
+						+ pot?.assetAddress?.slice(-4)
+
+					let token = getToken(pot.assetAddress);
+					let value = pot.value;
+					if (token) {
+						// console.log('gamePots-getToken');
+						// console.log(token);
+						value =
+							token.decimals === '18'
+							? web3.utils.fromWei(pot.value)
+							: pot.value; // game._decimals
+						
+						if (token.symbol) value += ' ' + token.symbol;
+					}
+
+					return (
+						<div className="pot" key={`game-${game.gameNumber}-pot-${key}`}>
+							<div>{pot.assetType == 0 ? 'Token' : 'NFT'}</div>
+							<div>{displayAddress}</div>
+							<div>{value}</div>
+						</div>
+					);
+				})}
 			</div>
 		)
 	};
@@ -212,7 +210,7 @@ const Game = ({
 					<div>{gameItems}</div>
 				</div>
 				{gameTicketItems()}
-				{gamePots(game._pot)}
+				{gamePots()}
 				<div className="buttons">
 					<button
 						className="button"
