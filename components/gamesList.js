@@ -3,6 +3,7 @@ import React, { useEffect } from 'react';
 import Game from './game'
 
 const GamesList = ({
+	getActiveGames,
 	tickets,
 	getToken,
 	games,
@@ -16,8 +17,14 @@ const GamesList = ({
 	setApproval,
 	getAllowance
 }) => {
-	if (!games || !gameContract || !games.length || !web3)
+	if (!gameContract || !web3)
 		return null;
+
+	if (!games || !games.length) {
+		let runOnce = true;
+		// getActiveGames(10, runOnce);
+		return null;
+	}
 
 	return (
 		<div className="games">

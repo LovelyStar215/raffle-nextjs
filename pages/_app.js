@@ -63,6 +63,8 @@ function MyApp({ Component, pageProps }) {
 
   const [games, setGames] = useState([])
 
+  const [totalActiveGameCalls, setActiveGameCalls] = useState(0)
+
   const [tickets, setTickets] = useState([])
 
   const [tokens, setTokens] = useState([])
@@ -71,6 +73,7 @@ function MyApp({ Component, pageProps }) {
 
   const endGameId = useRef();
   const getGameStateId = useRef();
+  const getActiveGamesMax = useRef();
 
   const sendFundsFrom = useRef();
   const sendFundsTo = useRef();
@@ -328,6 +331,29 @@ function MyApp({ Component, pageProps }) {
     console.log([..._games]);
     setGames([..._games]);
   }
+
+  const getActiveGames = async (_total, _runOnce) => {
+    let runOnce = _runOnce ? true : false;
+    if (runOnce && totalActiveGameCalls) {
+      console.warn('Only allowed to run getActiveGames() once, in this instance.');
+      return;
+    }
+
+    let newActiveGameCalls = totalActiveGameCalls + 1;
+    setActiveGameCalls(newActiveGameCalls);
+
+    let results = await gameContract.methods.getActiveGames(_total).call();
+    console.log('getActiveGames = ' + _total);
+    if (results?.length) {
+      console.log('getActiveGames');
+      results.forEach(gameNumber => {
+        getGameState(web3, gameContract, games, gameNumber);
+      });
+      console.log(results);
+    } else {
+      console.warn('There are no active games');
+    }
+  };
 
   const getGameState = async (web3, gameContract, games, gameNumber) => {
     let results = await gameContract.methods.getGameState(gameNumber).call();
@@ -625,6 +651,15 @@ function MyApp({ Component, pageProps }) {
             }}>getGameState</button>
             <input ref={getGameStateId} defaultValue="0" size="2" min="0" type="number" />
           </div>
+          <div className="button">
+            <button onClick={() => {
+              console.log('getActiveGamesMax: ' + getActiveGamesMax.current.value);
+              getActiveGames(
+                web3.utils.toBN(getActiveGamesMax.current.value)
+              )
+            }}>getActiveGames</button>
+            <input ref={getActiveGamesMax} defaultValue="1" size="2" min="1" type="number" />
+          </div>
           {/* <button
 						className="button"
 						onClick={async () => {
@@ -639,6 +674,7 @@ function MyApp({ Component, pageProps }) {
         </div>
       </div>
       <GamesList
+        getActiveGames={getActiveGames}
         tickets={tickets}
         getToken={getToken}
         games={games}
