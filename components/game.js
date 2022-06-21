@@ -307,18 +307,19 @@ const Game = ({
 						}}>
 						Get allowance
 					</button> */}
-					<div className={buttonBuyTicketClasses()}>
-						<button
-							disabled={gameHasEnded}
-							onClick={() => {
-								buyTicket(
-									gameContract,
-									web3.utils.toBN(game.gameNumber),
-									web3.utils.toBN(numberOfTickets.current.value)
-								)
-							}}>
-							Buy tickets
-						</button>
+					<div
+						disabled={gameHasEnded}
+						className={buttonBuyTicketClasses()}
+						onClick={() => {
+							buyTicket(
+								gameContract,
+								web3.utils.toBN(game.gameNumber),
+								web3.utils.toBN(numberOfTickets.current.value)
+							)
+						}}
+						role="button"
+						tabindex="0">
+						<div>Buy tickets</div>
 						<input
 							ref={numberOfTickets}
 							max={game.maxTicketsPlayer}
