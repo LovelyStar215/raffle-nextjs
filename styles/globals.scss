@@ -188,9 +188,9 @@ h1, h2, h3 {
   cursor: pointer;
   font-weight: 700;
   font-size: 1em;
+  line-height: 1;
   font-family: $body-font;
   margin: .5em;
-
   &:hover {
     background-color: #ccc;
     border-color: #002593;
@@ -227,7 +227,7 @@ h1, h2, h3 {
 }
 
 .buttons {
-  border-top: 2px solid #ccc;
+  border-top: .25em solid #ccc;
   padding-top: 1em;
   margin-top: 1.5em;
 }
@@ -236,6 +236,7 @@ div.button {
   padding: 0;
   > div {
     padding: .75em .75em .75em 1em;
+    border: 0;
   }
   > input {
     margin-right: 1em;
