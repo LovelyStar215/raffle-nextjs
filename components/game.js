@@ -22,7 +22,41 @@ const Game = ({
 	// Get game token metadata
 	let gameTokenMetadata = getToken(game.tokenAddress);
 
-	let hasEnded = game._status == 0;
+	let gameHasEnded = (game._status == 0);
+
+	// Set current game token allowance/approval state
+	let gameTokenApprovalMax = web3.utils
+		.toBN(game.ticketPrice)
+		.mul(web3.utils.toBN(game.maxTicketsPlayer));
+	console.log('getAllowance');
+	let gameTokenAllowanceAmount = getAllowance(game.tokenAddress);
+	console.log(gameTokenAllowanceAmount);
+	let hasGameTokenApproval =
+		gameTokenAllowanceAmount
+		.sub(gameTokenApprovalMax)
+		.gte(web3.utils.toBN('0'));
+	console.log(gameTokenAllowanceAmount.sub(gameTokenApprovalMax).toString());
+	console.log('hasGameTokenApproval: ' + hasGameTokenApproval);
+
+	const buttonApproveClasses = () => {
+		let arr = [
+			'button'
+		];
+		if (hasGameTokenApproval)
+			arr.push('hide');
+		
+		return arr.join(' ');
+	};
+
+	const buttonBuyTicketClasses = () => {
+		let arr = [
+			'button'
+		];
+		if (!hasGameTokenApproval)
+			arr.push('hide');
+		
+		return arr.join(' ');
+	};
 
 	let ticketItems = '';
 
@@ -217,7 +251,7 @@ const Game = ({
 						Hide
 					</button>
 					<button
-						disabled={hasEnded}
+						disabled={gameHasEnded}
 						className="button"
 						onClick={() => {
 							getGamePlayerState(
@@ -239,17 +273,18 @@ const Game = ({
 						Get token
 					</button>
 					<button
-						disabled={hasEnded}
-						className="button"
+						disabled={gameHasEnded}
+						className={buttonApproveClasses()}
 						onClick={() => {
-							let _totalCost = web3.utils.toBN(game.ticketPrice).mul(web3.utils.toBN(game.maxTicketsPlayer));
 							gameToken.methods.approve(
 								gameAddress,
-								_totalCost
+								gameTokenApprovalMax
 							).send({from: activeAddress})
 							.on('receipt', function(receipt) {
 								// console.log(receipt);
-								setApproval(receipt.to, _totalCost);
+								console.log('approve');
+								console.log(gameTokenApprovalMax);
+								setApproval(receipt.to, gameTokenApprovalMax);
 								// let allowance = getAllowance(game.tokenAddress);
 								// console.log('getAllowance');
 								// console.log(allowance);
@@ -257,9 +292,24 @@ const Game = ({
 						}}>
 						Approve
 					</button>
-					<div className="button">
+					<button
+						disabled={gameHasEnded}
+						className={buttonApproveClasses()}
+						onClick={() => {
+							gameToken.methods.allowance(
+								activeAddress,
+								gameAddress
+							).call()
+							.on('receipt', function(receipt) {
+								console.log('allowance');
+								console.log(receipt);
+							});
+						}}>
+						Get allowance
+					</button>
+					<div className={buttonBuyTicketClasses()}>
 						<button
-							disabled={hasEnded}
+							disabled={gameHasEnded}
 							onClick={() => {
 								buyTicket(
 									gameContract,

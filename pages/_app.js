@@ -168,8 +168,8 @@ function MyApp({ Component, pageProps }) {
     let allowance;
     let token = new web3.eth.Contract(IERC20MetadataABI, _address);
     const result = await token.methods.allowance(
-      gameAddress,
-      activeAddress
+      activeAddress,
+      gameAddress
     ).call();
     console.log('allowance: ' + result);
     if (result) {
@@ -188,14 +188,17 @@ function MyApp({ Component, pageProps }) {
     // Approval exists
     if (currApproval.length) {
       let approvalsKey = [...currApproval.keys()][0];
-      console.log('Approval exists: ' + _approvals[approvalsKey].amount);
-      return _approvals[approvalsKey].amount;
+      let amount = approvals[approvalsKey].amount;
+      console.log('Approval exists: ' + amount);
+      console.log(approvals[approvalsKey]);
+
+      return web3.utils.toBN(amount);
     }
 
     // Request token allowance
     _getAllowance(_address);
 
-    return "0";
+    return web3.utils.toBN('0');
   };
 
 
