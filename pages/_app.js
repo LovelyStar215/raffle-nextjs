@@ -174,9 +174,11 @@ function MyApp({ Component, pageProps }) {
     console.log('allowance: ' + result);
     if (result) {
       allowance = result.toString();
+      console.log(allowance);
+      setApproval(_address, result);
     }
 
-    console.log(allowance);
+    
     return allowance;
   };
 
@@ -190,13 +192,10 @@ function MyApp({ Component, pageProps }) {
       return _approvals[approvalsKey].amount;
     }
 
-    // Request `allowance`
-    else {
-      let allowance = _getAllowance(_address);
-      console.log(allowance);
-      // setApproval(_address, result);
-      return allowance;
-    }
+    // Request token allowance
+    _getAllowance(_address);
+
+    return "0";
   };
 
 
@@ -287,8 +286,11 @@ function MyApp({ Component, pageProps }) {
       }
     }
 
+    // Request token
     console.log('token request: ' + _address);
-    _getToken(_address)
+    _getToken(_address);
+
+    return null;
   };
 
   const setGameTickets = (_gameNumber, data) => {
