@@ -204,9 +204,7 @@ h1, h2, h3 {
 .button {
   @extend %button;
   display: inline-block;
-  button {
-    cursor: pointer;
-  }
+  cursor: pointer;
   > * {
     display: inline-block;
     background-color: transparent;
@@ -223,7 +221,7 @@ h1, h2, h3 {
     border-style: solid;
     border-color: #333;
     &:focus, &:hover {
-      background-color: #ccc;
+      background-color: #aaa;
     }
   }
 }
@@ -236,7 +234,7 @@ h1, h2, h3 {
 
 div.button {
   padding: 0;
-  > button {
+  > div {
     padding: .75em .75em .75em 1em;
   }
   > input {

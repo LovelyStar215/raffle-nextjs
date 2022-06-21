@@ -606,8 +606,17 @@ function MyApp({ Component, pageProps }) {
       <div className="tools">
         <div className="container">
           <h3>Dev</h3>
-          <div className="button">
-            <button onClick={() => sendFunds(tokenAddress, sendFundsFrom.current.value, sendFundsTo.current.value, sendFundsAmount.current.value)}>sendFunds (GBT)</button>
+          <div
+            onClick={() => sendFunds(
+              tokenAddress,
+              sendFundsFrom.current.value,
+              sendFundsTo.current.value,
+              sendFundsAmount.current.value
+            )}
+            className="button"
+            role="button"
+            tabindex="0">
+            <div>sendFunds (GBT)</div>
             <input
               ref={sendFundsFrom}
               defaultValue={activeAddress}
@@ -630,34 +639,46 @@ function MyApp({ Component, pageProps }) {
             />
           </div>
           <button className="button" onClick={() => startGame(gameContract)}>startGame (A0)</button>
-          <div className="button">
-            <button onClick={() => {
+          <div
+            onClick={() => {
               console.log('endGame ID: ' + endGameId.current.value);
               endGame(
                 gameContract,
                 web3.utils.toBN(endGameId.current.value)
               )
-            }}>endGame (A0)</button>
+            }}
+            className="button"
+            role="button"
+            tabindex="0">
+            <div>endGame (A0)</div>
             <input ref={endGameId} defaultValue="0" size="1" min="0" type="number" />
           </div>
-          <div className="button">
-            <button onClick={() => {
+          <div
+            onClick={() => {
               getGameState(
                 web3,
                 gameContract,
                 games,
                 web3.utils.toBN(getGameStateId.current.value)
               )
-            }}>getGameState</button>
+            }}
+            className="button"
+            role="button"
+            tabindex="0">
+            <div>getGameState</div>
             <input ref={getGameStateId} defaultValue="0" size="1" min="0" type="number" />
           </div>
-          <div className="button">
-            <button onClick={() => {
+          <div
+            onClick={() => {
               console.log('getActiveGamesMax: ' + getActiveGamesMax.current.value);
               getActiveGames(
                 web3.utils.toBN(getActiveGamesMax.current.value)
               )
-            }}>getActiveGames</button>
+            }}
+            className="button"
+            role="button"
+            tabindex="0">
+            <div>getActiveGames</div>
             <input ref={getActiveGamesMax} defaultValue="1" size="1" min="1" type="number" />
           </div>
           {/* <button
