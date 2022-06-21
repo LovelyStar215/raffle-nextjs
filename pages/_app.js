@@ -612,19 +612,19 @@ function MyApp({ Component, pageProps }) {
               ref={sendFundsFrom}
               defaultValue={activeAddress}
               placeholder="From"
-              size="8"
+              size="6"
               type="text"
             />
             <input
               ref={sendFundsTo}
               placeholder="To"
-              size="8"
+              size="6"
               type="text"
             />
             <input
               ref={sendFundsAmount}
               defaultValue="1000"
-              size="4"
+              size="3"
               min="0"
               type="number"
             />
@@ -638,7 +638,7 @@ function MyApp({ Component, pageProps }) {
                 web3.utils.toBN(endGameId.current.value)
               )
             }}>endGame (A0)</button>
-            <input ref={endGameId} defaultValue="0" size="2" min="0" type="number" />
+            <input ref={endGameId} defaultValue="0" size="1" min="0" type="number" />
           </div>
           <div className="button">
             <button onClick={() => {
@@ -649,7 +649,7 @@ function MyApp({ Component, pageProps }) {
                 web3.utils.toBN(getGameStateId.current.value)
               )
             }}>getGameState</button>
-            <input ref={getGameStateId} defaultValue="0" size="2" min="0" type="number" />
+            <input ref={getGameStateId} defaultValue="0" size="1" min="0" type="number" />
           </div>
           <div className="button">
             <button onClick={() => {
@@ -658,7 +658,7 @@ function MyApp({ Component, pageProps }) {
                 web3.utils.toBN(getActiveGamesMax.current.value)
               )
             }}>getActiveGames</button>
-            <input ref={getActiveGamesMax} defaultValue="1" size="2" min="1" type="number" />
+            <input ref={getActiveGamesMax} defaultValue="1" size="1" min="1" type="number" />
           </div>
           {/* <button
 						className="button"
