@@ -250,7 +250,7 @@ const Game = ({
 						onClick={hideGame}>
 						Hide
 					</button>
-					<button
+					{/* <button
 						disabled={gameHasEnded}
 						className="button"
 						onClick={() => {
@@ -271,7 +271,7 @@ const Game = ({
 							console.log(result);
 						}}>
 						Get token
-					</button>
+					</button> */}
 					<button
 						disabled={gameHasEnded}
 						className={buttonApproveClasses()}
@@ -292,7 +292,7 @@ const Game = ({
 						}}>
 						Approve
 					</button>
-					<button
+					{/* <button
 						disabled={gameHasEnded}
 						className={buttonApproveClasses()}
 						onClick={() => {
@@ -306,7 +306,7 @@ const Game = ({
 							});
 						}}>
 						Get allowance
-					</button>
+					</button> */}
 					<div className={buttonBuyTicketClasses()}>
 						<button
 							disabled={gameHasEnded}
