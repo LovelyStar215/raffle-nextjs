@@ -278,18 +278,17 @@ function MyApp({ Component, pageProps }) {
   };
 
   const getToken = (_address) => {
-    let token;
     if (tokens.length) {
-      console.log('token exists: ' + _address);
-      token = tokens.filter(_token => _token.address == _address);
-      token = token.pop();
-    } else {
-      console.log('lookup token: ' + _address);
-      _getToken(_address);
-      token = tokens[_address];
+      let filter = tokens.filter(_token => _token.address === _address);
+      if (filter.length) {
+        console.log('token exists: ' + _address);
+        let filterKey = [...filter.keys()][0];
+        return tokens[filterKey];
+      }
     }
 
-    return token;
+    console.log('token request: ' + _address);
+    _getToken(_address)
   };
 
   const setGameTickets = (_gameNumber, data) => {

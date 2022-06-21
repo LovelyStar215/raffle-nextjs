@@ -19,6 +19,9 @@ const Game = ({
 
 	let gameToken = new web3.eth.Contract(IERC20MetadataABI, game.tokenAddress);
 
+	// Get game token metadata
+	let gameTokenMetadata = getToken(game.tokenAddress);
+
 	let hasEnded = game._status == 0;
 
 	let ticketItems = '';
@@ -40,14 +43,13 @@ const Game = ({
 		
 		// Format wei by decimals, and add symbol
 		else if(key === 'ticketPrice') {
-			let token = getToken(game.tokenAddress);
-			console.log('ticketPrice-token')
-			console.log(token);
-			if (token) {
+			console.log('ticketPrice-gameTokenMetadata')
+			console.log(gameTokenMetadata);
+			if (gameTokenMetadata) {
 				console.log('gameItems-getToken');
-				console.log(token);
-				val = token.decimals === '18' ? web3.utils.fromWei(val) : val; // game._decimals
-				if (token.symbol) val += ' ' + token.symbol;
+				console.log(gameTokenMetadata);
+				val = gameTokenMetadata.decimals === '18' ? web3.utils.fromWei(val) : val; // game._decimals
+				if (gameTokenMetadata.symbol) val += ' ' + gameTokenMetadata.symbol;
 			}
 		}
 
@@ -118,16 +120,16 @@ const Game = ({
 			}, {});
 
 			// Players current pot share (value and percentage), in play
-			let token = getToken(game.tokenAddress);
-			if (token) {
+			// let token = getToken(game.tokenAddress);
+			if (gameTokenMetadata) {
 				console.log('game.ticketPrice');
 				console.log(game.ticketPrice);
 				console.log('ticketCount');
 				let ticketCount = gameTickets[activeAddress].length;
 				let ticketCountBN = web3.utils.toBN(ticketCount);
 				// console.log(ticketCount);
-				// let decimals = web3.utils.toBN(token.decimals);
-				// console.log('token.decimals');
+				// let decimals = web3.utils.toBN(gameTokenMetadata.decimals);
+				// console.log('gameTokenMetadata.decimals');
 				// console.log(decimals);
 				// totalShareValue = web3.utils
 				// 	.toBN(game.ticketPrice)
@@ -140,9 +142,9 @@ const Game = ({
 				// 		.toBN(10)
 				// 		.pow(decimals)
 				// 	)
-				// 	.toString() + ' ' + token.symbol;
+				// 	.toString() + ' ' + gameTokenMetadata.symbol;
 				totalShareValue = web3.utils.fromWei(web3.utils.toBN(game.ticketPrice).mul(ticketCountBN));
-				if (token.symbol) totalShareValue += ' ' + token.symbol;
+				if (gameTokenMetadata.symbol) totalShareValue += ' ' + gameTokenMetadata.symbol;
 
 				totalSharePercentage = (ticketCount * parseInt(game.ticketCount)).toFixed(2);
 				if (totalSharePercentage)
