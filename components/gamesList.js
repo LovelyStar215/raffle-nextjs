@@ -12,7 +12,9 @@ const GamesList = ({
 	activeAddress,
 	buyTicket,
 	getGamePlayerState,
-	setGames
+	setGames,
+	setApproval,
+	getAllowance
 }) => {
 	if (!games || !gameContract || !games.length || !web3)
 		return null;
@@ -46,6 +48,8 @@ const GamesList = ({
 							buyTicket={buyTicket}
 							getGamePlayerState={getGamePlayerState}
 							hideGame={hideGame}
+							setApproval={setApproval}
+							getAllowance={getAllowance}
 						/>
 					);
 				})}

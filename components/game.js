@@ -11,7 +11,9 @@ const Game = ({
 	activeAddress,
 	buyTicket,
 	getGamePlayerState,
-	hideGame
+	hideGame,
+	setApproval,
+	getAllowance
 }) => {
 	const numberOfTickets = useRef();
 
@@ -216,18 +218,6 @@ const Game = ({
 						disabled={hasEnded}
 						className="button"
 						onClick={() => {
-							let _totalCost = web3.utils.toBN(game.ticketPrice).mul(web3.utils.toBN(game.maxTicketsPlayer));
-							gameToken.methods.approve(
-								gameAddress,
-								_totalCost
-							).send({from: activeAddress})
-						}}>
-						Approve
-					</button>
-					<button
-						disabled={hasEnded}
-						className="button"
-						onClick={() => {
 							getGamePlayerState(
 								game.gameNumber,
 								activeAddress
@@ -245,6 +235,25 @@ const Game = ({
 							console.log(result);
 						}}>
 						Get token
+					</button>
+					<button
+						disabled={hasEnded}
+						className="button"
+						onClick={() => {
+							let _totalCost = web3.utils.toBN(game.ticketPrice).mul(web3.utils.toBN(game.maxTicketsPlayer));
+							gameToken.methods.approve(
+								gameAddress,
+								_totalCost
+							).send({from: activeAddress})
+							.on('receipt', function(receipt) {
+								// console.log(receipt);
+								setApproval(receipt.to, _totalCost);
+								// let allowance = getAllowance(game.tokenAddress);
+								// console.log('getAllowance');
+								// console.log(allowance);
+							});
+						}}>
+						Approve
 					</button>
 					<div className="button">
 						<button

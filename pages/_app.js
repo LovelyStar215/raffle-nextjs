@@ -49,6 +49,7 @@ const chainRpcs = {
 const LOCAL_STORAGE_KEY_GAMES = process.env.LOCAL_STORAGE_KEY_GAMES || 'caedmon.games';
 const LOCAL_STORAGE_KEY_TICKETS = process.env.LOCAL_STORAGE_KEY_TICKETS || 'caedmon.tickets';
 const LOCAL_STORAGE_KEY_TOKENS = process.env.LOCAL_STORAGE_KEY_TOKENS || 'caedmon.tokens';
+const LOCAL_STORAGE_KEY_APPROVALS = process.env.LOCAL_STORAGE_KEY_APPROVALS || 'caedmon.approvals';
 
 // APP
 
@@ -65,6 +66,8 @@ function MyApp({ Component, pageProps }) {
   const [tickets, setTickets] = useState([])
 
   const [tokens, setTokens] = useState([])
+
+  const [approvals, setApprovals] = useState([])
 
   const endGameId = useRef();
   const getGameStateId = useRef();
@@ -89,6 +92,11 @@ function MyApp({ Component, pageProps }) {
     console.log(storedTokens);
     if (storedTokens)
       setTokens(storedTokens);
+
+    const storedApprovals = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY_APPROVALS));
+    console.log(storedApprovals);
+    if (storedApprovals)
+    setApprovals(storedApprovals);
 	}, [])
 
 	useEffect(() => {
@@ -112,6 +120,13 @@ function MyApp({ Component, pageProps }) {
 		localStorage.setItem(LOCAL_STORAGE_KEY_TOKENS, storedTokens);
 	}, [tokens])
 
+	useEffect(() => {
+		console.log('Approvals changed');
+		console.log(approvals);
+		const storedApprovals = JSON.stringify(approvals);
+		localStorage.setItem(LOCAL_STORAGE_KEY_APPROVALS, storedApprovals);
+	}, [approvals])
+
   const disconnect = () => {
     console.log('disconnect()');
     setAddress(null)
@@ -119,6 +134,73 @@ function MyApp({ Component, pageProps }) {
     setGameContract(null)
     setConnected(false)
   };
+
+  const setApproval = (_address, _amount) => {
+    console.log('setApproval');
+    let _approvals = approvals;
+    const currApproval = _approvals.filter(approval => approval.address === _address);
+    console.log('currApproval');
+    console.log([...currApproval.keys()]);
+    
+    // Approval exists, update
+    if (currApproval.length) {
+      let approvalsKey = [...currApproval.keys()][0];
+      _approvals[approvalsKey].amount = _amount.toString();
+    }
+    
+    // No match, add new record
+    else {
+      const newApproval = {};
+      newApproval.address = _address;
+      newApproval.amount = _amount.toString();
+      console.log('setApproval-newApproval');
+      console.log(newApproval);
+      _approvals[_approvals.length] = newApproval;
+    }
+    
+
+    console.log('setApproval-_approvals');
+    console.log(_approvals);
+    setApprovals([..._approvals]);
+  };
+
+  const _getAllowance = async (_address) => {
+    let allowance;
+    let token = new web3.eth.Contract(IERC20MetadataABI, _address);
+    const result = await token.methods.allowance(
+      gameAddress,
+      activeAddress
+    ).call();
+    console.log('allowance: ' + result);
+    if (result) {
+      allowance = result.toString();
+    }
+
+    console.log(allowance);
+    return allowance;
+  };
+
+  const getAllowance = (_address) => {
+    const currApproval = approvals.filter(approval => approval.address === _address);
+    
+    // Approval exists
+    if (currApproval.length) {
+      let approvalsKey = [...currApproval.keys()][0];
+      console.log('Approval exists: ' + _approvals[approvalsKey].amount);
+      return _approvals[approvalsKey].amount;
+    }
+
+    // Request `allowance`
+    else {
+      let allowance = _getAllowance(_address);
+      console.log(allowance);
+      // setApproval(_address, result);
+      return allowance;
+    }
+  };
+
+
+
 
 
   const connect = () => {
@@ -563,6 +645,8 @@ function MyApp({ Component, pageProps }) {
         buyTicket={buyTicket}
         getGamePlayerState={getGamePlayerState}
         setGames={setGames}
+        setApproval={setApproval}
+        getAllowance={getAllowance}
       />
       <div className="container">
         <Component {...pageProps} />
