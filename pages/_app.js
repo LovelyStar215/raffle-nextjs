@@ -588,7 +588,7 @@ function MyApp({ Component, pageProps }) {
             )}
             className="button"
             role="button"
-            tabindex="0">
+            tabIndex="0">
               <div>sendFunds (GBT)</div>
               <input
                 ref={sendFundsFrom}
@@ -622,7 +622,7 @@ function MyApp({ Component, pageProps }) {
             }}
             className="button"
             role="button"
-            tabindex="0">
+            tabIndex="0">
             <div>endGame (A0)</div>
             <input ref={endGameId} defaultValue="0" size="1" min="0" type="number" />
           </div>
@@ -637,7 +637,7 @@ function MyApp({ Component, pageProps }) {
             }}
             className="button"
             role="button"
-            tabindex="0">
+            tabIndex="0">
             <div>getGameState</div>
             <input ref={getGameStateId} defaultValue="0" size="1" min="0" type="number" />
           </div>
@@ -650,7 +650,7 @@ function MyApp({ Component, pageProps }) {
             }}
             className="button"
             role="button"
-            tabindex="0">
+            tabIndex="0">
             <div>getActiveGames</div>
             <input ref={getActiveGamesMax} defaultValue="1" size="1" min="1" type="number" />
           </div>

@@ -326,7 +326,7 @@ const Game = ({
 							)
 						}}
 						role="button"
-						tabindex="0">
+						tabIndex="0">
 							<div>Buy tickets</div>
 							<input
 								ref={numberOfTickets}
@@ -355,7 +355,7 @@ const Game = ({
 					}}
 					className="button"
 					role="button"
-					tabindex="0">
+					tabIndex="0">
 						<div>addGamePotERC20Asset</div>
 						<input
 							ref={addGamePotERC20AssetAddress}
@@ -387,7 +387,7 @@ const Game = ({
 						}}
 						className="button"
 						role="button"
-						tabindex="0">
+						tabIndex="0">
 							<div>addGamePotERC721Asset</div>
 							<input
 								ref={addGamePotERC721AssetAddress}
