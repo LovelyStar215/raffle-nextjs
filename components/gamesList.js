@@ -8,7 +8,6 @@ const GamesList = ({
 	getToken,
 	games,
 	web3,
-	gameAddress,
 	gameContract,
 	activeAddress,
 	buyTicket,
@@ -49,7 +48,6 @@ const GamesList = ({
 							game={game}
 							gameTickets={tickets[game.gameNumber]}
 							web3={web3}
-							gameAddress={gameAddress}
 							gameContract={gameContract}
 							activeAddress={activeAddress}
 							buyTicket={buyTicket}

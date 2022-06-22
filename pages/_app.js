@@ -1,55 +1,28 @@
 import React, { useState, useEffect, useRef } from 'react';
-// import useDeepCompareEffect from 'use-deep-compare-effect'
 import Web3 from 'web3'
-// import { BN } from 'bn.js';
 
-import { gameMasterABI, IERC20MetadataABI } from '../features/configure/abi.js'
+import {
+  gameMasterABI,
+  IERC20MetadataABI
+} from '../features/configure/abi.js'
+
+import {
+  gameAddress,
+  tokenAddress,
+  feeAddress,
+  chain,
+  chainRpcs,
+  LOCAL_STORAGE_KEY_GAMES,
+  LOCAL_STORAGE_KEY_TICKETS,
+  LOCAL_STORAGE_KEY_TOKENS,
+  LOCAL_STORAGE_KEY_APPROVALS
+} from '../features/configure/env';
 
 import '../styles/globals.scss'
 
 import Wallet from '../components/wallet'
 // import Banner from '../components/banner'
 import GamesList from '../components/gamesList'
-
-// ENVIRONMENT
-const gameAddress = '0x81D2Ef94CC380C501bF696538eB1a8C924E0C235';//process.env.GAME_ADDRESS || null;
-const tokenAddress = '0xC399979F65d1418248593dB74aA0B8fF134a2C23';//process.env.TOKEN_ADDRESS || null;
-const feeAddress = '0xF7CbB70c591677E2408d784395e23049399Fb361';//process.env.TESTA1_ADDRESS || null; //A1
-
-
-const chain = process.env.CHAIN || 'local';
-
-const chainRpcs = {
-  local: 'http://192.168.2.4:7545/',
-};
-
-// ENVIRONMENT
-// const gameAddress = '0x11a305dcb346f4bb48e18f430191fbdea648d242';//process.env.GAME_ADDRESS || null;
-// const tokenAddress = '0xbf92a8d662dadbc8bcd8b96545b932a8f79f12b3';//process.env.TOKEN_ADDRESS || null;
-// const feeAddress = '0x3d31312F65E90c76f0bf95b574EADCf81Cf2B566';//process.env.TESTA1_ADDRESS || null; //A1
-
-
-// const chain = 'rinkeby';
-
-// const chainRpcs = {
-//   local: 'http://192.168.2.4:7545/',
-//   rinkeby: 'https://mainnet.infura.io/v3/ddf47ec4f3e2420bbd5eed733573e6aa'
-// };
-
-
-
-// console.log(process.env);
-
-// TODO: state for tokens, to reduce calls.
-// token rendering
-// game pot rendering
-// getactivegames implment if empty storage
-
-
-const LOCAL_STORAGE_KEY_GAMES = process.env.LOCAL_STORAGE_KEY_GAMES || 'caedmon.games';
-const LOCAL_STORAGE_KEY_TICKETS = process.env.LOCAL_STORAGE_KEY_TICKETS || 'caedmon.tickets';
-const LOCAL_STORAGE_KEY_TOKENS = process.env.LOCAL_STORAGE_KEY_TOKENS || 'caedmon.tokens';
-const LOCAL_STORAGE_KEY_APPROVALS = process.env.LOCAL_STORAGE_KEY_APPROVALS || 'caedmon.approvals';
 
 // APP
 
@@ -616,27 +589,27 @@ function MyApp({ Component, pageProps }) {
             className="button"
             role="button"
             tabindex="0">
-            <div>sendFunds (GBT)</div>
-            <input
-              ref={sendFundsFrom}
-              defaultValue={activeAddress}
-              placeholder="From"
-              size="6"
-              type="text"
-            />
-            <input
-              ref={sendFundsTo}
-              placeholder="To"
-              size="6"
-              type="text"
-            />
-            <input
-              ref={sendFundsAmount}
-              defaultValue="1000"
-              size="3"
-              min="0"
-              type="number"
-            />
+              <div>sendFunds (GBT)</div>
+              <input
+                ref={sendFundsFrom}
+                defaultValue={activeAddress}
+                placeholder="From"
+                size="6"
+                type="text"
+              />
+              <input
+                ref={sendFundsTo}
+                placeholder="To"
+                size="6"
+                type="text"
+              />
+              <input
+                ref={sendFundsAmount}
+                defaultValue="1000"
+                size="3"
+                min="0"
+                type="number"
+              />
           </div>
           <button className="button" onClick={() => startGame(gameContract)}>startGame (A0)</button>
           <div
