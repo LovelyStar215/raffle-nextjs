@@ -111,40 +111,46 @@ const Game = ({
 		if (!game._pot) return false;
 		
 		return (
-			<div className="result pots">
-				<div>
-					<div><strong>Pots</strong></div>
+			<div className="result">
+				<div className="panels">
+					<div>
+						<p><h5>Game prize</h5></p>
+					</div>
+					<div>
+						{game._pot.map((pot, key) => {
+							// console.log('potItem: ' + key);
+							// console.log(pot);
+
+							let displayAddress =
+							pot?.assetAddress?.slice(0,6)
+								+ '...'
+								+ pot?.assetAddress?.slice(-4)
+
+							let token = getToken(pot.assetAddress);
+							let value = pot.value;
+							if (token) {
+								// console.log('gamePots-getToken');
+								// console.log(token);
+								value =
+									token.decimals === '18'
+									? web3.utils.fromWei(pot.value)
+									: pot.value; // game._decimals
+								
+								if (token.symbol) value += ' ' + token.symbol;
+							}
+
+							return (
+								<div className="panel" key={`game-${game.gameNumber}-pot-${key}`}>
+									<div className="items">
+										<div>{pot.assetType == 0 ? 'Token' : 'NFT'}</div>
+										<div>{displayAddress}</div>
+										<div>{value}</div>
+									</div>
+								</div>
+							);
+						})}
+					</div>
 				</div>
-				{game._pot.map((pot, key) => {
-					// console.log('potItem: ' + key);
-					// console.log(pot);
-
-					let displayAddress =
-					pot?.assetAddress?.slice(0,6)
-						+ '...'
-						+ pot?.assetAddress?.slice(-4)
-
-					let token = getToken(pot.assetAddress);
-					let value = pot.value;
-					if (token) {
-						// console.log('gamePots-getToken');
-						// console.log(token);
-						value =
-							token.decimals === '18'
-							? web3.utils.fromWei(pot.value)
-							: pot.value; // game._decimals
-						
-						if (token.symbol) value += ' ' + token.symbol;
-					}
-
-					return (
-						<div className="pot" key={`game-${game.gameNumber}-pot-${key}`}>
-							<div>{pot.assetType == 0 ? 'Token' : 'NFT'}</div>
-							<div>{displayAddress}</div>
-							<div>{value}</div>
-						</div>
-					);
-				})}
 			</div>
 		)
 	};
@@ -195,17 +201,24 @@ const Game = ({
 		}
 
 		return (
-			<div className="result pots">
-				<div>
-					<div><strong>Your play</strong></div>
-				</div>
-				<div className="pot">
-					<div><strong>Tickets ({ticketCount})</strong></div>
-					{ticketItems}
-				</div>
-				<div className="pot">
-					<div><strong>Share of pot</strong></div>
-					{totalShareValue} {totalSharePercentageString}
+			<div className="result">
+				<div className="panels">
+					<div>
+						<p><h5>Your tickets ({ticketCount})</h5></p>
+					</div>
+					<div>
+						<div className="panel">
+							<div className="items">
+								{ticketItems}
+							</div>
+						</div>
+						<div className="panel">
+							<div className="items">
+								<div><strong>Share of pot</strong></div>
+								{totalShareValue} {totalSharePercentageString}
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 		)
@@ -216,8 +229,8 @@ const Game = ({
 		if (game._status > 0) {
 			return (
 				<div className="result state active">
-					<div>
-						<div><strong>Game in progress</strong></div>
+					<div className="panels">
+						<p><h5>Game is active</h5></p>
 					</div>
 				</div>
 			);
@@ -227,16 +240,18 @@ const Game = ({
 			// console.log(idx);
 			// console.log(`winnerResult-${game.gameNumber}-${idx}`);
 			return (
-				<div key={`winnerResult-${game.gameNumber}-${idx}`}>{val}</div>
+				<div className="ticket" key={`winnerResult-${game.gameNumber}-${idx}`}>#{val}</div>
 			);
 		});
 		// console.log('winnerResult: ' + winnerResult);
 
 		return (
 			<div className="result state">
-				<div>
-					<div><strong>Winning ticket:</strong></div>
-					<div className="items">{winnerResult}</div>
+				<div className="panels">
+					<div><h5>Winning ticket is</h5></div>
+					<div className="panel">
+						<div className="items">{winnerResult}</div>
+					</div>
 				</div>
 			</div>
 		)
