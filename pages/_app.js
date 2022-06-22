@@ -10,8 +10,6 @@ import {
   gameAddress,
   tokenAddress,
   feeAddress,
-  chain,
-  chainRpcs,
   LOCAL_STORAGE_KEY_GAMES,
   LOCAL_STORAGE_KEY_TICKETS,
   LOCAL_STORAGE_KEY_TOKENS,
