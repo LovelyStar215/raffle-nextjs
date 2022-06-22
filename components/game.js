@@ -122,8 +122,10 @@ const Game = ({
 					</div>
 					<div>
 						{game._pot.map((pot, key) => {
-							// console.log('potItem: ' + key);
-							// console.log(pot);
+							let value = pot.value;
+
+							// Skip game pots that have been removed
+							if (value == 0) return null;
 
 							let displayAddress =
 							pot?.assetAddress?.slice(0,6)
@@ -131,7 +133,6 @@ const Game = ({
 								+ pot?.assetAddress?.slice(-4)
 
 							let token = getToken(pot.assetAddress);
-							let value = pot.value;
 							if (token) {
 								// console.log('gamePots-getToken');
 								// console.log(token);
