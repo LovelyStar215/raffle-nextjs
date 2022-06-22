@@ -359,6 +359,7 @@ const Game = ({
 					</div>
 				</div>
 				<div className="buttons tools">
+					<h3>Management</h3>
 					<div
 						onClick={() => {
 							gameContract.methods.addGamePotERC20Asset(

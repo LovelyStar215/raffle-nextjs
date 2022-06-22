@@ -576,7 +576,7 @@ function MyApp({ Component, pageProps }) {
       </header>
       <div className="tools">
         <div className="container">
-          <h3>Dev</h3>
+          <h3>Management</h3>
           <div
             onClick={() => sendFunds(
               tokenAddress,
