@@ -10,6 +10,7 @@ import {
 	tokenAddress
 } from '../features/configure/env';
 
+import GameMetrics from '../components/GameMetrics'
 import GamePots from '../components/GamePots'
 import GameStatus from '../components/GameStatus'
 import GameTickets from '../components/GameTickets'
@@ -122,9 +123,11 @@ const Game = ({
 				<GameStatus
 					game={game}
 				/>
-				<div className="items">
-					<div>{gameItems}</div>
-				</div>
+				<GameMetrics
+					web3={web3}
+					gameTokenMetadata={gameTokenMetadata}
+					game={game}
+				/>
 				<GameTickets
 					web3={web3}
 					activeAddress={activeAddress}
