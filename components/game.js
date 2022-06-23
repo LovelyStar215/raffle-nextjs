@@ -122,7 +122,7 @@ const Game = ({
 			<div className="result">
 				<div className="panels">
 					<div>
-						<p><h5>Game prize</h5></p>
+						<h5>Game prize</h5>
 					</div>
 					<div>
 						{game._pot.map((pot, key) => {
@@ -231,7 +231,7 @@ const Game = ({
 			<div className="result">
 				<div className="panels">
 					<div>
-						<p><h5>Your tickets ({playerTicketCount})</h5></p>
+						<h5>Your tickets ({playerTicketCount})</h5>
 					</div>
 					<div>
 						<div className="panel">
@@ -256,7 +256,7 @@ const Game = ({
 			return (
 				<div className="result state active">
 					<div className="panels">
-						<p><h5>Game is active</h5></p>
+						<h5>Game is active</h5>
 					</div>
 				</div>
 			);
@@ -274,7 +274,7 @@ const Game = ({
 		return (
 			<div className="result state">
 				<div className="panels">
-					<div><h5>Winning ticket is</h5></div>
+					<h5>Winning ticket is</h5>
 					<div className="panel">
 						<div className="items">{winnerResult}</div>
 					</div>
