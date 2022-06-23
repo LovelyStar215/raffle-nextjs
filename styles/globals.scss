@@ -30,7 +30,7 @@ h4 {
 
 h5 {
   font-size: 1.5em;
-  padding: .5em 0 0;
+  padding: .75em 0 0;
 }
 
 
@@ -77,6 +77,10 @@ header {
 
 .tools {
   background-color: #461b4d;
+  > .container {
+    padding-left: 0;
+    padding-right: 0;
+  }
 }
 
 .games {
