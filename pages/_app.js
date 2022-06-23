@@ -578,12 +578,15 @@ function MyApp({ Component, pageProps }) {
         <div className="container">
           <h3>Management</h3>
           <div
-            onClick={() => sendFunds(
-              tokenAddress,
-              sendFundsFrom.current.value,
-              sendFundsTo.current.value,
-              sendFundsAmount.current.value
-            )}
+            onClick={(e) => {
+              if (e.target.tagName === 'DIV')
+                sendFunds(
+                  tokenAddress,
+                  sendFundsFrom.current.value,
+                  sendFundsTo.current.value,
+                  sendFundsAmount.current.value
+                )
+            }}
             className="button"
             role="button"
             tabIndex="0">
@@ -609,14 +612,20 @@ function MyApp({ Component, pageProps }) {
                 type="number"
               />
           </div>
-          <button className="button" onClick={() => startGame(gameContract)}>startGame (A0)</button>
+          <button
+            onClick={() => startGame(gameContract)}
+            className="button">
+            startGame (A0)
+          </button>
           <div
-            onClick={() => {
-              console.log('endGame ID: ' + endGameId.current.value);
-              endGame(
-                gameContract,
-                web3.utils.toBN(endGameId.current.value)
-              )
+            onClick={(e) => {
+              if (e.target.tagName === 'DIV') {
+                console.log('endGame ID: ' + endGameId.current.value);
+                endGame(
+                  gameContract,
+                  web3.utils.toBN(endGameId.current.value)
+                )
+              }
             }}
             className="button"
             role="button"
@@ -625,13 +634,14 @@ function MyApp({ Component, pageProps }) {
             <input ref={endGameId} defaultValue="0" size="1" min="0" type="number" />
           </div>
           <div
-            onClick={() => {
-              getGameState(
-                web3,
-                gameContract,
-                games,
-                web3.utils.toBN(getGameStateId.current.value)
-              )
+            onClick={(e) => {
+              if (e.target.tagName === 'DIV')
+                getGameState(
+                  web3,
+                  gameContract,
+                  games,
+                  web3.utils.toBN(getGameStateId.current.value)
+                )
             }}
             className="button"
             role="button"
@@ -640,11 +650,13 @@ function MyApp({ Component, pageProps }) {
             <input ref={getGameStateId} defaultValue="0" size="1" min="0" type="number" />
           </div>
           <div
-            onClick={() => {
-              console.log('getActiveGamesMax: ' + getActiveGamesMax.current.value);
-              getActiveGames(
-                web3.utils.toBN(getActiveGamesMax.current.value)
-              )
+            onClick={(e) => {
+              if (e.target.tagName === 'DIV') {
+                console.log('getActiveGamesMax: ' + getActiveGamesMax.current.value);
+                getActiveGames(
+                  web3.utils.toBN(getActiveGamesMax.current.value)
+                )
+              }
             }}
             className="button"
             role="button"
