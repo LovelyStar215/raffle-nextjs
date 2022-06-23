@@ -509,7 +509,7 @@ function MyApp({ Component, pageProps }) {
         } else {
           // console.log(data);
           if (data.returnValues) {
-            setGameState(data.returnValues);
+            // setGameState(data.returnValues);
             getGameState(web3, gameContract, games, data.returnValues.gameNumber);
           }
         }
