@@ -20,9 +20,9 @@ import {
 
 import '../styles/globals.scss'
 
-import Wallet from '../components/wallet'
+import Wallet from '../components/Wallet'
 // import Banner from '../components/banner'
-import GamesList from '../components/gamesList'
+import GamesList from '../components/GamesList'
 
 // APP
 
