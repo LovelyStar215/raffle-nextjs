@@ -3,11 +3,13 @@ import Web3 from 'web3'
 
 import {
   gameMasterABI,
-  IERC20MetadataABI
+  IERC20MetadataABI,
+  gameTrophyABI
 } from '../features/configure/abi.js'
 
 import {
   gameAddress,
+  gameTrophyAddress,
   tokenAddress,
   feeAddress,
   LOCAL_STORAGE_KEY_GAMES,
@@ -49,6 +51,9 @@ function MyApp({ Component, pageProps }) {
   const sendFundsFrom = useRef();
   const sendFundsTo = useRef();
   const sendFundsAmount = useRef();
+
+  const awardItemTo = useRef();
+  const awardItemURI = useRef();
 
 	useEffect(() => {
 		console.log('Loaded from local storage');
@@ -663,6 +668,40 @@ function MyApp({ Component, pageProps }) {
             tabIndex="0">
             <div>getActiveGames</div>
             <input ref={getActiveGamesMax} defaultValue="1" size="1" min="1" type="number" />
+          </div>
+          <div
+            onClick={(e) => {
+              if (e.target.tagName === 'DIV') {
+                new web3.eth.Contract(
+                  gameTrophyABI,
+                  gameTrophyAddress
+                ).methods.awardItem(
+                  awardItemTo.current.value,
+                  awardItemURI.current.value
+                )
+                .send({from: activeAddress})
+                .on('receipt', (receipt) => {
+                  console.log(receipt);
+                });
+              }
+            }}
+            className="button"
+            role="button"
+            tabIndex="0">
+              <div>awardItem (GT)</div>
+              <input
+                ref={awardItemTo}
+                defaultValue={activeAddress}
+                placeholder="To"
+                size="6"
+                type="text"
+              />
+              <input
+                ref={awardItemURI}
+                defaultValue="http://example.com/foo.jpeg"
+                size="3"
+                type="text"
+              />
           </div>
           {/* <button
 						className="button"

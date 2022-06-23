@@ -1,8 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { IERC20MetadataABI } from '../features/configure/abi.js';
+import {
+	IERC20MetadataABI,
+	IERC721MetadataABI
+} from '../features/configure/abi.js';
 
 import {
 	gameAddress,
+	gameTrophyAddress,
 	tokenAddress
 } from '../features/configure/env';
 
@@ -132,16 +136,20 @@ const Game = ({
 								+ '...'
 								+ pot?.assetAddress?.slice(-4)
 
-							let token = getToken(pot.assetAddress);
-							if (token) {
-								// console.log('gamePots-getToken');
-								// console.log(token);
-								value =
-									token.decimals === '18'
-									? web3.utils.fromWei(pot.value)
-									: pot.value; // game._decimals
-								
-								if (token.symbol) value += ' ' + token.symbol;
+							if (pot.assetType == 0) {
+								let token = getToken(pot.assetAddress);
+								if (token) {
+									// console.log('gamePots-getToken');
+									// console.log(token);
+									value =
+										token.decimals === '18'
+										? web3.utils.fromWei(pot.value)
+										: pot.value; // game._decimals
+									
+									if (token.symbol) value += ' ' + token.symbol;
+								}
+							} else if (pot.assetType == 1) {
+								value = `#${pot.value}`
 							}
 
 							return (
@@ -363,18 +371,29 @@ const Game = ({
 					<h3>Management</h3>
 					<div
 						onClick={(e) => {
-							if (e.target.tagName === 'DIV')
-								gameContract.methods.addGamePotERC20Asset(
-									web3.utils.toBN(game.gameNumber),
-									web3.utils.toBN(
-										addGamePotERC20AssetAmount.current.value)
-										.mul(web3.utils.toBN(10).pow(web3.utils.toBN(18))),
+							if (e.target.tagName === 'DIV') {
+								let _amount = web3.utils.toBN(
+									addGamePotERC20AssetAmount.current.value)
+									.mul(web3.utils.toBN(10).pow(web3.utils.toBN(18)));
+								new web3.eth.Contract(
+									IERC20MetadataABI,
 									addGamePotERC20AssetAddress.current.value
+								).methods.approve(
+									gameAddress,
+									_amount
 								).send({from: activeAddress})
 								.on('receipt', function(receipt) {
-									console.log('receipt-addGamePotERC20Asset');
-									console.log(receipt);
+									gameContract.methods.addGamePotERC20Asset(
+										web3.utils.toBN(game.gameNumber),
+										_amount,
+										addGamePotERC20AssetAddress.current.value
+									).send({from: activeAddress})
+									.on('receipt', function(receipt2) {
+										console.log('receipt-addGamePotERC20Asset');
+										console.log(receipt);
+									});
 								});
+							}
 						}}
 						className="button"
 						role="button"
@@ -382,8 +401,8 @@ const Game = ({
 							<div>addGamePotERC20Asset</div>
 							<input
 								ref={addGamePotERC20AssetAddress}
-								placeholder="Address"
 								defaultValue={tokenAddress}
+								placeholder="Address"
 								size="6"
 								type="text"/>
 							<input
@@ -415,8 +434,8 @@ const Game = ({
 							<div>removeGamePotERC20Asset</div>
 							<input
 								ref={removeGamePotERC20AssetAddress}
-								placeholder="Address"
 								defaultValue={tokenAddress}
+								placeholder="Address"
 								size="6"
 								type="text"/>
 							<input
@@ -430,14 +449,26 @@ const Game = ({
 					<div
 						onClick={(e) => {
 							if (e.target.tagName === 'DIV')
-								gameContract.methods.addGamePotERC721Asset(
-									web3.utils.toBN(game.gameNumber),
-									addGamePotERC721AssetId.current.value,
+								new web3.eth.Contract(
+									IERC721MetadataABI,
 									addGamePotERC721AssetAddress.current.value
-								).send({from: activeAddress})
-								.on('receipt', function(receipt) {
-									console.log('receipt-addGamePotERC721Asset');
+								).methods.approve(
+									gameAddress,
+									addGamePotERC721AssetId.current.value
+								)
+								.send({from: activeAddress})
+								.on('receipt', (receipt) => {
 									console.log(receipt);
+
+									gameContract.methods.addGamePotERC721Asset(
+										web3.utils.toBN(game.gameNumber),
+										addGamePotERC721AssetId.current.value,
+										addGamePotERC721AssetAddress.current.value
+									).send({from: activeAddress})
+									.on('receipt', function(receipt) {
+										console.log('receipt-addGamePotERC721Asset');
+										console.log(receipt);
+									});
 								});
 						}}
 						className="button"
@@ -446,6 +477,7 @@ const Game = ({
 							<div>addGamePotERC721Asset</div>
 							<input
 								ref={addGamePotERC721AssetAddress}
+								defaultValue={gameTrophyAddress}
 								placeholder="Address"
 								size="6"
 								type="text"/>
@@ -475,6 +507,7 @@ const Game = ({
 							<div>removeGamePotERC721Asset</div>
 							<input
 								ref={removeGamePotERC721AssetAddress}
+								defaultValue={gameTrophyAddress}
 								placeholder="Address"
 								size="6"
 								type="text"/>

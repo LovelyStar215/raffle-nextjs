@@ -1,4 +1,5 @@
 export const gameAddress = process.env.NEXT_PUBLIC_GAMEMASTER_ADDRESS || null;
+export const gameTrophyAddress = process.env.NEXT_PUBLIC_GAME_TROPHY_ADDRESS || null;
 export const tokenAddress = process.env.NEXT_PUBLIC_TOKEN_ADDRESS || null;
 export const feeAddress = process.env.NEXT_PUBLIC_TESTA1_ADDRESS || null;
 
