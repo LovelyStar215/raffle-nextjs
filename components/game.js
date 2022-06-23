@@ -128,8 +128,9 @@ const Game = ({
 						{game._pot.map((pot, key) => {
 							let value = pot.value;
 
-							// Skip game pots that have been removed
-							if (value == 0) return null;
+							// Skip game pots (except for pot zero for tickets)
+							// that have been removed
+							if (key && value == 0) return null;
 
 							let displayAddress =
 							pot?.assetAddress?.slice(0,6)
