@@ -10,6 +10,10 @@ import {
 	tokenAddress
 } from '../features/configure/env';
 
+import GamePots from '../components/GamePots'
+import GameStatus from '../components/GameStatus'
+import GameTickets from '../components/GameTickets'
+
 const Game = ({
 	getToken,
 	game,
@@ -112,187 +116,35 @@ const Game = ({
 	});
 
 	const gamePots = () => {
-		// console.log('pots');
-		// console.log(game._pot);
-		// console.log(game._pot.length);
-
-		if (!game._pot) return false;
 		
-		return (
-			<div className="result">
-				<div className="panels">
-					<div>
-						<h5>Game prize</h5>
-					</div>
-					<div>
-						{game._pot.map((pot, key) => {
-							let value = pot.value;
-
-							// Skip game pots (except for pot zero for tickets)
-							// that have been removed
-							if (key && value == 0) return null;
-
-							let displayAddress =
-							pot?.assetAddress?.slice(0,6)
-								+ '...'
-								+ pot?.assetAddress?.slice(-4)
-
-							if (pot.assetType == 0) {
-								let token = getToken(pot.assetAddress);
-								if (token) {
-									// console.log('gamePots-getToken');
-									// console.log(token);
-									value =
-										token.decimals === '18'
-										? web3.utils.fromWei(pot.value)
-										: pot.value; // game._decimals
-									
-									if (token.symbol) value += ' ' + token.symbol;
-								}
-							} else if (pot.assetType == 1) {
-								value = `#${pot.value}`
-							}
-
-							return (
-								<div className="panel" key={`game-${game.gameNumber}-pot-${key}`}>
-									<div className="items">
-										<div>{pot.assetType == 0 ? 'Token' : 'NFT'}</div>
-										<div>{displayAddress}</div>
-										<div>{value}</div>
-									</div>
-								</div>
-							);
-						})}
-					</div>
-				</div>
-			</div>
-		)
-	};
-
-	const gameTicketItems = () => {
-		let ticketItems = '';
-		let totalSharePercentage = 0;
-		let totalShareValue, totalSharePercentageString;
-
-		if (!gameTickets || !gameTickets[activeAddress] || !gameTickets[activeAddress].length) {
-			return (
-				<div className="result">
-					<div className="panels">
-						<div>
-							<p>You currently don't hold any tickets in this game.</p>
-						</div>
-					</div>
-				</div>
-			);
-		}
-
-		ticketItems = gameTickets[activeAddress].map((val, key) => {
-			return (
-				<div className="ticket" key={`game-${game.gameNumber}-ticket-${key}`}>
-					<span>#{val}</span>
-				</div>
-			);
-		}, {});
-
-		// Players current pot share (value and percentage), in play
-		// let token = getToken(game.tokenAddress);
-		if (gameTokenMetadata) {
-			console.log('game.ticketPrice');
-			console.log(game.ticketPrice);
-			console.log('ticketCount');
-			let playerTicketCount = gameTickets[activeAddress].length;
-			let playerTicketCountBN = web3.utils.toBN(playerTicketCount);
-			// console.log(playerTicketCount);
-			// let decimals = web3.utils.toBN(gameTokenMetadata.decimals);
-			// console.log('gameTokenMetadata.decimals');
-			// console.log(decimals);
-			// totalShareValue = web3.utils
-			// 	.toBN(game.ticketPrice)
-			// 	.mul(playerTicketCount);
-			// console.log('shareBN');
-			// console.log(totalShareValue.toString());
-			// totalShareValue = web3.utils
-			// 	.toBN(game.ticketPrice).div(
-			// 		web3.utils
-			// 		.toBN(10)
-			// 		.pow(decimals)
-			// 	)
-			// 	.toString() + ' ' + gameTokenMetadata.symbol;
-			totalShareValue = web3.utils.fromWei(web3.utils.toBN(game.ticketPrice).mul(playerTicketCountBN));
-			if (gameTokenMetadata.symbol) totalShareValue += ' ' + gameTokenMetadata.symbol;
-
-			let gameTicketCount = parseInt(game.ticketCount);
-			if (gameTicketCount)
-				totalSharePercentage = ((playerTicketCount * 100) / gameTicketCount).toFixed(2);
-			totalSharePercentageString = `(${totalSharePercentage}%)`;
-		}
-
-		return (
-			<div className="result">
-				<div className="panels">
-					<div>
-						<h5>Your tickets ({playerTicketCount})</h5>
-					</div>
-					<div>
-						<div className="panel">
-							<div className="items">
-								{ticketItems}
-							</div>
-						</div>
-						<div className="panel">
-							<div className="items">
-								<div><strong>Share of pot</strong></div>
-								{totalShareValue} {totalSharePercentageString}
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		)
 	};
 
 	const gameStateBanner = () => {
-		if (game._status > 0) {
-			return (
-				<div className="result state active">
-					<div className="panels">
-						<h5>Game is active</h5>
-					</div>
-				</div>
-			);
-		}
-
-		const winnerResult = game?._winnerResult?.map((val, idx) => {
-			// console.log(idx);
-			// console.log(`winnerResult-${game.gameNumber}-${idx}`);
-			return (
-				<div className="ticket" key={`winnerResult-${game.gameNumber}-${idx}`}>#{val}</div>
-			);
-		});
-		// console.log('winnerResult: ' + winnerResult);
-
-		return (
-			<div className="result state">
-				<div className="panels">
-					<h5>Winning ticket is</h5>
-					<div className="panel">
-						<div className="items">{winnerResult}</div>
-					</div>
-				</div>
-			</div>
-		)
+		
 	};
 
 	return (
 		<div key={`game-${game.gameNumber}`} className="game">
 			<div className="container">
 				<h4>Game #{game.gameNumber}</h4>
-				{gameStateBanner()}
+				<GameStatus
+					game={game}
+				/>
 				<div className="items">
 					<div>{gameItems}</div>
 				</div>
-				{gameTicketItems()}
-				{gamePots()}
+				<GameTickets
+					web3={web3}
+					activeAddress={activeAddress}
+					gameTickets={gameTickets}
+					gameTokenMetadata={gameTokenMetadata}
+					game={game}
+				/>
+				<GamePots
+					web3={web3}
+					gameTokenMetadata={gameTokenMetadata}
+					game={game}
+				/>
 				<div className="buttons">
 					<button
 						className="button"
