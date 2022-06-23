@@ -45,6 +45,9 @@ const Game = ({
 
 	let gameHasEnded = (game._status == 0);
 
+	// User has the necessary contract roles?
+	let hasManagementAccess = true; // TBC
+
 	// Set current game token allowance/approval state
 	let gameTokenApprovalMax = web3.utils
 		.toBN(game.ticketPrice)
@@ -58,6 +61,16 @@ const Game = ({
 		.gte(web3.utils.toBN('0'));
 	console.log(gameTokenAllowanceAmount.sub(gameTokenApprovalMax).toString());
 	console.log('hasGameTokenApproval: ' + hasGameTokenApproval);
+
+	const panelManagementClasses = () => {
+		let arr = [
+			'tools'
+		];
+		if (!hasManagementAccess)
+			arr.push('hide');
+		
+		return arr.join(' ');
+	}
 
 	const buttonApproveClasses = () => {
 		let arr = [
@@ -78,43 +91,6 @@ const Game = ({
 		
 		return arr.join(' ');
 	};
-
-	let ticketItems = '';
-
-	const gameItems = Object.entries(game).map(([key, val]) => {
-		console.log('gameItems');
-		if (key.substring(0, 1) === '_') return null;
-
-		// Shorten address
-		if (key.substring((key.length - 7)) === 'Address') {
-			// console.log(parseInt(val));
-			val = val.length > 10
-				? val.slice(0,6) + '...' + val.slice(-4)
-				: (parseInt(val) == 0
-					? '&ndash;'
-					: val
-				);
-		}
-		
-		// Format wei by decimals, and add symbol
-		else if(key === 'ticketPrice') {
-			console.log('ticketPrice-gameTokenMetadata')
-			console.log(gameTokenMetadata);
-			if (gameTokenMetadata) {
-				console.log('gameItems-getToken');
-				console.log(gameTokenMetadata);
-				val = gameTokenMetadata.decimals === '18' ? web3.utils.fromWei(val) : val; // game._decimals
-				if (gameTokenMetadata.symbol) val += ' ' + gameTokenMetadata.symbol;
-			}
-		}
-
-		return (
-			<div key={`game-${game.gameNumber}-${key}`}>
-				<strong>{key}</strong>
-				<span>{val}</span>
-			</div>
-		)
-	});
 
 	return (
 		<div key={`game-${game.gameNumber}`} className="game">
@@ -227,7 +203,7 @@ const Game = ({
 							/>
 					</div>
 				</div>
-				<div className="tools">
+				<div className={panelManagementClasses()}>
 					<div className="container">
 						<div className="buttons">
 							<h3>Management</h3>

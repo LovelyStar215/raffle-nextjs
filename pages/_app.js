@@ -55,6 +55,9 @@ function MyApp({ Component, pageProps }) {
   const awardItemTo = useRef();
   const awardItemURI = useRef();
 
+  // User has the necessary contract roles?
+	let hasManagementAccess = true; // TBC
+
 	useEffect(() => {
 		console.log('Loaded from local storage');
 		const storedGames = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY_GAMES));
@@ -486,6 +489,16 @@ function MyApp({ Component, pageProps }) {
     console.log(results);
   }
 
+	const panelManagementClasses = () => {
+		let arr = [
+			'tools'
+		];
+		if (!hasManagementAccess)
+			arr.push('hide');
+		
+		return arr.join(' ');
+	}
+
 
 
   // Listen for connection
@@ -579,7 +592,7 @@ function MyApp({ Component, pageProps }) {
           </button>
         </div>
       </header>
-      <div className="tools">
+      <div className={panelManagementClasses()}>
         <div className="container">
           <div className="buttons">
             <h3>Management &ndash; Games</h3>
