@@ -581,139 +581,144 @@ function MyApp({ Component, pageProps }) {
       </header>
       <div className="tools">
         <div className="container">
-          <h3>Management</h3>
-          <div
-            onClick={(e) => {
-              if (e.target.tagName === 'DIV')
-                sendFunds(
-                  tokenAddress,
-                  sendFundsFrom.current.value,
-                  sendFundsTo.current.value,
-                  sendFundsAmount.current.value
-                )
-            }}
-            className="button"
-            role="button"
-            tabIndex="0">
-              <div>sendFunds (GBT)</div>
-              <input
-                ref={sendFundsFrom}
-                defaultValue={activeAddress}
-                placeholder="From"
-                size="6"
-                type="text"
-              />
-              <input
-                ref={sendFundsTo}
-                placeholder="To"
-                size="6"
-                type="text"
-              />
-              <input
-                ref={sendFundsAmount}
-                defaultValue="1000"
-                size="3"
-                min="0"
-                type="number"
-              />
+          <div className="buttons">
+            <h3>Management &ndash; Games</h3>
+            <button
+              onClick={() => startGame(gameContract)}
+              className="button">
+              startGame (A0)
+            </button>
+            <div
+              onClick={(e) => {
+                if (e.target.tagName === 'DIV') {
+                  console.log('endGame ID: ' + endGameId.current.value);
+                  endGame(
+                    gameContract,
+                    web3.utils.toBN(endGameId.current.value)
+                  )
+                }
+              }}
+              className="button"
+              role="button"
+              tabIndex="0">
+              <div>endGame (A0)</div>
+              <input ref={endGameId} defaultValue="0" size="1" min="0" type="number" />
+            </div>
+            <div
+              onClick={(e) => {
+                if (e.target.tagName === 'DIV')
+                  getGameState(
+                    web3,
+                    gameContract,
+                    games,
+                    web3.utils.toBN(getGameStateId.current.value)
+                  )
+              }}
+              className="button"
+              role="button"
+              tabIndex="0">
+              <div>getGameState</div>
+              <input ref={getGameStateId} defaultValue="0" size="1" min="0" type="number" />
+            </div>
+            <div
+              onClick={(e) => {
+                if (e.target.tagName === 'DIV') {
+                  console.log('getActiveGamesMax: ' + getActiveGamesMax.current.value);
+                  getActiveGames(
+                    web3.utils.toBN(getActiveGamesMax.current.value)
+                  )
+                }
+              }}
+              className="button"
+              role="button"
+              tabIndex="0">
+              <div>getActiveGames</div>
+              <input ref={getActiveGamesMax} defaultValue="1" size="1" min="1" type="number" />
+            </div>
           </div>
-          <button
-            onClick={() => startGame(gameContract)}
-            className="button">
-            startGame (A0)
-          </button>
-          <div
-            onClick={(e) => {
-              if (e.target.tagName === 'DIV') {
-                console.log('endGame ID: ' + endGameId.current.value);
-                endGame(
-                  gameContract,
-                  web3.utils.toBN(endGameId.current.value)
-                )
-              }
-            }}
-            className="button"
-            role="button"
-            tabIndex="0">
-            <div>endGame (A0)</div>
-            <input ref={endGameId} defaultValue="0" size="1" min="0" type="number" />
+          <div className="buttons">
+            <h3>Management &ndash; Transfers</h3>
+            <div
+              onClick={(e) => {
+                if (e.target.tagName === 'DIV')
+                  sendFunds(
+                    tokenAddress,
+                    sendFundsFrom.current.value,
+                    sendFundsTo.current.value,
+                    sendFundsAmount.current.value
+                  )
+              }}
+              className="button"
+              role="button"
+              tabIndex="0">
+                <div>sendFunds (GBT)</div>
+                <input
+                  ref={sendFundsFrom}
+                  defaultValue={activeAddress}
+                  placeholder="From"
+                  size="6"
+                  type="text"
+                />
+                <input
+                  ref={sendFundsTo}
+                  placeholder="To"
+                  size="6"
+                  type="text"
+                />
+                <input
+                  ref={sendFundsAmount}
+                  defaultValue="1000"
+                  size="3"
+                  min="0"
+                  type="number"
+                />
+            </div>
+            <div
+              onClick={(e) => {
+                if (e.target.tagName === 'DIV') {
+                  new web3.eth.Contract(
+                    gameTrophyABI,
+                    gameTrophyAddress
+                  ).methods.awardItem(
+                    awardItemTo.current.value,
+                    awardItemURI.current.value
+                  )
+                  .send({from: activeAddress})
+                  .on('receipt', (receipt) => {
+                    console.log(receipt);
+                  });
+                }
+              }}
+              className="button"
+              role="button"
+              tabIndex="0">
+                <div>awardItem (GT)</div>
+                <input
+                  ref={awardItemTo}
+                  defaultValue={activeAddress}
+                  placeholder="To"
+                  size="6"
+                  type="text"
+                />
+                <input
+                  ref={awardItemURI}
+                  defaultValue="http://example.com/foo.jpeg"
+                  size="3"
+                  type="text"
+                />
+            </div>
+            {/* <button
+              className="button"
+              onClick={async () => {
+                let tokenContract = new web3.eth.Contract(IERC20MetadataABI, tokenAddress);
+                let value = await tokenContract.methods.balanceOf(
+                  gameAddress
+                ).call({from: activeAddress})
+                console.log(value);
+              }}>
+              Get contract balance
+            </button> */}
           </div>
-          <div
-            onClick={(e) => {
-              if (e.target.tagName === 'DIV')
-                getGameState(
-                  web3,
-                  gameContract,
-                  games,
-                  web3.utils.toBN(getGameStateId.current.value)
-                )
-            }}
-            className="button"
-            role="button"
-            tabIndex="0">
-            <div>getGameState</div>
-            <input ref={getGameStateId} defaultValue="0" size="1" min="0" type="number" />
-          </div>
-          <div
-            onClick={(e) => {
-              if (e.target.tagName === 'DIV') {
-                console.log('getActiveGamesMax: ' + getActiveGamesMax.current.value);
-                getActiveGames(
-                  web3.utils.toBN(getActiveGamesMax.current.value)
-                )
-              }
-            }}
-            className="button"
-            role="button"
-            tabIndex="0">
-            <div>getActiveGames</div>
-            <input ref={getActiveGamesMax} defaultValue="1" size="1" min="1" type="number" />
-          </div>
-          <div
-            onClick={(e) => {
-              if (e.target.tagName === 'DIV') {
-                new web3.eth.Contract(
-                  gameTrophyABI,
-                  gameTrophyAddress
-                ).methods.awardItem(
-                  awardItemTo.current.value,
-                  awardItemURI.current.value
-                )
-                .send({from: activeAddress})
-                .on('receipt', (receipt) => {
-                  console.log(receipt);
-                });
-              }
-            }}
-            className="button"
-            role="button"
-            tabIndex="0">
-              <div>awardItem (GT)</div>
-              <input
-                ref={awardItemTo}
-                defaultValue={activeAddress}
-                placeholder="To"
-                size="6"
-                type="text"
-              />
-              <input
-                ref={awardItemURI}
-                defaultValue="http://example.com/foo.jpeg"
-                size="3"
-                type="text"
-              />
-          </div>
-          {/* <button
-						className="button"
-						onClick={async () => {
-              let tokenContract = new web3.eth.Contract(IERC20MetadataABI, tokenAddress);
-							let value = await tokenContract.methods.balanceOf(
-								gameAddress
-							).call({from: activeAddress})
-              console.log(value);
-						}}>
-						Get contract balance
-					</button> */}
         </div>
       </div>
       <GamesList

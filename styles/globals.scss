@@ -21,7 +21,7 @@ $body-font: 'Inter', sans-serif;
 }
 
 #{headings(1,6)} {
-  margin-bottom: .5em;
+  padding: .5em 0;
 }
 
 h4 {
@@ -30,6 +30,7 @@ h4 {
 
 h5 {
   font-size: 1.5em;
+  padding: .5em 0 0;
 }
 
 
@@ -92,6 +93,7 @@ header {
     > .container {
       background-color: #000;
       border-radius: 1em;
+      padding-bottom: 1em;
       .result {
         margin: 0 auto .75em;
         .panels .panel.brick {
@@ -118,7 +120,7 @@ header {
         .panels {
           background-color: #b9956e;
           border-radius: 1em;
-          padding: 1em;
+          padding: 0 1em 1em;
           color: #000;
           .panel {
             > div {
@@ -127,6 +129,9 @@ header {
               background-color: rgba(0, 0, 0, .5);
               margin: 1em 0 0;
             }
+          }
+          p {
+            padding-top: 1em;
           }
         }
         .tickets {
@@ -183,7 +188,7 @@ header {
   margin: 0 auto;
   width: 100%;
   max-width: 1200px;
-  padding: 1.25em;
+  padding: 0 1.25em;
 }
 
 a {
@@ -246,8 +251,11 @@ h1, h2, h3 {
 }
 
 .buttons {
-  border-top: .25em solid #ccc;
+  // border-top: .25em solid #ccc;
   padding: 1em 0;
+  + .buttons {
+    padding-top: 0;
+  }
 }
 
 div.button {
