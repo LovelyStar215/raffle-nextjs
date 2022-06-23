@@ -171,7 +171,8 @@ const Game = ({
 
 	const gameTicketItems = () => {
 		let ticketItems = '';
-		let totalShareValue, totalSharePercentage, totalSharePercentageString;
+		let totalSharePercentage = 0;
+		let totalShareValue, totalSharePercentageString;
 		if (gameTickets && gameTickets[activeAddress]) {
 			ticketItems = gameTickets[activeAddress].map((val, key) => {
 				return (
@@ -187,15 +188,15 @@ const Game = ({
 				console.log('game.ticketPrice');
 				console.log(game.ticketPrice);
 				console.log('ticketCount');
-				let ticketCount = gameTickets[activeAddress].length;
-				let ticketCountBN = web3.utils.toBN(ticketCount);
-				// console.log(ticketCount);
+				let playerTicketCount = gameTickets[activeAddress].length;
+				let playerTicketCountBN = web3.utils.toBN(playerTicketCount);
+				// console.log(playerTicketCount);
 				// let decimals = web3.utils.toBN(gameTokenMetadata.decimals);
 				// console.log('gameTokenMetadata.decimals');
 				// console.log(decimals);
 				// totalShareValue = web3.utils
 				// 	.toBN(game.ticketPrice)
-				// 	.mul(ticketCount);
+				// 	.mul(playerTicketCount);
 				// console.log('shareBN');
 				// console.log(totalShareValue.toString());
 				// totalShareValue = web3.utils
@@ -205,12 +206,13 @@ const Game = ({
 				// 		.pow(decimals)
 				// 	)
 				// 	.toString() + ' ' + gameTokenMetadata.symbol;
-				totalShareValue = web3.utils.fromWei(web3.utils.toBN(game.ticketPrice).mul(ticketCountBN));
+				totalShareValue = web3.utils.fromWei(web3.utils.toBN(game.ticketPrice).mul(playerTicketCountBN));
 				if (gameTokenMetadata.symbol) totalShareValue += ' ' + gameTokenMetadata.symbol;
 
-				totalSharePercentage = (ticketCount * parseInt(game.ticketCount)).toFixed(2);
-				if (totalSharePercentage)
-					totalSharePercentageString = `(${totalSharePercentage}%)`;
+				let gameTicketCount = parseInt(game.ticketCount);
+				if (gameTicketCount)
+					totalSharePercentage = ((playerTicketCount * 100) / gameTicketCount).toFixed(2);
+				totalSharePercentageString = `(${totalSharePercentage}%)`;
 			}
 		}
 
@@ -218,7 +220,7 @@ const Game = ({
 			<div className="result">
 				<div className="panels">
 					<div>
-						<p><h5>Your tickets ({ticketCount})</h5></p>
+						<p><h5>Your tickets ({playerTicketCount})</h5></p>
 					</div>
 					<div>
 						<div className="panel">
