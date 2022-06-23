@@ -26,7 +26,7 @@ const GamesList = ({
 	}
 
 	return (
-		<div className="games">
+		<div key={`gamesList`} className="games">
 			<div className="container">
           		<h3>Games</h3>
 				{games.map(game => {

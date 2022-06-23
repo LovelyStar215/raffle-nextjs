@@ -23,7 +23,7 @@ const GameStatus = ({
 	// console.log('winnerResult: ' + winnerResult);
 
 	return (
-		<div className="result state">
+		<div key={`gameStatus-${game.gameNumber}`} className="result state">
 			<div className="panels">
 				<h5>Winning ticket is</h5>
 				<div className="panel">

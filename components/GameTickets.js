@@ -1,14 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
-import {
-	IERC20MetadataABI,
-	IERC721MetadataABI
-} from '../features/configure/abi.js';
-
-import {
-	gameAddress,
-	gameTrophyAddress,
-	tokenAddress
-} from '../features/configure/env';
+import React from 'react';
 
 const GameTickets = ({
 	web3,
@@ -23,7 +13,7 @@ const GameTickets = ({
 
 	if (!gameTickets || !gameTickets[activeAddress] || !gameTickets[activeAddress].length) {
 		return (
-			<div className="result">
+			<div key={`gameTickets-${game.gameNumber}`} className="result">
 				<div className="panels">
 					<div>
 						<p>You currently don't hold any tickets in this game.</p>
@@ -75,7 +65,7 @@ const GameTickets = ({
 	}
 
 	return (
-		<div className="result">
+		<div key={`gameTickets-${game.gameNumber}`} className="result">
 			<div className="panels">
 				<div>
 					<h5>Your tickets ({playerTicketCount})</h5>

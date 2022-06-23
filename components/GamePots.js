@@ -1,28 +1,14 @@
-import React, { useState, useEffect, useRef } from 'react';
-import {
-	IERC20MetadataABI,
-	IERC721MetadataABI
-} from '../features/configure/abi.js';
-
-import {
-	gameAddress,
-	gameTrophyAddress,
-	tokenAddress
-} from '../features/configure/env';
+import React from 'react';
 
 const GamePots = ({
 	web3,
 	gameTokenMetadata,
 	game
 }) => {
-	// console.log('pots');
-	// console.log(game._pot);
-	// console.log(game._pot.length);
-
 	if (!game._pot) return false;
 	
 	return (
-		<div className="result">
+		<div key={`gamePots-${game.gameNumber}`} className="result">
 			<div className="panels">
 				<div>
 					<h5>Game prize</h5>

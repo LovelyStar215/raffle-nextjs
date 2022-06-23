@@ -41,7 +41,7 @@ const GameMetrics = ({
 	});
 
 	return (
-		<div className="items">
+		<div key={`gameMetrics-${game.gameNumber}`} className="items">
 			<div>{items}</div>
 		</div>
 	)
