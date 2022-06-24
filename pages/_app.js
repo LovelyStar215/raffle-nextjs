@@ -216,15 +216,19 @@ function MyApp({ Component, pageProps }) {
   const setToken = (data) => {
     console.log('setToken');
     console.log(JSON.stringify(data));
-    let _tokens = tokens;
-    const currToken = _tokens[data.address];
+    // let _tokens = tokens;
+    const currToken = tokens[data.address];
     const newToken = { ...currToken, ...data };
     console.log('setToken-newToken');
     console.log(newToken);
-    _tokens[_tokens.length] = newToken;
+    let tokenIdx = tokenExists(data.address);
+    if (tokenIdx === false)
+      tokenIdx = tokens.length;
+    
+      tokens[tokenIdx] = newToken;
     console.log('setToken-tokens');
-    console.log(_tokens);
-    setTokens([..._tokens]);
+    console.log(tokens);
+    setTokens([...tokens]);
   }
 
   const _getToken = async (_address) => {
@@ -251,6 +255,7 @@ function MyApp({ Component, pageProps }) {
 
     if (name.length && symbol.length && decimals.length) {
       token = {
+        state: 1,
         address: _address,
         name,
         symbol,
@@ -261,21 +266,34 @@ function MyApp({ Component, pageProps }) {
     }
   };
 
-  const getToken = (_address) => {
+  const tokenExists = (_address) => {
     if (tokens.length) {
       let filter = tokens.filter(_token => _token.address === _address);
       if (filter.length) {
         console.log('token exists: ' + _address);
         let filterKey = [...filter.keys()][0];
-        return tokens[filterKey];
+        return filterKey;
       }
     }
 
+    return false;
+  };
+
+  const getToken = (_address) => {
+    let tokenId = tokenExists(_address);
+    if (tokenId !== false)
+      return tokens[tokenId];
+
     // Request token
     console.log('token request: ' + _address);
+    let token = {
+      state: 0,
+      address: _address
+    };
+    setToken(token);
     _getToken(_address);
 
-    return null;
+    return token;
   };
 
   const setGameTickets = (_gameNumber, data) => {

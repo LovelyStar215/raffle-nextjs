@@ -5,6 +5,8 @@ const GameMetrics = ({
 	gameTokenMetadata,
 	game
 }) => {
+	if (gameTokenMetadata.state === 0) return false;
+	
 	const items = Object.entries(game).map(([key, val]) => {
 		console.log('gameItems');
 		if (key.substring(0, 1) === '_') return null;

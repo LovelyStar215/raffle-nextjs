@@ -41,7 +41,7 @@ const Game = ({
 	let gameToken = new web3.eth.Contract(IERC20MetadataABI, game.tokenAddress);
 
 	// Get game token metadata
-	let gameTokenMetadata = getToken(game.tokenAddress);
+	let gameTokenMetadata = {};
 
 	let gameHasEnded = (game._status == 0);
 
@@ -49,18 +49,77 @@ const Game = ({
 	let hasManagementAccess = true; // TBC
 
 	// Set current game token allowance/approval state
-	let gameTokenApprovalMax = web3.utils
-		.toBN(game.ticketPrice)
-		.mul(web3.utils.toBN(game.maxTicketsPlayer));
-	console.log('getAllowance');
-	let gameTokenAllowanceAmount = getAllowance(game.tokenAddress);
-	console.log(gameTokenAllowanceAmount);
-	let hasGameTokenApproval =
-		gameTokenAllowanceAmount
-		.sub(gameTokenApprovalMax)
-		.gte(web3.utils.toBN('0'));
-	console.log(gameTokenAllowanceAmount.sub(gameTokenApprovalMax).toString());
-	console.log('hasGameTokenApproval: ' + hasGameTokenApproval);
+	let gameTokenApprovalMax;
+	let gameTokenAllowanceAmount;
+	let hasGameTokenApproval = false;
+
+	let gameERC20Tokens = [];
+	let gameERC721Tokens = [];
+
+	// Gather all tokens, used in this game
+	game._pot.map((pot, potIdx) => {
+		let result = [];
+
+		// Non-null addresses only
+		if (web3.utils.toBN(pot.assetAddress).gt(web3.utils.toBN(0))) {
+			switch (pot.assetType) {
+				case '0': {
+					if (gameERC20Tokens.length)
+						result = gameERC20Tokens.filter(_address => _address === pot.assetAddress);
+	
+					// Doesn't exist
+					if (!result.length)
+						gameERC20Tokens[potIdx] = pot.assetAddress;
+					
+					break;
+				}
+	
+				case '1': {
+					if (gameERC721Tokens.length)
+						result = gameERC721Tokens.filter(_address => _address === pot.assetAddress);
+	
+					// Doesn't exist
+					if (!result.length)
+						gameERC721Tokens[potIdx] = pot.assetAddress;
+					
+					break;
+				}
+			}
+		}
+	});
+	// console.log('gameERC20Tokens');
+	// console.log(gameERC20Tokens);
+	// console.log('gameERC721Tokens');
+	// console.log(gameERC721Tokens);
+
+	// Process all game tokens
+	gameERC20Tokens.forEach((address, pot) => {
+
+		// First sight of this token
+		let tokenResult = getToken(address);
+
+		// The ticket pot (always pot zero)
+		if (!pot) {
+			gameTokenMetadata = tokenResult;
+
+			gameTokenApprovalMax = web3.utils
+				.toBN(game.ticketPrice)
+				.mul(web3.utils.toBN(game.maxTicketsPlayer));
+			console.log('getAllowance');
+			
+			gameTokenAllowanceAmount = getAllowance(game.tokenAddress);
+			console.log(gameTokenAllowanceAmount);
+			
+			hasGameTokenApproval =
+				gameTokenAllowanceAmount
+				.sub(gameTokenApprovalMax)
+				.gte(web3.utils.toBN('0'));
+			console.log(gameTokenAllowanceAmount.sub(gameTokenApprovalMax).toString());
+			console.log('hasGameTokenApproval: ' + hasGameTokenApproval);
+		} else {
+
+		}
+	});
 
 	const panelManagementClasses = () => {
 		let arr = [

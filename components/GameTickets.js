@@ -7,6 +7,8 @@ const GameTickets = ({
 	gameTokenMetadata,
 	game
 }) => {
+	if (gameTokenMetadata.state === 0) return false;
+	
 	let ticketItems = '';
 	let totalSharePercentage = 0;
 	let totalShareValue, totalSharePercentageString;

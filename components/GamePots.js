@@ -5,7 +5,11 @@ const GamePots = ({
 	gameTokenMetadata,
 	game
 }) => {
-	if (!game._pot) return false;
+	if (gameTokenMetadata.state === 0)
+		return false;
+
+	if (!game._pot)
+		return false;
 	
 	return (
 		<div key={`gamePots-${game.gameNumber}`} className="result">
