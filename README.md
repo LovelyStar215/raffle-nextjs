@@ -19,3 +19,13 @@ A Docker solution for hot-reloading issues on WSL
 ```
 docker-compose up
 ```
+
+## Deployment
+Can be deployed as a static build, to AWS S3, IPFS, etc...
+```
+BUCKET=foobar
+npm run build
+npm run export
+aws s3 rm --recursive s3://${BUCKET}
+aws s3 sync ./out s3://${BUCKET}
+```
