@@ -146,47 +146,6 @@ function MyApp({ Component, pageProps }) {
       setAllowances([..._allowances]);
     }
 
-
-
-
-    // if (_allowances[0].length) {
-    //   const result = _allowances[0].filter(address => {
-    //     console.log(address);
-    //     return address === _playerAddress
-    //   });
-    //   console.log('_playerAllowances-filter');
-    //   console.log([...result]);
-    //   if (result.length) {
-    //     let resultKey = [...result.keys()][0];
-    //     console.log('getAllowancePlayerIndex: ' + _playerAddress);
-    //     console.log('resultKey: ' + resultKey);
-        
-    //     return resultKey;
-    //   }
-    // }
-
-    // console.warn('getAllowancePlayerIndex: create new entry');
-
-    // let _playerIndexes = _playerIndexes;
-    // let _playerIndex = _allowances[0].length;
-    // console.log('getAllowancePlayerIndex-_playerIndex.length');
-    // console.log(_playerIndex);
-
-    // console.log('_allowances');
-    // console.log(_allowances);
-
-    // _allowances[0][_playerIndex] = _playerAddress;
-    // _allowances[1][_playerIndex] = [];
-
-    // console.log('getAllowancePlayerIndex-_playerIndexes');
-    // console.log(_allowances[0]);
-
-    // console.log('getAllowancePlayerIndex-_playerAllowances');
-    // console.log(_allowances[1]);
-    
-
-    // setAllowances([..._allowances]);
-
     return _playerIndex;
   };
 
@@ -245,29 +204,6 @@ function MyApp({ Component, pageProps }) {
       // console.log(newAllowance);
       _approvals[1][_playerAllowanceIdx][playerTokenAllowanceIdx] = data;
     }
-
-    // const result = _approvals[1][_playerAllowanceIdx].filter(approval => approval.address === _address);
-    // console.log('_playerAllowances-filter');
-    // console.log([...result.keys()]);
-
-    // let playerTokenAllowanceIdx;
-
-    // if (result.length) {
-    //   playerTokenAllowanceIdx = [...result.keys()][0];
-    //   _approvals[1][_playerAllowanceIdx][playerTokenAllowanceIdx].amount = _amount.toString();
-    // }
-
-    // // No match, add new record
-    // else {
-    //   playerTokenAllowanceIdx = _approvals[1][_playerAllowanceIdx].length;
-    //   const newAllowance = {
-    //     address: _address,
-    //     amount: _amount
-    //   };
-    //   console.log('setApproval-newAllowance');
-    //   console.log(newAllowance);
-    //   _approvals[1][_playerAllowanceIdx][playerTokenAllowanceIdx] = newAllowance;
-    // }
 
     setAllowances([..._approvals]);
   };
@@ -328,52 +264,6 @@ function MyApp({ Component, pageProps }) {
     _getAllowance(_playerAllowanceIdx, _address);
 
     return newAllowance;
-
-
-
-
-    // if (approvals.length) {
-    //   const currApproval = approvals.filter(approval => approval.address === _address);
-      
-    //   // Approval exists
-    //   if (currApproval.length) {
-    //     let approvalsKey = [...currApproval.keys()][0];
-    //     let amount = approvals[approvalsKey].amount;
-    //     console.log('Approval exists: ' + amount);
-    //     console.log(approvals[approvalsKey]);
-
-    //     return web3.utils.toBN(amount);
-    //   }
-
-    //   // Request token allowance
-    //   _getAllowance(_address);
-    // }
-
-    // const result = approvals[1][_playerAllowanceIdx].filter(approval => approval.address === _address);
-    // console.log('_playerAllowances-filter');
-    // console.log([...result.keys()]);
-
-    // let playerTokenAllowanceIdx;
-
-    // if (result.length) {
-    //   playerTokenAllowanceIdx = [...result.keys()][0];
-    //   if (playerTokenAllowanceIdx)
-    //     return playerTokenAllowanceIdx;
-    // }
-
-    // // No match, add new record
-    // else {
-    //   playerTokenAllowanceIdx = _approvals[1][_playerAllowanceIdx].length;
-    //   const newAllowance = {
-    //     address: _address,
-    //     amount: _amount
-    //   };
-    //   console.log('setApproval-newAllowance');
-    //   console.log(newAllowance);
-    //   _approvals[1][_playerAllowanceIdx][playerTokenAllowanceIdx] = newAllowance;
-    // }
-
-    // return web3.utils.toBN('0');
   };
 
 
