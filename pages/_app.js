@@ -716,9 +716,9 @@ function MyApp({ Component, pageProps }) {
                 if (result)
                   setRole(role);
               });
-              // window.location='/';
             }}
             className="button lightning"
+            title="Contract role call"
           >✺</button>
       </div>
     </>
