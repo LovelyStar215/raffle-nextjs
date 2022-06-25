@@ -50,7 +50,7 @@ const Game = ({
 
 	// Set current game token allowance/approval state
 	let gameTokenApprovalMax;
-	let gameTokenAllowanceAmount;
+	let gameTokenAllowance;
 	let hasGameTokenApproval = false;
 
 	let gameERC20Tokens = [];
@@ -65,10 +65,10 @@ const Game = ({
 			switch (pot.assetType) {
 				case '0': {
 					if (gameERC20Tokens.length)
-						result = gameERC20Tokens.filter(_address => _address === pot.assetAddress);
+						result = gameERC20Tokens.findIndex(_address => _address === pot.assetAddress);
 	
 					// Doesn't exist
-					if (!result.length)
+					if (result >= 0)
 						gameERC20Tokens[potIdx] = pot.assetAddress;
 					
 					break;
@@ -76,10 +76,10 @@ const Game = ({
 	
 				case '1': {
 					if (gameERC721Tokens.length)
-						result = gameERC721Tokens.filter(_address => _address === pot.assetAddress);
+						result = gameERC721Tokens.findIndex(_address => _address === pot.assetAddress);
 	
 					// Doesn't exist
-					if (!result.length)
+					if (result >= 0)
 						gameERC721Tokens[potIdx] = pot.assetAddress;
 					
 					break;
@@ -105,17 +105,17 @@ const Game = ({
 			gameTokenApprovalMax = web3.utils
 				.toBN(game.ticketPrice)
 				.mul(web3.utils.toBN(game.maxTicketsPlayer));
-			console.log('getAllowance');
 			
-			gameTokenAllowanceAmount = getAllowance(game.tokenAddress);
-			console.log(gameTokenAllowanceAmount);
+			// console.log('gameERC20Tokens-getAllowance');
+			gameTokenAllowance = getAllowance(address);
+			// console.log(gameTokenAllowance);
 			
 			hasGameTokenApproval =
-				gameTokenAllowanceAmount
+				web3.utils.toBN(gameTokenAllowance.amount)
 				.sub(gameTokenApprovalMax)
 				.gte(web3.utils.toBN('0'));
-			console.log(gameTokenAllowanceAmount.sub(gameTokenApprovalMax).toString());
-			console.log('hasGameTokenApproval: ' + hasGameTokenApproval);
+			// console.log(web3.utils.toBN(gameTokenAllowance.amount).sub(gameTokenApprovalMax).toString());
+			// console.log('hasGameTokenApproval: ' + hasGameTokenApproval);
 		} else {
 
 		}
@@ -214,8 +214,8 @@ const Game = ({
 							.on('receipt', function(receipt) {
 								// console.log(receipt);
 								console.log('approve');
-								console.log(gameTokenApprovalMax);
-								setApproval(receipt.to, gameTokenApprovalMax);
+								console.log(gameTokenApprovalMax.toString());
+								setApproval(receipt.to, gameTokenApprovalMax.toString());
 								// let allowance = getAllowance(game.tokenAddress);
 								// console.log('getAllowance');
 								// console.log(allowance);

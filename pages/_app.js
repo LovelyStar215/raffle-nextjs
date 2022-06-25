@@ -42,7 +42,8 @@ function MyApp({ Component, pageProps }) {
 
   const [tokens, setTokens] = useState([])
 
-  const [approvals, setApprovals] = useState([])
+  const [approvals, setAllowances] = useState([[],[]])
+  // const [_playerIndexes, set_playerIndexes] = useState([])
 
   const endGameId = useRef();
   const getGameStateId = useRef();
@@ -78,7 +79,7 @@ function MyApp({ Component, pageProps }) {
     const storedApprovals = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY_APPROVALS));
     console.log(storedApprovals);
     if (storedApprovals)
-    setApprovals(storedApprovals);
+    setAllowances(storedApprovals);
 	}, [])
 
 	useEffect(() => {
@@ -117,70 +118,262 @@ function MyApp({ Component, pageProps }) {
     setConnected(false)
   };
 
-  const setApproval = (_address, _amount) => {
-    console.log('setApproval');
-    let _approvals = approvals;
-    const currApproval = _approvals.filter(approval => approval.address === _address);
-    console.log('currApproval');
-    console.log([...currApproval.keys()]);
+
+
+
+  const getAllowancePlayerIndex = (_playerAddress) => {
+    let _allowances = approvals;
+    // console.log('getAllowancePlayerIndex-_allowances');
+    // console.log(_allowances);
+    // let _playerIndexes = _allowances[0];
+    // console.log('getAllowancePlayerIndex-_playerIndexes');
+    // console.log(_allowances[0]);
     
-    // Approval exists, update
-    if (currApproval.length) {
-      let approvalsKey = [...currApproval.keys()][0];
-      _approvals[approvalsKey].amount = _amount.toString();
-    }
     
-    // No match, add new record
-    else {
-      const newApproval = {};
-      newApproval.address = _address;
-      newApproval.amount = _amount.toString();
-      console.log('setApproval-newApproval');
-      console.log(newApproval);
-      _approvals[_approvals.length] = newApproval;
+    let _playerIndex = -1;
+    
+    if (_allowances[0].length)
+      _playerIndex = _allowances[0].findIndex(address => address === _playerAddress);
+
+    // console.log('_allowances[0] match: ' + _playerIndex);
+
+    if (_playerIndex < 0) {
+      _playerIndex = _allowances[0].length;
+
+      _allowances[0][_playerIndex] = _playerAddress;
+      _allowances[1][_playerIndex] = [];
+
+      setAllowances([..._allowances]);
     }
+
+
+
+
+    // if (_allowances[0].length) {
+    //   const result = _allowances[0].filter(address => {
+    //     console.log(address);
+    //     return address === _playerAddress
+    //   });
+    //   console.log('_playerAllowances-filter');
+    //   console.log([...result]);
+    //   if (result.length) {
+    //     let resultKey = [...result.keys()][0];
+    //     console.log('getAllowancePlayerIndex: ' + _playerAddress);
+    //     console.log('resultKey: ' + resultKey);
+        
+    //     return resultKey;
+    //   }
+    // }
+
+    // console.warn('getAllowancePlayerIndex: create new entry');
+
+    // let _playerIndexes = _playerIndexes;
+    // let _playerIndex = _allowances[0].length;
+    // console.log('getAllowancePlayerIndex-_playerIndex.length');
+    // console.log(_playerIndex);
+
+    // console.log('_allowances');
+    // console.log(_allowances);
+
+    // _allowances[0][_playerIndex] = _playerAddress;
+    // _allowances[1][_playerIndex] = [];
+
+    // console.log('getAllowancePlayerIndex-_playerIndexes');
+    // console.log(_allowances[0]);
+
+    // console.log('getAllowancePlayerIndex-_playerAllowances');
+    // console.log(_allowances[1]);
     
 
-    console.log('setApproval-_approvals');
-    console.log(_approvals);
-    setApprovals([..._approvals]);
+    // setAllowances([..._allowances]);
+
+    return _playerIndex;
   };
 
-  const _getAllowance = async (_address) => {
+
+
+  const allowanceExists = (_playerAllowanceIdx, _address) => {
+    if (approvals.length) {
+      // let _playerAllowanceIdx = getAllowancePlayerIndex(activeAddress);
+      // console.log('allowanceExists-_playerAllowanceIdx');
+      // console.log(_playerAllowanceIdx);
+
+      // console.log('allowanceExists-approvals: ' + JSON.stringify(approvals));
+      // console.log('approvals[1].length: ' + approvals[1].length);
+      // console.log('approvals[1][_playerAllowanceIdx]');
+      // console.log(approvals[1][_playerAllowanceIdx]);
+      if (approvals[1].length && approvals[1][_playerAllowanceIdx]) {
+        const result = approvals[1][_playerAllowanceIdx].findIndex(approval => approval.address === _address);
+        // console.log('_playerAllowances-findIndex');
+        // console.log(result);
+        if (result >= 0) {
+          // console.log('allowanceExists: ' + _address);
+          // console.log('result: ' + result);
+          
+          return result;
+        }
+      }
+    }
+
+    return false;
+  };
+
+
+
+  const setApproval = (_playerAllowanceIdx, data) => {
+    let _approvals = approvals;
+    console.log(activeAddress);
+    // let _playerAllowanceIdx = getAllowancePlayerIndex(activeAddress);
+    // console.log('_playerAllowanceIdx');
+    // console.log(_playerAllowanceIdx);
+
+    // console.log(_approvals[1][_playerAllowanceIdx]);
+
+    let playerTokenAllowanceIdx = allowanceExists(_playerAllowanceIdx, data.address);
+    if (playerTokenAllowanceIdx !== false) {
+      // console.log('Existing record for setApproval: IDX: ' + playerTokenAllowanceIdx);
+      _approvals[1][_playerAllowanceIdx][playerTokenAllowanceIdx] = data;
+    }
+
+    // No match, add new record
+    else {
+      playerTokenAllowanceIdx = _approvals[1][_playerAllowanceIdx].length;
+      // console.log('New record for setApproval: IDX: ' + playerTokenAllowanceIdx);
+      // const currAllowance = _approvals[1][_playerAllowanceIdx][playerTokenAllowanceIdx];
+      // const newAllowance = { ...currAllowance, ...data };
+      // console.log('setApproval-newAllowance');
+      // console.log(newAllowance);
+      _approvals[1][_playerAllowanceIdx][playerTokenAllowanceIdx] = data;
+    }
+
+    // const result = _approvals[1][_playerAllowanceIdx].filter(approval => approval.address === _address);
+    // console.log('_playerAllowances-filter');
+    // console.log([...result.keys()]);
+
+    // let playerTokenAllowanceIdx;
+
+    // if (result.length) {
+    //   playerTokenAllowanceIdx = [...result.keys()][0];
+    //   _approvals[1][_playerAllowanceIdx][playerTokenAllowanceIdx].amount = _amount.toString();
+    // }
+
+    // // No match, add new record
+    // else {
+    //   playerTokenAllowanceIdx = _approvals[1][_playerAllowanceIdx].length;
+    //   const newAllowance = {
+    //     address: _address,
+    //     amount: _amount
+    //   };
+    //   console.log('setApproval-newAllowance');
+    //   console.log(newAllowance);
+    //   _approvals[1][_playerAllowanceIdx][playerTokenAllowanceIdx] = newAllowance;
+    // }
+
+    setAllowances([..._approvals]);
+  };
+
+
+
+
+
+
+
+  const _getAllowance = async (_playerAllowanceIdx, _address) => {
     let allowance;
     let token = new web3.eth.Contract(IERC20MetadataABI, _address);
     const result = await token.methods.allowance(
       activeAddress,
       gameAddress
     ).call();
-    console.log('allowance: ' + result);
+    // console.log('allowance: ' + result);
     if (result) {
-      allowance = result.toString();
-      console.log(allowance);
-      setApproval(_address, result);
+      let newAllowance = {
+        state: 1,
+        address: _address,
+        amount: result.toString()
+      };
+      // console.log(newAllowance);
+      setApproval(_playerAllowanceIdx, newAllowance);
     }
-
-    
-    return allowance;
   };
 
   const getAllowance = (_address) => {
-    const currApproval = approvals.filter(approval => approval.address === _address);
-    
-    // Approval exists
-    if (currApproval.length) {
-      let approvalsKey = [...currApproval.keys()][0];
-      let amount = approvals[approvalsKey].amount;
-      console.log('Approval exists: ' + amount);
-      console.log(approvals[approvalsKey]);
-
-      return web3.utils.toBN(amount);
+    let _playerAllowanceIdx = getAllowancePlayerIndex(activeAddress);
+    // console.log('getAllowance-_playerAllowanceIdx');
+    // console.log(_playerAllowanceIdx);
+    let playerTokenAllowanceIdx = allowanceExists(_playerAllowanceIdx, _address);
+    // console.log('getAllowance-playerTokenAllowanceIdx');
+    // console.log(playerTokenAllowanceIdx);
+    // console.log('getAllowance-_playerAllowanceIdx-STATE');
+    // console.log(approvals[1][_playerAllowanceIdx]);
+    // console.log('getAllowance-_playerAllowanceIdx-playerTokenAllowanceIdx-STATE');
+    // console.log(approvals[1][_playerAllowanceIdx][playerTokenAllowanceIdx]);
+    if (playerTokenAllowanceIdx !== false) {
+      return approvals[1][_playerAllowanceIdx][playerTokenAllowanceIdx];
     }
 
-    // Request token allowance
-    _getAllowance(_address);
+    // No match, add new record
+    // if (!approvals[1].length) {
+    //   approvals[1][_playerAllowanceIdx] = [];
+    // }
+    // playerTokenAllowanceIdx = approvals[1][_playerAllowanceIdx].length;
+    let newAllowance = {
+      state: 0,
+      address: _address,
+      amount: '0'
+    };
+    // console.log('setApproval-newAllowance');
+    // console.log(newAllowance);
+    setApproval(_playerAllowanceIdx, newAllowance);
+    _getAllowance(_playerAllowanceIdx, _address);
 
-    return web3.utils.toBN('0');
+    return newAllowance;
+
+
+
+
+    // if (approvals.length) {
+    //   const currApproval = approvals.filter(approval => approval.address === _address);
+      
+    //   // Approval exists
+    //   if (currApproval.length) {
+    //     let approvalsKey = [...currApproval.keys()][0];
+    //     let amount = approvals[approvalsKey].amount;
+    //     console.log('Approval exists: ' + amount);
+    //     console.log(approvals[approvalsKey]);
+
+    //     return web3.utils.toBN(amount);
+    //   }
+
+    //   // Request token allowance
+    //   _getAllowance(_address);
+    // }
+
+    // const result = approvals[1][_playerAllowanceIdx].filter(approval => approval.address === _address);
+    // console.log('_playerAllowances-filter');
+    // console.log([...result.keys()]);
+
+    // let playerTokenAllowanceIdx;
+
+    // if (result.length) {
+    //   playerTokenAllowanceIdx = [...result.keys()][0];
+    //   if (playerTokenAllowanceIdx)
+    //     return playerTokenAllowanceIdx;
+    // }
+
+    // // No match, add new record
+    // else {
+    //   playerTokenAllowanceIdx = _approvals[1][_playerAllowanceIdx].length;
+    //   const newAllowance = {
+    //     address: _address,
+    //     amount: _amount
+    //   };
+    //   console.log('setApproval-newAllowance');
+    //   console.log(newAllowance);
+    //   _approvals[1][_playerAllowanceIdx][playerTokenAllowanceIdx] = newAllowance;
+    // }
+
+    // return web3.utils.toBN('0');
   };
 
 
@@ -216,18 +409,18 @@ function MyApp({ Component, pageProps }) {
   const setToken = (data) => {
     console.log('setToken');
     console.log(JSON.stringify(data));
-    // let _tokens = tokens;
-    const currToken = tokens[data.address];
-    const newToken = { ...currToken, ...data };
-    console.log('setToken-newToken');
-    console.log(newToken);
     let tokenIdx = tokenExists(data.address);
     if (tokenIdx === false)
       tokenIdx = tokens.length;
     
-      tokens[tokenIdx] = newToken;
-    console.log('setToken-tokens');
-    console.log(tokens);
+    const currToken = tokens[tokenIdx];
+    const newToken = { ...currToken, ...data };
+    // console.log('setToken-newToken');
+    // console.log(newToken);
+
+    tokens[tokenIdx] = newToken;
+    // console.log('setToken-tokens');
+    // console.log(tokens);
     setTokens([...tokens]);
   }
 
@@ -268,11 +461,11 @@ function MyApp({ Component, pageProps }) {
 
   const tokenExists = (_address) => {
     if (tokens.length) {
-      let filter = tokens.filter(_token => _token.address === _address);
-      if (filter.length) {
+      const result = tokens.findIndex(_token => _token.address === _address);
+      if (result >= 0) {
         console.log('token exists: ' + _address);
-        let filterKey = [...filter.keys()][0];
-        return filterKey;
+
+        return result;
       }
     }
 
