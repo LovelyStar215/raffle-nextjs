@@ -16,6 +16,7 @@ import GameStatus from '../components/GameStatus'
 import GameTickets from '../components/GameTickets'
 
 const Game = ({
+	getAllowancePlayerIndex,
 	getToken,
 	game,
 	gameTickets,
@@ -212,13 +213,14 @@ const Game = ({
 								gameTokenApprovalMax
 							).send({from: activeAddress})
 							.on('receipt', function(receipt) {
-								// console.log(receipt);
-								console.log('approve');
-								console.log(gameTokenApprovalMax.toString());
-								setApproval(receipt.to, gameTokenApprovalMax.toString());
-								// let allowance = getAllowance(game.tokenAddress);
-								// console.log('getAllowance');
-								// console.log(allowance);
+								let newAllowance = {
+									state: 1,
+									address: game._pot[0].assetAddress,
+									amount: gameTokenApprovalMax.toString()
+								};
+								console.log(newAllowance.amount);
+								let _playerAllowanceIdx = getAllowancePlayerIndex(activeAddress);
+								setApproval(_playerAllowanceIdx, newAllowance);
 							});
 						}}>
 						Approve

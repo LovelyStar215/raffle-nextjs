@@ -3,6 +3,7 @@ import React, { useEffect } from 'react';
 import Game from './Game'
 
 const GamesList = ({
+	getAllowancePlayerIndex,
 	getActiveGames,
 	tickets,
 	getToken,
@@ -44,6 +45,7 @@ const GamesList = ({
 					return (
 						<Game
 							key={`gameNumber-${game.gameNumber}`}
+							getAllowancePlayerIndex={getAllowancePlayerIndex}
 							getToken={getToken}
 							game={game}
 							gameTickets={tickets[game.gameNumber]}

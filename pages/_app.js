@@ -836,6 +836,7 @@ function MyApp({ Component, pageProps }) {
         </div>
       </div>
       <GamesList
+        getAllowancePlayerIndex={getAllowancePlayerIndex}
         getActiveGames={getActiveGames}
         tickets={tickets}
         getToken={getToken}
