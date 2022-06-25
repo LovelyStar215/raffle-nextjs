@@ -3,7 +3,9 @@ import React from 'react';
 const GamePots = ({
 	web3,
 	gameTokenMetadata,
-	game
+	game,
+	getERC20Token,
+	getERC721Token
 }) => {
 	if (gameTokenMetadata.state === 0)
 		return false;
@@ -26,40 +28,35 @@ const GamePots = ({
 						if (key && value == 0) return null;
 
 						let displayAddress =
-						pot?.assetAddress?.slice(0,6)
+							pot?.assetAddress?.slice(0,6)
 							+ '...'
 							+ pot?.assetAddress?.slice(-4)
 
 						if (pot.assetType == 0) {
-							// let token = getToken(pot.assetAddress);
-							// if (token) {
-							// 	// console.log('gamePots-getToken');
-							// 	// console.log(token);
-							// 	value =
-							// 		token.decimals === '18'
-							// 		? web3.utils.fromWei(pot.value)
-							// 		: pot.value; // game._decimals
-								
-							// 	if (token.symbol) value += ' ' + token.symbol;
-							// }
-							if (gameTokenMetadata) {
-								// console.log('gamePots-getToken');
+							let assetMetadata = getERC20Token(pot.assetAddress);
+							if (assetMetadata) {
+								// console.log('gamePots-getERC20Token');
 								// console.log(token);
 								value =
-									gameTokenMetadata.decimals === '18'
+									assetMetadata.decimals === '18'
 									? web3.utils.fromWei(pot.value)
 									: pot.value; // game._decimals
 								
-								if (gameTokenMetadata.symbol) value += ' ' + gameTokenMetadata.symbol;
+								if (assetMetadata.symbol) value += ' ' + assetMetadata.symbol;
 							}
 						} else if (pot.assetType == 1) {
 							value = `#${pot.value}`
+							
+							// let assetMetadata = getERC721Token(pot.assetAddress);
+							// if (assetMetadata) {
+							// 	value += ' ' + assetMetadata.symbol;
+							// }
 						}
 
 						return (
 							<div className="panel" key={`game-${game.gameNumber}-pot-${key}`}>
 								<div className="items">
-									<div>{pot.assetType == 0 ? 'Token' : 'NFT'}</div>
+									<div>{pot.assetType == 1 ? 'NFT' : 'Token'}</div>
 									<div>{displayAddress}</div>
 									<div>{value}</div>
 								</div>

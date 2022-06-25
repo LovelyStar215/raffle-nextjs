@@ -6,7 +6,8 @@ const GamesList = ({
 	getAllowancePlayerIndex,
 	getActiveGames,
 	tickets,
-	getToken,
+	getERC20Token,
+	getERC721Token,
 	games,
 	web3,
 	gameContract,
@@ -46,7 +47,8 @@ const GamesList = ({
 						<Game
 							key={`gameNumber-${game.gameNumber}`}
 							getAllowancePlayerIndex={getAllowancePlayerIndex}
-							getToken={getToken}
+							getERC20Token={getERC20Token}
+							getERC721Token={getERC721Token}
 							game={game}
 							gameTickets={tickets[game.gameNumber]}
 							web3={web3}

@@ -4,6 +4,7 @@ import Web3 from 'web3'
 import {
   gameMasterABI,
   IERC20MetadataABI,
+  IERC721MetadataABI,
   gameTrophyABI
 } from '../features/configure/abi.js'
 
@@ -314,7 +315,20 @@ function MyApp({ Component, pageProps }) {
     setTokens([...tokens]);
   }
 
-  const _getToken = async (_address) => {
+  const tokenExists = (_address) => {
+    if (tokens.length) {
+      const result = tokens.findIndex(_token => _token.address === _address);
+      if (result >= 0) {
+        console.log('token exists: ' + _address);
+
+        return result;
+      }
+    }
+
+    return false;
+  };
+
+  const _getERC20Token = async (_address) => {
     let gameToken = new web3.eth.Contract(IERC20MetadataABI, _address);
     let token, name, symbol, decimals;
     
@@ -349,20 +363,7 @@ function MyApp({ Component, pageProps }) {
     }
   };
 
-  const tokenExists = (_address) => {
-    if (tokens.length) {
-      const result = tokens.findIndex(_token => _token.address === _address);
-      if (result >= 0) {
-        console.log('token exists: ' + _address);
-
-        return result;
-      }
-    }
-
-    return false;
-  };
-
-  const getToken = (_address) => {
+  const getERC20Token = (_address) => {
     let tokenId = tokenExists(_address);
     if (tokenId !== false)
       return tokens[tokenId];
@@ -374,7 +375,52 @@ function MyApp({ Component, pageProps }) {
       address: _address
     };
     setToken(token);
-    _getToken(_address);
+    _getERC20Token(_address);
+
+    return token;
+  };
+
+  const _getERC721Token = async (_address) => {
+    let gameToken = new web3.eth.Contract(IERC721MetadataABI, _address);
+    let token, name, symbol, decimals;
+    
+    const result = await gameToken.methods.name().call();
+    console.log('name: ' + result);
+    if (result) {
+      name = result;
+    }
+    
+    result = await gameToken.methods.symbol().call();
+    console.log('symbol: ' + result);
+    if (result) {
+      symbol = result;
+    }
+
+    if (name.length && symbol.length) {
+      token = {
+        state: 1,
+        address: _address,
+        name,
+        symbol
+      };
+      console.log(token);
+      setToken(token);
+    }
+  };
+
+  const getERC721Token = (_address) => {
+    let tokenId = tokenExists(_address);
+    if (tokenId !== false)
+      return tokens[tokenId];
+
+    // Request token
+    console.log('token request: ' + _address);
+    let token = {
+      state: 0,
+      address: _address
+    };
+    setToken(token);
+    _getERC721Token(_address);
 
     return token;
   };
@@ -839,7 +885,8 @@ function MyApp({ Component, pageProps }) {
         getAllowancePlayerIndex={getAllowancePlayerIndex}
         getActiveGames={getActiveGames}
         tickets={tickets}
-        getToken={getToken}
+        getERC20Token={getERC20Token}
+        getERC721Token={getERC721Token}
         games={games}
         web3={web3}
         gameAddress={gameAddress}

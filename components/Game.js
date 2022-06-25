@@ -17,7 +17,8 @@ import GameTickets from '../components/GameTickets'
 
 const Game = ({
 	getAllowancePlayerIndex,
-	getToken,
+	getERC20Token,
+	getERC721Token,
 	game,
 	gameTickets,
 	web3,
@@ -93,11 +94,9 @@ const Game = ({
 	// console.log('gameERC721Tokens');
 	// console.log(gameERC721Tokens);
 
-	// Process all game tokens
+	// Process all game ERC20 tokens
 	gameERC20Tokens.forEach((address, pot) => {
-
-		// First sight of this token
-		let tokenResult = getToken(address);
+		let tokenResult = getERC20Token(address);
 
 		// The ticket pot (always pot zero)
 		if (!pot) {
@@ -117,10 +116,11 @@ const Game = ({
 				.gte(web3.utils.toBN('0'));
 			// console.log(web3.utils.toBN(gameTokenAllowance.amount).sub(gameTokenApprovalMax).toString());
 			// console.log('hasGameTokenApproval: ' + hasGameTokenApproval);
-		} else {
-
 		}
 	});
+
+	// Process all game ERC721 tokens
+	gameERC721Tokens.forEach(address => getERC721Token(address));
 
 	const panelManagementClasses = () => {
 		let arr = [
@@ -175,6 +175,8 @@ const Game = ({
 					web3={web3}
 					gameTokenMetadata={gameTokenMetadata}
 					game={game}
+					getERC20Token={getERC20Token}
+					getERC721Token={getERC721Token}
 				/>
 				<div className="buttons">
 					<button
@@ -196,10 +198,10 @@ const Game = ({
 					<button
 						className="button"
 						onClick={() => {
-							let result = getToken(
+							let result = getERC20Token(
 								game.tokenAddress,
 							)
-							console.log('getToken()');
+							console.log('getERC20Token()');
 							console.log(result);
 						}}>
 						Get token
