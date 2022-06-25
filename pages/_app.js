@@ -12,6 +12,9 @@ import {
   gameTrophyAddress,
   tokenAddress,
   feeAddress,
+	CALLER_ROLE,
+	MANAGER_ROLE,
+  LOCAL_STORAGE_KEY_ROLES,
   LOCAL_STORAGE_KEY_GAMES,
   LOCAL_STORAGE_KEY_TICKETS,
   LOCAL_STORAGE_KEY_TOKENS,
@@ -29,6 +32,8 @@ function MyApp({ Component, pageProps }) {
   const [connected, setConnected] = useState(false)
 
   const [gameContract, setGameContract] = useState(null)
+
+  const [roles, setRoles] = useState([[],[]])
 
   const [games, setGames] = useState([])
 
@@ -52,11 +57,14 @@ function MyApp({ Component, pageProps }) {
   const awardItemTo = useRef();
   const awardItemURI = useRef();
 
-  // User has the necessary contract roles?
-	let hasManagementAccess = true; // TBC
-
 	useEffect(() => {
 		console.log('Loaded from local storage');
+
+		const storedRoles = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY_ROLES));
+    console.log(storedRoles);
+		if (storedRoles)
+			setRoles(storedRoles);
+    
 		const storedGames = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY_GAMES));
     console.log(storedGames);
 		if (storedGames)
@@ -77,6 +85,13 @@ function MyApp({ Component, pageProps }) {
     if (storedApprovals)
     setAllowances(storedApprovals);
 	}, [])
+
+	useEffect(() => {
+		console.log('Roles changed');
+		console.log(roles);
+		const storedRoles = JSON.stringify(roles);
+		localStorage.setItem(LOCAL_STORAGE_KEY_ROLES, storedRoles);
+	}, [roles])
 
 	useEffect(() => {
 		console.log('Games changed');
@@ -166,6 +181,53 @@ function MyApp({ Component, pageProps }) {
   };
 
   
+
+  const setRole = (roleName) => {
+    console.log('setRole');
+    let _roles = roles;
+    let addressIdx = -1;
+    if (_roles[0].length) {
+      let result = _roles[0].findIndex(address => address === activeAddress);
+      if (result >= 0 ) {
+        addressIdx = result;
+      }
+    }
+
+    if (addressIdx < 0) {
+      addressIdx = _roles[0].length;
+      _roles[0][addressIdx] = activeAddress;
+      _roles[1][addressIdx] = [];
+    }
+
+    let roleIdx = _roles[1][addressIdx].length;
+    _roles[1][addressIdx][roleIdx] = roleName;
+
+    console.log(_roles);
+    
+    setRoles([..._roles]);
+  }
+
+
+
+  const hasRole = (roleName) => {
+    console.log('hasRole');
+    let addressIdx = -1;
+    if (roles[0].length) {
+      let result = roles[0].findIndex(address => address === activeAddress);
+      if (result < 0 )
+        return false;
+
+      addressIdx = result;
+
+      result = roles[1][addressIdx].findIndex(role => role === roleName);
+      if (result < 0 )
+        return false;
+
+      return true;
+    }
+    
+    return false;
+  }
 
 
 
@@ -378,7 +440,7 @@ function MyApp({ Component, pageProps }) {
 		let arr = [
 			'tools'
 		];
-		if (!hasManagementAccess)
+		if (!hasRole(CALLER_ROLE) && !hasRole(MANAGER_ROLE))
 			arr.push('hide');
 		
 		return arr.join(' ');
@@ -629,11 +691,14 @@ function MyApp({ Component, pageProps }) {
         games={games}
         gameAddress={gameAddress}
         gameContract={gameContract}
+        roles={roles}
         getActiveGames={getActiveGames}
         getGamePlayerState={getGamePlayerState}
         setGames={setGames}
         setAllowances={setAllowances}
         setTokens={setTokens}
+        setRole={setRole}
+        hasRole={hasRole}
       />
     </>
   )

@@ -18,7 +18,9 @@ function HomePage({
   getGamePlayerState,
   setGames,
   setAllowances,
-  setTokens
+  setTokens,
+  getRole,
+  hasRole
 }) {
 
   const setToken = (data) => {
@@ -315,6 +317,8 @@ function HomePage({
       setGames={setGames}
       setAllowance={setAllowance}
       getAllowance={getAllowance}
+      getRole={getRole}
+      hasRole={hasRole}
     />
   )
 }

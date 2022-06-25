@@ -7,7 +7,9 @@ import {
 import {
 	gameAddress,
 	gameTrophyAddress,
-	tokenAddress
+	tokenAddress,
+	CALLER_ROLE,
+	MANAGER_ROLE
 } from '../features/configure/env';
 
 import GameMetrics from '../components/GameMetrics'
@@ -28,7 +30,8 @@ const Game = ({
 	getGamePlayerState,
 	hideGame,
 	setAllowance,
-	getAllowance
+	getAllowance,
+	hasRole
 }) => {
 	const numberOfTickets = useRef();
 	const addGamePotERC20AssetAddress = useRef();
@@ -126,7 +129,7 @@ const Game = ({
 		let arr = [
 			'tools'
 		];
-		if (!hasManagementAccess)
+		if (!hasRole(CALLER_ROLE) && !hasRole(MANAGER_ROLE))
 			arr.push('hide');
 		
 		return arr.join(' ');

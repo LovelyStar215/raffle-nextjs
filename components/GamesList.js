@@ -16,7 +16,8 @@ const GamesList = ({
 	getGamePlayerState,
 	setGames,
 	setAllowance,
-	getAllowance
+	getAllowance,
+	hasRole
 }) => {
 	if (!gameContract || !web3)
 		return null;
@@ -59,6 +60,7 @@ const GamesList = ({
 							hideGame={hideGame}
 							setAllowance={setAllowance}
 							getAllowance={getAllowance}
+							hasRole={hasRole}
 						/>
 					);
 				})}
