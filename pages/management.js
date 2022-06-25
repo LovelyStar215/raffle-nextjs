@@ -22,7 +22,7 @@ function Management({
 			<div className="container">
         <h3>Management</h3>
         <p>If you have been granted management roles within the gamemaster contract.<br/>Click button to cache your contract roles and enable management control panels.</p>
-        <p>If your contract roles aren't loading correctly, get in contact with the contract owners.</p>
+        <p>If your contract roles aren&apos;t loading correctly, get in contact with the contract owners.</p>
         <button
           onClick={() => {
             roleKeys.forEach(async role => {

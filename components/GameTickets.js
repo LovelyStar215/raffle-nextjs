@@ -18,7 +18,7 @@ const GameTickets = ({
 			<div key={`gameTickets-${game.gameNumber}`} className="result">
 				<div className="panels">
 					<div>
-						<p>You don't have any tickets in this game.</p>
+						<p>You don&apos;t have any tickets in this game.</p>
 					</div>
 				</div>
 			</div>
