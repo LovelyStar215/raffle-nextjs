@@ -210,7 +210,7 @@ function MyApp({ Component, pageProps }) {
 
 
   const hasRole = (roleName) => {
-    console.log('hasRole');
+    // console.log('hasRole');
     let addressIdx = -1;
     if (roles[0].length) {
       let result = roles[0].findIndex(address => address === activeAddress);
@@ -233,16 +233,16 @@ function MyApp({ Component, pageProps }) {
 
 
   const setGameState = (data) => {
-    console.log('setGameState');
-    console.log(JSON.stringify(data));
+    // console.log('setGameState');
+    // console.log(JSON.stringify(data));
     let _games = games;
     const currGame = _games[data.gameNumber];
     const newGame = { ...currGame, ...data };
-    console.log('setGameState-newGame');
-    console.log(newGame);
+    // console.log('setGameState-newGame');
+    // console.log(newGame);
     _games[data.gameNumber] = newGame;
-    console.log('setGameState-newGames');
-    console.log([..._games]);
+    // console.log('setGameState-newGames');
+    // console.log([..._games]);
     setGames([..._games]);
   }
 
@@ -258,9 +258,9 @@ function MyApp({ Component, pageProps }) {
     setActiveGameCalls(newActiveGameCalls);
 
     let results = await gameContract.methods.getActiveGames(_total).call();
-    console.log('getActiveGames = ' + _total);
+    // console.log('getActiveGames = ' + _total);
     if (results?.length) {
-      console.log('getActiveGames');
+      // console.log('getActiveGames');
       results.forEach(gameNumber => {
         getGameState(web3, gameContract, games, gameNumber);
       });
@@ -274,7 +274,7 @@ function MyApp({ Component, pageProps }) {
 
   const getGameState = async (web3, gameContract, games, gameNumber) => {
     let results = await gameContract.methods.getGameState(gameNumber).call();
-    console.log('getGameState = ' + gameNumber);
+    // console.log('getGameState = ' + gameNumber);
     console.log(results);
     if (results) {
       let len = Object.keys(results).length/2;
@@ -305,7 +305,7 @@ function MyApp({ Component, pageProps }) {
       }, {});
       items.gameNumber = gameNumber.toString();
       
-      console.log('setGameData call');
+      // console.log('setGameData call');
       setGameState(items);
 
       getGamePlayerState(
@@ -319,17 +319,17 @@ function MyApp({ Component, pageProps }) {
 
 
   const setGameTickets = (_gameNumber, data) => {
-    console.log('setGameTickets: ' + _gameNumber);
-    console.log((data));
+    // console.log('setGameTickets: ' + _gameNumber);
+    // console.log((data));
     let _tickets = tickets;
     // const currTickets = _tickets[_gameNumber];
     // console.log(currTickets);
     const newTickets = { ...data };
-    console.log('setGameTickets-newTickets');
-    console.log(newTickets);
+    // console.log('setGameTickets-newTickets');
+    // console.log(newTickets);
     _tickets[_gameNumber] = newTickets;
-    console.log('setGameTickets-_tickets');
-    console.log(_tickets);
+    // console.log('setGameTickets-_tickets');
+    // console.log(_tickets);
     setTickets([..._tickets]);
   };
 
@@ -341,15 +341,15 @@ function MyApp({ Component, pageProps }) {
       _gameNumber,
       _playerAddress
     ).call();
-    console.log('getGamePlayerState = ' + _gameNumber + '; address = ' + _playerAddress);
-    console.log(results);
+    // console.log('getGamePlayerState = ' + _gameNumber + '; address = ' + _playerAddress);
+    // console.log(results);
     let newTickets = tickets[_gameNumber] || [];
     newTickets[_playerAddress] = results;
     // newTickets = {
     //   _playerAddress: results
     // };
-    console.log('newTickets');
-    console.log(newTickets);
+    // console.log('newTickets');
+    // console.log(newTickets);
     setGameTickets(_gameNumber, newTickets);
     // return results;
   }
