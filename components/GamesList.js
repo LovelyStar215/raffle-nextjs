@@ -14,7 +14,7 @@ const GamesList = ({
 	buyTicket,
 	getGamePlayerState,
 	setGames,
-	setApproval,
+	setAllowance,
 	getAllowance
 }) => {
 	if (!gameContract || !web3)
@@ -55,7 +55,7 @@ const GamesList = ({
 							buyTicket={buyTicket}
 							getGamePlayerState={getGamePlayerState}
 							hideGame={hideGame}
-							setApproval={setApproval}
+							setAllowance={setAllowance}
 							getAllowance={getAllowance}
 						/>
 					);

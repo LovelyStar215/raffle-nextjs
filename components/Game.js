@@ -26,7 +26,7 @@ const Game = ({
 	buyTicket,
 	getGamePlayerState,
 	hideGame,
-	setApproval,
+	setAllowance,
 	getAllowance
 }) => {
 	const numberOfTickets = useRef();
@@ -220,7 +220,7 @@ const Game = ({
 								};
 								console.log(newAllowance.amount);
 								let _playerAllowanceIdx = getAllowancePlayerIndex(activeAddress);
-								setApproval(_playerAllowanceIdx, newAllowance);
+								setAllowance(_playerAllowanceIdx, newAllowance);
 							});
 						}}>
 						Approve

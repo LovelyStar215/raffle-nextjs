@@ -1243,7 +1243,7 @@ export const IERC721MetadataABI = [
         "type": "bool"
       }
     ],
-    "name": "setApprovalForAll",
+    "name": "setAllowanceForAll",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -1619,7 +1619,7 @@ export const gameTrophyABI = [
         "type": "bool"
       }
     ],
-    "name": "setApprovalForAll",
+    "name": "setAllowanceForAll",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

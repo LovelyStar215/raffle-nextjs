@@ -15,7 +15,7 @@ import {
   LOCAL_STORAGE_KEY_GAMES,
   LOCAL_STORAGE_KEY_TICKETS,
   LOCAL_STORAGE_KEY_TOKENS,
-  LOCAL_STORAGE_KEY_APPROVALS
+  LOCAL_STORAGE_KEY_ALLOWANCES
 } from '../features/configure/env';
 
 import '../styles/globals.scss'
@@ -42,7 +42,7 @@ function MyApp({ Component, pageProps }) {
 
   const [tokens, setTokens] = useState([])
 
-  const [approvals, setAllowances] = useState([[],[]])
+  const [allowances, setAllowances] = useState([[],[]])
   // const [_playerIndexes, set_playerIndexes] = useState([])
 
   const endGameId = useRef();
@@ -76,7 +76,7 @@ function MyApp({ Component, pageProps }) {
     if (storedTokens)
       setTokens(storedTokens);
 
-    const storedApprovals = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY_APPROVALS));
+    const storedApprovals = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY_ALLOWANCES));
     console.log(storedApprovals);
     if (storedApprovals)
     setAllowances(storedApprovals);
@@ -105,10 +105,10 @@ function MyApp({ Component, pageProps }) {
 
 	useEffect(() => {
 		console.log('Approvals changed');
-		console.log(approvals);
-		const storedApprovals = JSON.stringify(approvals);
-		localStorage.setItem(LOCAL_STORAGE_KEY_APPROVALS, storedApprovals);
-	}, [approvals])
+		console.log(allowances);
+		const storedApprovals = JSON.stringify(allowances);
+		localStorage.setItem(LOCAL_STORAGE_KEY_ALLOWANCES, storedApprovals);
+	}, [allowances])
 
   const disconnect = () => {
     console.log('disconnect()');
@@ -122,7 +122,7 @@ function MyApp({ Component, pageProps }) {
 
 
   const getAllowancePlayerIndex = (_playerAddress) => {
-    let _allowances = approvals;
+    let _allowances = allowances;
     // console.log('getAllowancePlayerIndex-_allowances');
     // console.log(_allowances);
     // let _playerIndexes = _allowances[0];
@@ -151,22 +151,22 @@ function MyApp({ Component, pageProps }) {
 
 
 
-  const allowanceExists = (_playerAllowanceIdx, _address) => {
-    if (approvals.length) {
+  const playerAllowanceExists = (_playerAllowanceIdx, _address) => {
+    if (allowances.length) {
       // let _playerAllowanceIdx = getAllowancePlayerIndex(activeAddress);
-      // console.log('allowanceExists-_playerAllowanceIdx');
+      // console.log('playerAllowanceExists-_playerAllowanceIdx');
       // console.log(_playerAllowanceIdx);
 
-      // console.log('allowanceExists-approvals: ' + JSON.stringify(approvals));
-      // console.log('approvals[1].length: ' + approvals[1].length);
-      // console.log('approvals[1][_playerAllowanceIdx]');
-      // console.log(approvals[1][_playerAllowanceIdx]);
-      if (approvals[1].length && approvals[1][_playerAllowanceIdx]) {
-        const result = approvals[1][_playerAllowanceIdx].findIndex(approval => approval.address === _address);
+      // console.log('playerAllowanceExists-allowances: ' + JSON.stringify(allowances));
+      // console.log('allowances[1].length: ' + allowances[1].length);
+      // console.log('allowances[1][_playerAllowanceIdx]');
+      // console.log(allowances[1][_playerAllowanceIdx]);
+      if (allowances[1].length && allowances[1][_playerAllowanceIdx]) {
+        const result = allowances[1][_playerAllowanceIdx].findIndex(approval => approval.address === _address);
         // console.log('_playerAllowances-findIndex');
         // console.log(result);
         if (result >= 0) {
-          // console.log('allowanceExists: ' + _address);
+          // console.log('playerAllowanceExists: ' + _address);
           // console.log('result: ' + result);
           
           return result;
@@ -179,33 +179,33 @@ function MyApp({ Component, pageProps }) {
 
 
 
-  const setApproval = (_playerAllowanceIdx, data) => {
-    let _approvals = approvals;
+  const setAllowance = (_playerAllowanceIdx, data) => {
+    let _allowances = allowances;
     console.log(activeAddress);
     // let _playerAllowanceIdx = getAllowancePlayerIndex(activeAddress);
     // console.log('_playerAllowanceIdx');
     // console.log(_playerAllowanceIdx);
 
-    // console.log(_approvals[1][_playerAllowanceIdx]);
+    // console.log(_allowances[1][_playerAllowanceIdx]);
 
-    let playerTokenAllowanceIdx = allowanceExists(_playerAllowanceIdx, data.address);
+    let playerTokenAllowanceIdx = playerAllowanceExists(_playerAllowanceIdx, data.address);
     if (playerTokenAllowanceIdx !== false) {
-      // console.log('Existing record for setApproval: IDX: ' + playerTokenAllowanceIdx);
-      _approvals[1][_playerAllowanceIdx][playerTokenAllowanceIdx] = data;
+      // console.log('Existing record for setAllowance: IDX: ' + playerTokenAllowanceIdx);
+      _allowances[1][_playerAllowanceIdx][playerTokenAllowanceIdx] = data;
     }
 
     // No match, add new record
     else {
-      playerTokenAllowanceIdx = _approvals[1][_playerAllowanceIdx].length;
-      // console.log('New record for setApproval: IDX: ' + playerTokenAllowanceIdx);
-      // const currAllowance = _approvals[1][_playerAllowanceIdx][playerTokenAllowanceIdx];
+      playerTokenAllowanceIdx = _allowances[1][_playerAllowanceIdx].length;
+      // console.log('New record for setAllowance: IDX: ' + playerTokenAllowanceIdx);
+      // const currAllowance = _allowances[1][_playerAllowanceIdx][playerTokenAllowanceIdx];
       // const newAllowance = { ...currAllowance, ...data };
-      // console.log('setApproval-newAllowance');
+      // console.log('setAllowance-newAllowance');
       // console.log(newAllowance);
-      _approvals[1][_playerAllowanceIdx][playerTokenAllowanceIdx] = data;
+      _allowances[1][_playerAllowanceIdx][playerTokenAllowanceIdx] = data;
     }
 
-    setAllowances([..._approvals]);
+    setAllowances([..._allowances]);
   };
 
 
@@ -229,7 +229,7 @@ function MyApp({ Component, pageProps }) {
         amount: result.toString()
       };
       // console.log(newAllowance);
-      setApproval(_playerAllowanceIdx, newAllowance);
+      setAllowance(_playerAllowanceIdx, newAllowance);
     }
   };
 
@@ -237,30 +237,30 @@ function MyApp({ Component, pageProps }) {
     let _playerAllowanceIdx = getAllowancePlayerIndex(activeAddress);
     // console.log('getAllowance-_playerAllowanceIdx');
     // console.log(_playerAllowanceIdx);
-    let playerTokenAllowanceIdx = allowanceExists(_playerAllowanceIdx, _address);
+    let playerTokenAllowanceIdx = playerAllowanceExists(_playerAllowanceIdx, _address);
     // console.log('getAllowance-playerTokenAllowanceIdx');
     // console.log(playerTokenAllowanceIdx);
     // console.log('getAllowance-_playerAllowanceIdx-STATE');
-    // console.log(approvals[1][_playerAllowanceIdx]);
+    // console.log(allowances[1][_playerAllowanceIdx]);
     // console.log('getAllowance-_playerAllowanceIdx-playerTokenAllowanceIdx-STATE');
-    // console.log(approvals[1][_playerAllowanceIdx][playerTokenAllowanceIdx]);
+    // console.log(allowances[1][_playerAllowanceIdx][playerTokenAllowanceIdx]);
     if (playerTokenAllowanceIdx !== false) {
-      return approvals[1][_playerAllowanceIdx][playerTokenAllowanceIdx];
+      return allowances[1][_playerAllowanceIdx][playerTokenAllowanceIdx];
     }
 
     // No match, add new record
-    // if (!approvals[1].length) {
-    //   approvals[1][_playerAllowanceIdx] = [];
+    // if (!allowances[1].length) {
+    //   allowances[1][_playerAllowanceIdx] = [];
     // }
-    // playerTokenAllowanceIdx = approvals[1][_playerAllowanceIdx].length;
+    // playerTokenAllowanceIdx = allowances[1][_playerAllowanceIdx].length;
     let newAllowance = {
       state: 0,
       address: _address,
       amount: '0'
     };
-    // console.log('setApproval-newAllowance');
+    // console.log('setAllowance-newAllowance');
     // console.log(newAllowance);
-    setApproval(_playerAllowanceIdx, newAllowance);
+    setAllowance(_playerAllowanceIdx, newAllowance);
     _getAllowance(_playerAllowanceIdx, _address);
 
     return newAllowance;
@@ -848,7 +848,7 @@ function MyApp({ Component, pageProps }) {
         buyTicket={buyTicket}
         getGamePlayerState={getGamePlayerState}
         setGames={setGames}
-        setApproval={setApproval}
+        setAllowance={setAllowance}
         getAllowance={getAllowance}
       />
       <div className="container">
