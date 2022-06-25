@@ -3,6 +3,9 @@ User interface (Next.js) for the blockchain raffle contracts (Solidity).
 
 Leveraging web3.js, currently only supports MetaMask.
 
+### Management panel access
+For users granted with contract roles (`CALLER_ROLE` or `MANAGER_ROLE`) on the `GameMaster` contract, visit endpoint `/management` to cache roles into local storage.
+
 **Still in eary stages of development**
 
 ## Contracts
