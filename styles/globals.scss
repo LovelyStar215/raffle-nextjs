@@ -233,6 +233,11 @@ h1, h2, h3 {
   @extend %button;
   display: inline-block;
   cursor: pointer;
+  &.lightning {
+    padding: .125em .25em;
+    font-size: 2em;
+    border-width: .125em;
+  }
   > * {
     display: inline-block;
     background-color: transparent;

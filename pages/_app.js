@@ -700,6 +700,27 @@ function MyApp({ Component, pageProps }) {
         setRole={setRole}
         hasRole={hasRole}
       />
+      <div className="container">
+        <button
+            onClick={() => {
+              [
+                CALLER_ROLE,
+                MANAGER_ROLE
+              ]
+              .forEach(async role => {
+                console.log('role: ' + role);
+                let result = await gameContract.methods.hasRole(
+                  role,
+                  activeAddress
+                ).call();
+                if (result)
+                  setRole(role);
+              });
+              // window.location='/';
+            }}
+            className="button lightning"
+          >✺</button>
+      </div>
     </>
   )
 }
