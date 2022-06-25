@@ -34,11 +34,11 @@ const GamesList = ({
 						return null;
 					
 					const hideGame = () => {
-						// let newGames = games;
-						// newGames[game.gameNumber] = null;
-						// //newGames[game._visibility] = false;
-						// console.log(newGames);
-						// setGames([...newGames]);
+						let newGames = games;
+						newGames[game.gameNumber] = null;
+						//newGames[game._visibility] = false;
+						console.log(newGames);
+						setGames([...newGames]);
 					};
 
 					return (
