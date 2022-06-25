@@ -253,6 +253,7 @@ h1, h2, h3 {
     border-width: .125em;
     border-style: solid;
     border-color: #333;
+    max-width: 6em;
     &:focus, &:hover {
       background-color: #aaa;
     }
