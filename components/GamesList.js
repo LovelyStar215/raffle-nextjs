@@ -21,7 +21,7 @@ const GamesList = ({
 
 	if (!games || !games.length) {
 		let runOnce = true;
-		// getActiveGames(10, runOnce);
+		getActiveGames(10, runOnce);
 		return null;
 	}
 
