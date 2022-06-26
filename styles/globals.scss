@@ -254,6 +254,7 @@ h1, h2, h3 {
     border-style: solid;
     border-color: #333;
     max-width: 6em;
+    margin: .25em .5em .25em 0em;
     &:focus, &:hover {
       background-color: #aaa;
     }
@@ -271,10 +272,10 @@ h1, h2, h3 {
 div.button {
   padding: 0;
   > div {
-    padding: .75em .75em .75em 1em;
+    margin: .75em .75em .75em 1em;
     border: 0;
   }
-  > input {
+  > input:last-of-type {
     margin-right: 1em;
   }
 }
