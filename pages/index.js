@@ -1,3 +1,5 @@
+import React, { useState } from 'react';
+
 import {
   IERC20MetadataABI,
   IERC721MetadataABI
@@ -29,6 +31,8 @@ function GamesList({
 		getActiveGames(10, runOnce);
 		return null;
 	}
+
+  const [gameListRenderMode, setGmeListRenderMode] = useState(-1);
 
   const setToken = (data) => {
     // console.log('setToken');
@@ -307,11 +311,54 @@ function GamesList({
     console.log(results);
   }
 
+  // Determine how to display game records
+  const gameRenderList = () => {
+    let list = [];
+    games.forEach((game, key) => {
+      if (game) {
+        switch (gameListRenderMode) {
+
+          // Ended games only
+          case 0: {
+            if (game._status === '0')
+              list.push(key);
+            
+            break;
+          }
+
+          // Active house games only
+          case -1:
+          case 1: {
+            if (game._status === '1')
+              list.push(key);
+            
+            break;
+          }
+
+          // Community games only
+          case -2:
+          case 2: {
+            if (game._status === '2')
+              list.push(key);
+            
+            break;
+          }
+        }
+      }
+    });
+
+    // Reverse order (newest first)
+    if (gameListRenderMode < 0)
+      return list.reverse();
+
+    return list;
+  };
+
   return (
     <div key={`gamesList`} className="games">
 			<div className="container">
-          		<h3>Games</h3>
-				{[2,0].map((gameNumber) => {
+        <h3>Games</h3>
+				{gameRenderList().map((gameNumber) => {
 					let game = games[gameNumber];
 					if (!game)
 						return null;
