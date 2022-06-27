@@ -27,8 +27,6 @@ const Game = ({
 	gameContract,
 	activeAddress,
 	buyTicket,
-	getGamePlayerState,
-	hideGame,
 	setAllowance,
 	getAllowance,
 	hasRole
@@ -182,11 +180,11 @@ const Game = ({
 					getERC721Token={getERC721Token}
 				/>
 				<div className="buttons">
-					<button
+					{/* <button
 						className="button"
 						onClick={hideGame}>
 						Hide
-					</button>
+					</button> */}
 					{/* <button
 						disabled={gameHasEnded}
 						className="button"
