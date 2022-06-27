@@ -24,8 +24,8 @@ function HomePage({
 }) {
 
   const setToken = (data) => {
-    console.log('setToken');
-    console.log(JSON.stringify(data));
+    // console.log('setToken');
+    // console.log(JSON.stringify(data));
     let tokenIdx = tokenExists(data.address);
     if (tokenIdx === false)
       tokenIdx = tokens.length;
@@ -45,7 +45,7 @@ function HomePage({
     if (tokens.length) {
       const result = tokens.findIndex(_token => _token.address === _address);
       if (result >= 0) {
-        console.log('token exists: ' + _address);
+        // console.log('token exists: ' + _address);
 
         return result;
       }
@@ -59,19 +59,19 @@ function HomePage({
     let token, name, symbol, decimals;
     
     const result = await gameToken.methods.name().call();
-    console.log('name: ' + result);
+    // console.log('name: ' + result);
     if (result) {
       name = result;
     }
     
     result = await gameToken.methods.symbol().call();
-    console.log('symbol: ' + result);
+    // console.log('symbol: ' + result);
     if (result) {
       symbol = result;
     }
 
     result = await gameToken.methods.decimals().call();
-    console.log('decimals: ' + result);
+    // console.log('decimals: ' + result);
     if (result) {
       decimals = result;
     }
@@ -84,7 +84,7 @@ function HomePage({
         symbol,
         decimals
       };
-      console.log(token);
+      // console.log(token);
       setToken(token);
     }
   };
@@ -95,7 +95,7 @@ function HomePage({
       return tokens[tokenId];
 
     // Request token
-    console.log('token request: ' + _address);
+    // console.log('token request: ' + _address);
     let token = {
       state: 0,
       address: _address
@@ -111,13 +111,13 @@ function HomePage({
     let token, name, symbol, decimals;
     
     const result = await gameToken.methods.name().call();
-    console.log('name: ' + result);
+    // console.log('name: ' + result);
     if (result) {
       name = result;
     }
     
     result = await gameToken.methods.symbol().call();
-    console.log('symbol: ' + result);
+    // console.log('symbol: ' + result);
     if (result) {
       symbol = result;
     }
@@ -129,7 +129,7 @@ function HomePage({
         name,
         symbol
       };
-      console.log(token);
+      // console.log(token);
       setToken(token);
     }
   };
@@ -140,7 +140,7 @@ function HomePage({
       return tokens[tokenId];
 
     // Request token
-    console.log('token request: ' + _address);
+    // console.log('token request: ' + _address);
     let token = {
       state: 0,
       address: _address

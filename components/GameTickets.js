@@ -36,9 +36,9 @@ const GameTickets = ({
 	// Players current pot share (value and percentage), in play
 	// let token = getERC20Token(game.tokenAddress);
 	if (gameTokenMetadata) {
-		console.log('game.ticketPrice');
-		console.log(game.ticketPrice);
-		console.log('ticketCount');
+		// console.log('game.ticketPrice');
+		// console.log(game.ticketPrice);
+		// console.log('ticketCount');
 		let playerTicketCount = gameTickets[activeAddress].length;
 		let playerTicketCountBN = web3.utils.toBN(playerTicketCount);
 		// console.log(playerTicketCount);
