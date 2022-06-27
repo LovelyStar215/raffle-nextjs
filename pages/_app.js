@@ -275,7 +275,7 @@ function MyApp({ Component, pageProps }) {
   const getGameState = async (web3, gameContract, games, gameNumber) => {
     let results = await gameContract.methods.getGameState(gameNumber).call();
     // console.log('getGameState = ' + gameNumber);
-    console.log(results);
+    // console.log(results);
     if (results) {
       let len = Object.keys(results).length/2;
       let items = Object.keys(results).slice(len).reduce((result, key) => {
