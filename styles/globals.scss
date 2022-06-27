@@ -275,7 +275,7 @@ div.button {
     margin: .75em .75em .75em 1em;
     border: 0;
   }
-  > input:last-of-type {
+  > *:last-child {
     margin-right: 1em;
   }
 }

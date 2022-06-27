@@ -32,7 +32,7 @@ function GamesList({
 		return null;
 	}
 
-  const [gameListRenderMode, setGmeListRenderMode] = useState(-1);
+  const [gameListRenderMode, setGameListRenderMode] = useState(-1);
 
   const setToken = (data) => {
     // console.log('setToken');
@@ -358,18 +358,31 @@ function GamesList({
     <div key={`gamesList`} className="games">
 			<div className="container">
         <h3>Games</h3>
+        <div className="buttons">
+          <div
+              className="button"
+              role="button"
+              tabIndex="0">
+                <div>Filter</div>
+                <select
+                  onChange={(e) => {
+                    console.log(e.target.value);
+                    setGameListRenderMode(parseInt(e.target.value));
+                  }}
+                  value={gameListRenderMode}
+                  defaultValue="-1">
+                    <option value="-2">Community games (newest first)</option>
+                    <option value="-1">House games (newest first)</option>
+                    <option value="0">Finished games (newest first)</option>
+                    <option value="1">House games (oldest first)</option>
+                    <option value="2">Community games (oldest first)</option>
+                </select>
+					</div>
+        </div>
 				{gameRenderList().map((gameNumber) => {
 					let game = games[gameNumber];
 					if (!game)
 						return null;
-
-					const hideGame = () => {
-						let newGames = games;
-						newGames[game.gameNumber] = null;
-						//newGames[game._visibility] = false;
-						console.log(newGames);
-						setGames([...newGames]);
-					};
 
 					return (
 						<Game
@@ -384,7 +397,6 @@ function GamesList({
 							activeAddress={activeAddress}
 							buyTicket={buyTicket}
 							getGamePlayerState={getGamePlayerState}
-							hideGame={hideGame}
 							setAllowance={setAllowance}
 							getAllowance={getAllowance}
 							hasRole={hasRole}
