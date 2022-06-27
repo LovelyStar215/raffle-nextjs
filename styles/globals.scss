@@ -88,7 +88,7 @@ header {
   font-size: 0;
   > .container {
     @extend %root;
-    padding: 1em;
+    padding-bottom: 1em;
   }
   .game {
     display: inline-block;

@@ -357,13 +357,13 @@ function GamesList({
   return (
     <div key={`gamesList`} className="games">
 			<div className="container">
-        <h3>Games</h3>
         <div className="buttons">
+          <h3>Display</h3>
           <div
               className="button"
               role="button"
               tabIndex="0">
-                <div>Filter</div>
+                <div>Filter:</div>
                 <select
                   onChange={(e) => {
                     console.log(e.target.value);
