@@ -3,9 +3,9 @@ import {
   IERC721MetadataABI
 } from '../features/configure/abi.js'
 
-import GamesList from '../components/GamesList'
+import Game from '../components/Game'
 
-function HomePage({
+function GamesList({
   activeAddress,
   web3,
   allowances,
@@ -19,9 +19,16 @@ function HomePage({
   setGames,
   setAllowances,
   setTokens,
-  getRole,
   hasRole
 }) {
+	if (!gameContract || !web3)
+		return null;
+
+	if (!games || !games.length) {
+		let runOnce = true;
+		getActiveGames(10, runOnce);
+		return null;
+	}
 
   const setToken = (data) => {
     // console.log('setToken');
@@ -301,26 +308,45 @@ function HomePage({
   }
 
   return (
-    <GamesList
-      web3={web3}
-      tickets={tickets}
-      games={games}
-      getAllowancePlayerIndex={getAllowancePlayerIndex}
-      getActiveGames={getActiveGames}
-      getERC20Token={getERC20Token}
-      getERC721Token={getERC721Token}
-      gameAddress={gameAddress}
-      gameContract={gameContract}
-      activeAddress={activeAddress}
-      buyTicket={buyTicket}
-      getGamePlayerState={getGamePlayerState}
-      setGames={setGames}
-      setAllowance={setAllowance}
-      getAllowance={getAllowance}
-      getRole={getRole}
-      hasRole={hasRole}
-    />
+    <div key={`gamesList`} className="games">
+			<div className="container">
+          		<h3>Games</h3>
+				{[2,0].map((gameNumber) => {
+					let game = games[gameNumber];
+					if (!game)
+						return null;
+
+					const hideGame = () => {
+						let newGames = games;
+						newGames[game.gameNumber] = null;
+						//newGames[game._visibility] = false;
+						console.log(newGames);
+						setGames([...newGames]);
+					};
+
+					return (
+						<Game
+							key={`gameNumber-${game.gameNumber}`}
+							getAllowancePlayerIndex={getAllowancePlayerIndex}
+							getERC20Token={getERC20Token}
+							getERC721Token={getERC721Token}
+							game={game}
+							gameTickets={tickets[game.gameNumber]}
+							web3={web3}
+							gameContract={gameContract}
+							activeAddress={activeAddress}
+							buyTicket={buyTicket}
+							getGamePlayerState={getGamePlayerState}
+							hideGame={hideGame}
+							setAllowance={setAllowance}
+							getAllowance={getAllowance}
+							hasRole={hasRole}
+						/>
+					);
+				})}
+			</div>
+		</div>
   )
 }
 
-export default HomePage
+export default GamesList
