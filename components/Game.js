@@ -156,269 +156,235 @@ const Game = ({
 	return (
 		<div key={`game-${game.gameNumber}`} className="game">
 			<div className="container">
-				<h4>Game #{game.gameNumber}</h4>
-				<GameStatus
-					game={game}
-				/>
-				<GameMetrics
-					web3={web3}
-					gameTokenMetadata={gameTokenMetadata}
-					game={game}
-				/>
-				<GameTickets
-					web3={web3}
-					activeAddress={activeAddress}
-					gameTickets={gameTickets}
-					gameTokenMetadata={gameTokenMetadata}
-					game={game}
-				/>
-				<GamePots
-					web3={web3}
-					gameTokenMetadata={gameTokenMetadata}
-					game={game}
-					getERC20Token={getERC20Token}
-					getERC721Token={getERC721Token}
-				/>
-				<div className="buttons">
-					{/* <button
-						className="button"
-						onClick={hideGame}>
-						Hide
-					</button> */}
-					{/* <button
-						disabled={gameHasEnded}
-						className="button"
-						onClick={() => {
-							getGamePlayerState(
-								game.gameNumber,
-								activeAddress
-							)
-						}}>
-						Show tickets
-					</button>
-					<button
-						className="button"
-						onClick={() => {
-							let result = getERC20Token(
-								game.tokenAddress,
-							)
-							console.log('getERC20Token()');
-							console.log(result);
-						}}>
-						Get token
-					</button> */}
-					<button
-						disabled={gameHasEnded}
-						className={buttonApproveClasses()}
-						onClick={() => {
-							gameToken.methods.approve(
-								gameAddress,
-								gameTokenApprovalMax
-							).send({from: activeAddress})
-							.on('receipt', function(receipt) {
-								let newAllowance = {
-									state: 1,
-									address: game._pot[0].assetAddress,
-									amount: gameTokenApprovalMax.toString()
-								};
-								console.log(newAllowance.amount);
-								let _playerAllowanceIdx = getAllowancePlayerIndex(activeAddress);
-								setAllowance(_playerAllowanceIdx, newAllowance);
-							});
-						}}>
-						Approve
-					</button>
-					{/* <button
-						disabled={gameHasEnded}
-						className={buttonApproveClasses()}
-						onClick={() => {
-							gameToken.methods.allowance(
-								activeAddress,
-								gameAddress
-							).call()
-							.on('receipt', function(receipt) {
-								console.log('allowance');
-								console.log(receipt);
-							});
-						}}>
-						Get allowance
-					</button> */}
-					<div
-						disabled={gameHasEnded}
-						className={buttonBuyTicketClasses()}
-						onClick={(e) => {
-							if (e.target.tagName === 'DIV')
-								buyTicket(
-									gameContract,
-									web3.utils.toBN(game.gameNumber),
-									web3.utils.toBN(numberOfTickets.current.value)
-								)
-						}}
-						role="button"
-						tabIndex="0">
-							<div>Buy tickets</div>
-							<input
-								ref={numberOfTickets}
-								max={game.maxTicketsPlayer}
-								defaultValue="1"
-								size="2"
-								min="1"
-								type="number"
+				<div className="grid">
+					<div className="row">
+						<div className="w50">
+							<h4>Game #{game.gameNumber}</h4>
+							<GameStatus
+								game={game}
 							/>
-					</div>
-				</div>
-				<div className={panelManagementClasses()}>
-					<div className="container">
-						<div className="buttons">
-							<h3>Management</h3>
-							<div
-								onClick={(e) => {
-									if (e.target.tagName === 'DIV') {
-										let _amount = web3.utils.toBN(
-											addGamePotERC20AssetAmount.current.value)
-											.mul(web3.utils.toBN(10).pow(web3.utils.toBN(18)));
-										new web3.eth.Contract(
-											IERC20MetadataABI,
-											addGamePotERC20AssetAddress.current.value
-										).methods.approve(
+							<GameMetrics
+								web3={web3}
+								gameTokenMetadata={gameTokenMetadata}
+								game={game}
+							/>
+						</div>
+						<div className="w50">
+							<GameTickets
+								web3={web3}
+								activeAddress={activeAddress}
+								gameTickets={gameTickets}
+								gameTokenMetadata={gameTokenMetadata}
+								game={game}
+							/>
+							<GamePots
+								web3={web3}
+								gameTokenMetadata={gameTokenMetadata}
+								game={game}
+								getERC20Token={getERC20Token}
+								getERC721Token={getERC721Token}
+							/>
+							<div className="buttons">
+								<button
+									disabled={gameHasEnded}
+									className={buttonApproveClasses()}
+									onClick={() => {
+										gameToken.methods.approve(
 											gameAddress,
-											_amount
+											gameTokenApprovalMax
 										).send({from: activeAddress})
 										.on('receipt', function(receipt) {
-											gameContract.methods.addGamePotERC20Asset(
+											let newAllowance = {
+												state: 1,
+												address: game._pot[0].assetAddress,
+												amount: gameTokenApprovalMax.toString()
+											};
+											console.log(newAllowance.amount);
+											let _playerAllowanceIdx = getAllowancePlayerIndex(activeAddress);
+											setAllowance(_playerAllowanceIdx, newAllowance);
+										});
+									}}>
+									Approve
+								</button>
+								<div
+									disabled={gameHasEnded}
+									className={buttonBuyTicketClasses()}
+									onClick={(e) => {
+										if (e.target.tagName === 'DIV')
+											buyTicket(
+												gameContract,
 												web3.utils.toBN(game.gameNumber),
-												_amount,
-												addGamePotERC20AssetAddress.current.value
-											).send({from: activeAddress})
-											.on('receipt', function(receipt2) {
-												console.log('receipt-addGamePotERC20Asset');
-												console.log(receipt);
-											});
-										});
-									}
-								}}
-								className="button"
-								role="button"
-								tabIndex="0">
-									<div>addGamePotERC20Asset</div>
-									<input
-										ref={addGamePotERC20AssetAddress}
-										defaultValue={tokenAddress}
-										placeholder="Address"
-										size="6"
-										type="text"/>
-									<input
-										ref={addGamePotERC20AssetAmount}
-										placeholder="Amount"
-										defaultValue="1"
-										size="3"
-										min="0"
-										type="number"/>
+												web3.utils.toBN(numberOfTickets.current.value)
+											)
+									}}
+									role="button"
+									tabIndex="0">
+										<div>Buy tickets</div>
+										<input
+											ref={numberOfTickets}
+											max={game.maxTicketsPlayer}
+											defaultValue="1"
+											size="2"
+											min="1"
+											type="number"
+										/>
+								</div>
 							</div>
-							<div
-								onClick={(e) => {
-									if (e.target.tagName === 'DIV')
-										gameContract.methods.removeGamePotERC20Asset(
-											web3.utils.toBN(game.gameNumber),
-											web3.utils.toBN(
-												removeGamePotERC20AssetAmount.current.value)
-												.mul(web3.utils.toBN(10).pow(web3.utils.toBN(18))),
-												removeGamePotERC20AssetAddress.current.value
-										).send({from: activeAddress})
-										.on('receipt', function(receipt) {
-											console.log('receipt-removeGamePotERC20Asset');
-											console.log(receipt);
-										});
-								}}
-								className="button"
-								role="button"
-								tabIndex="0">
-									<div>removeGamePotERC20Asset</div>
-									<input
-										ref={removeGamePotERC20AssetAddress}
-										defaultValue={tokenAddress}
-										placeholder="Address"
-										size="6"
-										type="text"/>
-									<input
-										ref={removeGamePotERC20AssetAmount}
-										placeholder="Amount"
-										defaultValue="1"
-										size="3"
-										min="0"
-										type="number"/>
-							</div>
-							<div
-								onClick={(e) => {
-									if (e.target.tagName === 'DIV')
-										new web3.eth.Contract(
-											IERC721MetadataABI,
-											addGamePotERC721AssetAddress.current.value
-										).methods.approve(
-											gameAddress,
-											addGamePotERC721AssetId.current.value
-										)
-										.send({from: activeAddress})
-										.on('receipt', (receipt) => {
-											console.log(receipt);
+							<div className={panelManagementClasses()}>
+								<div className="container">
+									<div className="buttons">
+										<h3>Management</h3>
+										<div
+											onClick={(e) => {
+												if (e.target.tagName === 'DIV') {
+													let _amount = web3.utils.toBN(
+														addGamePotERC20AssetAmount.current.value)
+														.mul(web3.utils.toBN(10).pow(web3.utils.toBN(18)));
+													new web3.eth.Contract(
+														IERC20MetadataABI,
+														addGamePotERC20AssetAddress.current.value
+													).methods.approve(
+														gameAddress,
+														_amount
+													).send({from: activeAddress})
+													.on('receipt', function(receipt) {
+														gameContract.methods.addGamePotERC20Asset(
+															web3.utils.toBN(game.gameNumber),
+															_amount,
+															addGamePotERC20AssetAddress.current.value
+														).send({from: activeAddress})
+														.on('receipt', function(receipt2) {
+															console.log('receipt-addGamePotERC20Asset');
+															console.log(receipt);
+														});
+													});
+												}
+											}}
+											className="button"
+											role="button"
+											tabIndex="0">
+												<div>addGamePotERC20Asset</div>
+												<input
+													ref={addGamePotERC20AssetAddress}
+													defaultValue={tokenAddress}
+													placeholder="Address"
+													size="6"
+													type="text"/>
+												<input
+													ref={addGamePotERC20AssetAmount}
+													placeholder="Amount"
+													defaultValue="1"
+													size="3"
+													min="0"
+													type="number"/>
+										</div>
+										<div
+											onClick={(e) => {
+												if (e.target.tagName === 'DIV')
+													gameContract.methods.removeGamePotERC20Asset(
+														web3.utils.toBN(game.gameNumber),
+														web3.utils.toBN(
+															removeGamePotERC20AssetAmount.current.value)
+															.mul(web3.utils.toBN(10).pow(web3.utils.toBN(18))),
+															removeGamePotERC20AssetAddress.current.value
+													).send({from: activeAddress})
+													.on('receipt', function(receipt) {
+														console.log('receipt-removeGamePotERC20Asset');
+														console.log(receipt);
+													});
+											}}
+											className="button"
+											role="button"
+											tabIndex="0">
+												<div>removeGamePotERC20Asset</div>
+												<input
+													ref={removeGamePotERC20AssetAddress}
+													defaultValue={tokenAddress}
+													placeholder="Address"
+													size="6"
+													type="text"/>
+												<input
+													ref={removeGamePotERC20AssetAmount}
+													placeholder="Amount"
+													defaultValue="1"
+													size="3"
+													min="0"
+													type="number"/>
+										</div>
+										<div
+											onClick={(e) => {
+												if (e.target.tagName === 'DIV')
+													new web3.eth.Contract(
+														IERC721MetadataABI,
+														addGamePotERC721AssetAddress.current.value
+													).methods.approve(
+														gameAddress,
+														addGamePotERC721AssetId.current.value
+													)
+													.send({from: activeAddress})
+													.on('receipt', (receipt) => {
+														console.log(receipt);
 
-											gameContract.methods.addGamePotERC721Asset(
-												web3.utils.toBN(game.gameNumber),
-												addGamePotERC721AssetId.current.value,
-												addGamePotERC721AssetAddress.current.value
-											).send({from: activeAddress})
-											.on('receipt', function(receipt) {
-												console.log('receipt-addGamePotERC721Asset');
-												console.log(receipt);
-											});
-										});
-								}}
-								className="button"
-								role="button"
-								tabIndex="0">
-									<div>addGamePotERC721Asset</div>
-									<input
-										ref={addGamePotERC721AssetAddress}
-										defaultValue={gameTrophyAddress}
-										placeholder="Address"
-										size="6"
-										type="text"/>
-									<input
-										ref={addGamePotERC721AssetId}
-										placeholder="ID"
-										size="3"
-										min="0"
-										type="number"/>
-							</div>
-							<div
-								onClick={(e) => {
-									if (e.target.tagName === 'DIV')
-										gameContract.methods.removeGamePotERC721Asset(
-											web3.utils.toBN(game.gameNumber),
-											removeGamePotERC721AssetId.current.value,
-											removeGamePotERC721AssetAddress.current.value
-										).send({from: activeAddress})
-										.on('receipt', function(receipt) {
-											console.log('receipt-removeGamePotERC721Asset');
-											console.log(receipt);
-										});
-								}}
-								className="button"
-								role="button"
-								tabIndex="0">
-									<div>removeGamePotERC721Asset</div>
-									<input
-										ref={removeGamePotERC721AssetAddress}
-										defaultValue={gameTrophyAddress}
-										placeholder="Address"
-										size="6"
-										type="text"/>
-									<input
-										ref={removeGamePotERC721AssetId}
-										placeholder="ID"
-										size="3"
-										min="0"
-										type="number"/>
+														gameContract.methods.addGamePotERC721Asset(
+															web3.utils.toBN(game.gameNumber),
+															addGamePotERC721AssetId.current.value,
+															addGamePotERC721AssetAddress.current.value
+														).send({from: activeAddress})
+														.on('receipt', function(receipt) {
+															console.log('receipt-addGamePotERC721Asset');
+															console.log(receipt);
+														});
+													});
+											}}
+											className="button"
+											role="button"
+											tabIndex="0">
+												<div>addGamePotERC721Asset</div>
+												<input
+													ref={addGamePotERC721AssetAddress}
+													defaultValue={gameTrophyAddress}
+													placeholder="Address"
+													size="6"
+													type="text"/>
+												<input
+													ref={addGamePotERC721AssetId}
+													placeholder="ID"
+													size="3"
+													min="0"
+													type="number"/>
+										</div>
+										<div
+											onClick={(e) => {
+												if (e.target.tagName === 'DIV')
+													gameContract.methods.removeGamePotERC721Asset(
+														web3.utils.toBN(game.gameNumber),
+														removeGamePotERC721AssetId.current.value,
+														removeGamePotERC721AssetAddress.current.value
+													).send({from: activeAddress})
+													.on('receipt', function(receipt) {
+														console.log('receipt-removeGamePotERC721Asset');
+														console.log(receipt);
+													});
+											}}
+											className="button"
+											role="button"
+											tabIndex="0">
+												<div>removeGamePotERC721Asset</div>
+												<input
+													ref={removeGamePotERC721AssetAddress}
+													defaultValue={gameTrophyAddress}
+													placeholder="Address"
+													size="6"
+													type="text"/>
+												<input
+													ref={removeGamePotERC721AssetId}
+													placeholder="ID"
+													size="3"
+													min="0"
+													type="number"/>
+										</div>
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>

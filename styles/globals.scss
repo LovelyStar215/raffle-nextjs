@@ -64,6 +64,23 @@ header {
   display: none !important;
 }
 
+.grid {
+  font-size: 0;
+  .row > div {
+    @extend %root;
+    display: inline-block;
+    vertical-align: top;
+    width: 100%;
+  }
+  @media screen and (min-width: 1024px) {
+    .row {
+      .w50 {
+        width: 50%;
+      }
+    }
+  }
+}
+
 .banner {
   background-color: rgb(27, 67, 77);
   transition: background-color ease .2s;
@@ -85,19 +102,25 @@ header {
 
 .games {
   background-color: #1b464d;
-  font-size: 0;
-  > .container {
-    @extend %root;
-    padding-bottom: 1em;
-  }
   .game {
-    display: inline-block;
-    width: 50%;
     padding: .5em;
     > .container {
       background-color: #000;
       border-radius: 1em;
-      padding-bottom: 1em;
+      padding: 0;
+      > .grid {
+        .row {
+          > div:first-child {
+            padding-right: .5em;
+          }
+          > div:last-child {
+            padding-left: .5em;
+          }
+        }
+        .w50 {
+          padding: 1em;
+        }
+      }
       .result {
         margin: 0 auto .75em;
         .panels .panel.brick {
