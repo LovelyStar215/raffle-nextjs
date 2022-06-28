@@ -365,10 +365,7 @@ function GamesList({
               tabIndex="0">
                 <div>Filter:</div>
                 <select
-                  onChange={(e) => {
-                    console.log(e.target.value);
-                    setGameListRenderMode(parseInt(e.target.value));
-                  }}
+                  onChange={e => setGameListRenderMode(parseInt(e.target.value))}
                   value={gameListRenderMode}
                   defaultValue="-1">
                     <option value="-2">Community games (newest first)</option>
