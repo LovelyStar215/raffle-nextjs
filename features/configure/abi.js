@@ -29,7 +29,7 @@ export const gameMasterABI = [
       {
         "indexed": true,
         "internalType": "address",
-        "name": "tokenAddress",
+        "name": "ticketTokenAddress",
         "type": "address"
       },
       {
@@ -83,7 +83,7 @@ export const gameMasterABI = [
       {
         "indexed": true,
         "internalType": "address",
-        "name": "tokenAddress",
+        "name": "ticketTokenAddress",
         "type": "address"
       },
       {
@@ -719,11 +719,6 @@ export const gameMasterABI = [
       {
         "internalType": "address",
         "name": "feeAddress",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "tokenAddress",
         "type": "address"
       },
       {
