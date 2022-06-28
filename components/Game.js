@@ -160,9 +160,6 @@ const Game = ({
 					<div className="row">
 						<div className="w50">
 							<h4>Game #{game.gameNumber}</h4>
-							<GameStatus
-								game={game}
-							/>
 							<GameMetrics
 								web3={web3}
 								gameTokenMetadata={gameTokenMetadata}
@@ -170,6 +167,9 @@ const Game = ({
 							/>
 						</div>
 						<div className="w50">
+							<GameStatus
+								game={game}
+							/>
 							<GameTickets
 								web3={web3}
 								activeAddress={activeAddress}
