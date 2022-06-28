@@ -121,6 +121,9 @@ function MyApp({ Component, pageProps }) {
 		localStorage.setItem(LOCAL_STORAGE_KEY_ALLOWANCES, storedApprovals);
 	}, [allowances])
 
+  /**
+   * 
+   */
   const disconnect = () => {
     console.log('disconnect()');
     setAddress(null)
@@ -129,32 +132,10 @@ function MyApp({ Component, pageProps }) {
     setConnected(false)
   };
 
-
-
-
-  
-
-
-
-  
-
-
-
-  
-
-
-
-
-
-
-
-  
-
-
-
-
-
-  const connect = () => {
+  /**
+   * 
+   */
+   const connect = () => {
     console.log('connect()');
     let now = new Date().toLocaleString('en-us', { weekday:"long", year:"numeric", month:"short", day:"numeric", hour:"numeric", minute:"numeric", second:"numeric"});
     window.ethereum ?
@@ -180,9 +161,10 @@ function MyApp({ Component, pageProps }) {
       : console.log(now + ": Please install MetaMask")
   };
 
-  
-
-  const setRole = (roleName) => {
+  /**
+   * 
+   */
+   const setRole = (roleName) => {
     console.log('setRole');
     let _roles = roles;
     let addressIdx = -1;
@@ -202,25 +184,22 @@ function MyApp({ Component, pageProps }) {
     let roleIdx = _roles[1][addressIdx].length;
     _roles[1][addressIdx][roleIdx] = roleName;
 
-    console.log(_roles);
+    // console.log(_roles);
     
     setRoles([..._roles]);
   }
 
-
-
-  const hasRole = (roleName) => {
-    // console.log('hasRole');
-    let addressIdx = -1;
+  /**
+   * 
+   */
+   const hasRole = (roleName) => {
     if (roles[0].length) {
       let result = roles[0].findIndex(address => address === activeAddress);
       if (result < 0 )
         return false;
 
-      addressIdx = result;
-
-      result = roles[1][addressIdx].findIndex(role => role === roleName);
-      if (result < 0 )
+      let result2 = roles[1][result].findIndex(role => role === roleName);
+      if (result2 < 0 )
         return false;
 
       return true;
@@ -229,25 +208,22 @@ function MyApp({ Component, pageProps }) {
     return false;
   }
 
-
-
-
-  const setGameState = (data) => {
-    // console.log('setGameState');
-    // console.log(JSON.stringify(data));
+  /**
+   * 
+   */
+   const setGameState = (data) => {
     let _games = games;
     const currGame = _games[data.gameNumber];
-    const newGame = { ...currGame, ...data };
-    // console.log('setGameState-newGame');
-    // console.log(newGame);
-    _games[data.gameNumber] = newGame;
-    // console.log('setGameState-newGames');
-    // console.log([..._games]);
+    
+    _games[data.gameNumber] = { ...currGame, ...data };
+
     setGames([..._games]);
   }
 
-
-  const getActiveGames = async (_total, _runOnce) => {
+  /**
+   * 
+   */
+   const getActiveGames = async (_total, _runOnce) => {
     let runOnce = _runOnce ? true : false;
     if (runOnce && totalActiveGameCalls) {
       console.warn('Only allowed to run getActiveGames() once, in this instance.');
@@ -258,11 +234,9 @@ function MyApp({ Component, pageProps }) {
     setActiveGameCalls(newActiveGameCalls);
 
     let results = await gameContract.methods.getActiveGames(_total).call();
-    // console.log('getActiveGames = ' + _total);
     if (results?.length) {
-      // console.log('getActiveGames');
       results.forEach(gameNumber => {
-        getGameState(web3, gameContract, games, gameNumber);
+        getGameState(gameContract, gameNumber);
       });
       console.log(results);
     } else {
@@ -270,12 +244,12 @@ function MyApp({ Component, pageProps }) {
     }
   };
 
-
-
-  const getGameState = async (web3, gameContract, games, gameNumber) => {
+  /**
+   * Fetch and store data for `gameNumber`
+   */
+   const getGameState = async (gameContract, gameNumber) => {
     let results = await gameContract.methods.getGameState(gameNumber).call();
-    // console.log('getGameState = ' + gameNumber);
-    // console.log(results);
+    console.log(results);
     if (results) {
       let len = Object.keys(results).length/2;
       let items = Object.keys(results).slice(len).reduce((result, key) => {
@@ -294,7 +268,6 @@ function MyApp({ Component, pageProps }) {
           let newKey = `_${key}`;
           result[newKey] = potRecord;
         } else if (key === 'winnerResult' || key === 'status') {
-          // console.log(val);
           let newKey = `_${key}`;
           result[newKey] = val;
         } else {
@@ -305,7 +278,6 @@ function MyApp({ Component, pageProps }) {
       }, {});
       items.gameNumber = gameNumber.toString();
       
-      // console.log('setGameData call');
       setGameState(items);
 
       getGamePlayerState(
@@ -315,55 +287,34 @@ function MyApp({ Component, pageProps }) {
     }
   }
 
-
-
-
-  const setGameTickets = (_gameNumber, data) => {
-    // console.log('setGameTickets: ' + _gameNumber);
-    // console.log((data));
+  /**
+   * 
+   */
+   const setGameTickets = (_gameNumber, data) => {
     let _tickets = tickets;
-    // const currTickets = _tickets[_gameNumber];
-    // console.log(currTickets);
-    const newTickets = { ...data };
-    // console.log('setGameTickets-newTickets');
-    // console.log(newTickets);
-    _tickets[_gameNumber] = newTickets;
-    // console.log('setGameTickets-_tickets');
-    // console.log(_tickets);
+    _tickets[_gameNumber] = { ...data };
+    
     setTickets([..._tickets]);
   };
 
-
-
-
+  /**
+   * Get and store an array of ticket numbers, for `_playerAddress` in `_gameNumber`
+   */
   const getGamePlayerState = async (_gameNumber, _playerAddress) => {
     let results = await gameContract.methods.getGamePlayerState(
       _gameNumber,
       _playerAddress
     ).call();
-    // console.log('getGamePlayerState = ' + _gameNumber + '; address = ' + _playerAddress);
-    // console.log(results);
+
     let newTickets = tickets[_gameNumber] || [];
     newTickets[_playerAddress] = results;
-    // newTickets = {
-    //   _playerAddress: results
-    // };
-    // console.log('newTickets');
-    // console.log(newTickets);
+
     setGameTickets(_gameNumber, newTickets);
-    // return results;
   }
 
-
-
-
-
-
-
-
-
-  
-
+  /**
+   * Mangement: 
+   */
   const sendFunds = async (_tokenAddress, _fromAddress, _toAddress, _amount) => {
     const decimals = web3.utils.toBN(18);
     let tokenContract = new web3.eth.Contract(IERC20MetadataABI, _tokenAddress);
@@ -383,9 +334,12 @@ function MyApp({ Component, pageProps }) {
       _value
 
     ).send({from: activeAddress});
+    console.log(results);
   }
 
-
+  /**
+   * Mangement: 
+   */
   const startGame = async (gameContract) => {
     if (!gameContract || !activeAddress) {
       console.log('Not ready');
@@ -417,11 +371,14 @@ function MyApp({ Component, pageProps }) {
         maxTicketsPlayer
   
       ).send({from: activeAddress});
+      console.log(results);
     }
   }
 
-
-  const endGame = async (_gameContract, _gameNumber) => {
+  /**
+   * Mangement: 
+   */
+    const endGame = async (_gameContract, _gameNumber) => {
     let results = await _gameContract.methods.endGame(
 
       // Game number
@@ -431,11 +388,9 @@ function MyApp({ Component, pageProps }) {
     console.log(results);
   }
 
-
-
-
-  
-
+  /**
+   * Display management panels if the user has been granted roles `MANAGER_ROLE` and `CALLER_ROLE` for house games
+   */
 	const panelManagementClasses = () => {
 		let arr = [
 			'tools'
@@ -446,9 +401,9 @@ function MyApp({ Component, pageProps }) {
 		return arr.join(' ');
 	}
 
-
-
-  // Listen for connection
+  /**
+   * `GameMaster` contract
+   */
   useEffect(() => {
     if (web3) {
       setGameContract(new web3.eth.Contract(
@@ -458,12 +413,9 @@ function MyApp({ Component, pageProps }) {
     }
   }, [web3])
 
-
-
-
-
-
-  // Listen for game events
+  /**
+   * `GameMaster` events
+   */
   useEffect(() => {
     if (web3 && gameContract) {
       gameContract.events.GameStarted({}, (error, data) => {
@@ -475,7 +427,7 @@ function MyApp({ Component, pageProps }) {
           // console.log(data);
           if (data.returnValues) {
             // setGameState(data.returnValues);
-            getGameState(web3, gameContract, games, data.returnValues.gameNumber);
+            getGameState(gameContract, data.returnValues.gameNumber);
           }
         }
       });
@@ -487,7 +439,7 @@ function MyApp({ Component, pageProps }) {
         } else {
           // console.log(data);
           if (data.returnValues) {
-            getGameState(web3, gameContract, games, data.returnValues.gameNumber);
+            getGameState(gameContract, data.returnValues.gameNumber);
           }
         }
       });
@@ -500,7 +452,7 @@ function MyApp({ Component, pageProps }) {
           // console.log(data);
           if (data.returnValues) {
             // setGameState(data.returnValues);
-            getGameState(web3, gameContract, games, data.returnValues.gameNumber);
+            getGameState(gameContract, data.returnValues.gameNumber);
           }
         }
       });
@@ -513,7 +465,7 @@ function MyApp({ Component, pageProps }) {
           // console.log(data);
           if (data.returnValues) {
             // setGameState(data.returnValues);
-            getGameState(web3, gameContract, games, data.returnValues.gameNumber);
+            getGameState(gameContract, data.returnValues.gameNumber);
             getGamePlayerState(
               data.returnValues.gameNumber,
               activeAddress
@@ -523,8 +475,6 @@ function MyApp({ Component, pageProps }) {
       });
     }
   }, [gameContract])
-
-
 
   return (
     <>
@@ -568,9 +518,7 @@ function MyApp({ Component, pageProps }) {
               onClick={(e) => {
                 if (e.target.tagName === 'DIV')
                   getGameState(
-                    web3,
                     gameContract,
-                    games,
                     web3.utils.toBN(getGameStateId.current.value)
                   )
               }}
