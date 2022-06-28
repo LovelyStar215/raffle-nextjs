@@ -58,29 +58,34 @@ function MyApp({ Component, pageProps }) {
   const awardItemURI = useRef();
 
 	useEffect(() => {
-		console.log('Loaded from local storage');
+		console.log('The data from local storage;');
 
 		const storedRoles = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY_ROLES));
+		console.log('Roles from cache');
     console.log(storedRoles);
 		if (storedRoles)
 			setRoles(storedRoles);
     
 		const storedGames = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY_GAMES));
+		console.log('Games from cache');
     console.log(storedGames);
 		if (storedGames)
 			setGames(storedGames);
 
     const storedTickets = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY_TICKETS));
+		console.log('Tickets from cache');
     console.log(storedTickets);
     if (storedTickets)
       setTickets(storedTickets);
 
     const storedTokens = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY_TOKENS));
+		console.log('Tokens from cache');
     console.log(storedTokens);
     if (storedTokens)
       setTokens(storedTokens);
 
     const storedApprovals = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY_ALLOWANCES));
+		console.log('Allowances from cache');
     console.log(storedApprovals);
     if (storedApprovals)
     setAllowances(storedApprovals);
@@ -115,7 +120,7 @@ function MyApp({ Component, pageProps }) {
 	}, [tokens])
 
 	useEffect(() => {
-		console.log('Approvals changed');
+		console.log('Allowances changed');
 		console.log(allowances);
 		const storedApprovals = JSON.stringify(allowances);
 		localStorage.setItem(LOCAL_STORAGE_KEY_ALLOWANCES, storedApprovals);
