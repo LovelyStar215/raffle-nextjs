@@ -230,6 +230,10 @@ const Game = ({
 										/>
 								</div>
 							</div>
+						</div>
+					</div>
+					<div className="row">
+						<div>
 							<div className={panelManagementClasses()}>
 								<div className="container">
 									<div className="buttons">

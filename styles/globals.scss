@@ -94,10 +94,7 @@ header {
 
 .tools {
   background-color: #461b4d;
-  > .container {
-    padding-left: 0;
-    padding-right: 0;
-  }
+  margin: 0 .5em;
 }
 
 .games {
@@ -116,9 +113,9 @@ header {
           > div:last-child {
             padding-left: .5em;
           }
-        }
-        .w50 {
-          padding: 1em;
+          > div {
+            padding: 1em;
+          }
         }
       }
       .result {
