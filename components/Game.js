@@ -41,7 +41,7 @@ const Game = ({
 	const removeGamePotERC721AssetAddress = useRef();
 	const removeGamePotERC721AssetId = useRef();
 
-	let gameToken = new web3.eth.Contract(IERC20MetadataABI, game.tokenAddress);
+	let gameToken = new web3.eth.Contract(IERC20MetadataABI, game._pot[0].assetAddress);
 
 	// Get game token metadata
 	let gameTokenMetadata = {};
