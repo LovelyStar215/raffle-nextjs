@@ -546,7 +546,7 @@ export const gameMasterABI = [
       },
       {
         "internalType": "uint248",
-        "name": "_assetValue",
+        "name": "_assetAmount",
         "type": "uint248"
       },
       {
@@ -569,7 +569,7 @@ export const gameMasterABI = [
       },
       {
         "internalType": "uint248",
-        "name": "_assetValue",
+        "name": "_assetIndex",
         "type": "uint248"
       },
       {
@@ -592,7 +592,7 @@ export const gameMasterABI = [
       },
       {
         "internalType": "uint248",
-        "name": "_assetValue",
+        "name": "_assetAmount",
         "type": "uint248"
       },
       {
@@ -615,7 +615,7 @@ export const gameMasterABI = [
       },
       {
         "internalType": "uint248",
-        "name": "_assetValue",
+        "name": "_assetIndex",
         "type": "uint248"
       },
       {
