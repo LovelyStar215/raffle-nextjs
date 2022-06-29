@@ -9,7 +9,12 @@ const GameMetrics = ({
 	
 	const items = Object.entries(game).map(([key, val]) => {
 		// console.log('gameItems');
-		if (key.substring(0, 1) === '_') return null;
+		if (
+			key === 'gameNumber'
+			|| key === 'pot'
+			|| key === 'status'
+			|| key === 'winnerResult'
+		) return null;
 
 		// Shorten address
 		if (key.substring((key.length - 7)) === 'Address') {

@@ -270,11 +270,7 @@ function MyApp({ Component, pageProps }) {
             potRecord[potIdx] = Object.fromEntries(Object.entries(pot).slice(potLen));
           }, {});
           // console.log(potRecord);
-          let newKey = `_${key}`;
-          result[newKey] = potRecord;
-        } else if (key === 'winnerResult' || key === 'status') {
-          let newKey = `_${key}`;
-          result[newKey] = val;
+          result[key] = potRecord;
         } else {
           result[key] = val;
         }
@@ -282,7 +278,8 @@ function MyApp({ Component, pageProps }) {
         return result;
       }, {});
       items.gameNumber = gameNumber.toString();
-      
+      console.log('gameItems');
+      console.log(items);
       setGameState(items);
 
       getGamePlayerState(

@@ -10,7 +10,7 @@ const GamePots = ({
 	if (gameTokenMetadata.state === 0)
 		return false;
 
-	if (!game._pot)
+	if (!game.pot)
 		return false;
 	
 	return (
@@ -20,7 +20,7 @@ const GamePots = ({
 					<h5>Game prize</h5>
 				</div>
 				<div>
-					{game._pot.map((pot, key) => {
+					{game.pot.map((pot, key) => {
 						let value = pot.value;
 
 						// Skip game pots (except for pot zero for tickets)

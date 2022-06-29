@@ -41,12 +41,12 @@ const Game = ({
 	const removeGamePotERC721AssetAddress = useRef();
 	const removeGamePotERC721AssetId = useRef();
 
-	let gameToken = new web3.eth.Contract(IERC20MetadataABI, game._pot[0].assetAddress);
+	let gameToken = new web3.eth.Contract(IERC20MetadataABI, game.pot[0].assetAddress);
 
 	// Get game token metadata
 	let gameTokenMetadata = {};
 
-	let gameHasEnded = (game._status == 0);
+	let gameHasEnded = (game.status == 0);
 
 	// User has the necessary contract roles?
 	let hasManagementAccess = true; // TBC
@@ -60,7 +60,7 @@ const Game = ({
 	let gameERC721Tokens = [];
 
 	// Gather all tokens, used in this game
-	game._pot.map((pot, potIdx) => {
+	game.pot.map((pot, potIdx) => {
 		let result = [];
 
 		// Non-null addresses only
@@ -196,7 +196,7 @@ const Game = ({
 										.on('receipt', function(receipt) {
 											let newAllowance = {
 												state: 1,
-												address: game._pot[0].assetAddress,
+												address: game.pot[0].assetAddress,
 												amount: gameTokenApprovalMax.toString()
 											};
 											console.log(newAllowance.amount);

@@ -3,7 +3,7 @@ import React from 'react';
 const GameStatus = ({
 	game
 }) => {
-	if (game._status > 0) {
+	if (game.status > 0) {
 		return (
 			<div className="result state active">
 				<div className="panels">

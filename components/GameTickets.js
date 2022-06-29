@@ -34,7 +34,7 @@ const GameTickets = ({
 	}, {});
 
 	// Players current pot share (value and percentage), in play
-	// let token = getERC20Token(game._pot[0].assetAddress);
+	// let token = getERC20Token(game.pot[0].assetAddress);
 	if (gameTokenMetadata) {
 		// console.log('game.ticketPrice');
 		// console.log(game.ticketPrice);

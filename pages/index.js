@@ -320,7 +320,7 @@ function GamesList({
 
           // Ended games only
           case 0: {
-            if (game._status === '0')
+            if (game.status === '0')
               list.push(key);
             
             break;
@@ -329,7 +329,7 @@ function GamesList({
           // Active house games only
           case -1:
           case 1: {
-            if (game._status === '1')
+            if (game.status === '1')
               list.push(key);
             
             break;
@@ -338,7 +338,7 @@ function GamesList({
           // Community games only
           case -2:
           case 2: {
-            if (game._status === '2')
+            if (game.status === '2')
               list.push(key);
             
             break;
