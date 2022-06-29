@@ -165,25 +165,6 @@ const Game = ({
 								gameTokenMetadata={gameTokenMetadata}
 								game={game}
 							/>
-						</div>
-						<div className="w50">
-							<GameStatus
-								game={game}
-							/>
-							<GameTickets
-								web3={web3}
-								activeAddress={activeAddress}
-								gameTickets={gameTickets}
-								gameTokenMetadata={gameTokenMetadata}
-								game={game}
-							/>
-							<GamePots
-								web3={web3}
-								gameTokenMetadata={gameTokenMetadata}
-								game={game}
-								getERC20Token={getERC20Token}
-								getERC721Token={getERC721Token}
-							/>
 							<div className="buttons">
 								<button
 									disabled={gameHasEnded}
@@ -230,6 +211,25 @@ const Game = ({
 										/>
 								</div>
 							</div>
+						</div>
+						<div className="w50">
+							<GameStatus
+								game={game}
+							/>
+							<GameTickets
+								web3={web3}
+								activeAddress={activeAddress}
+								gameTickets={gameTickets}
+								gameTokenMetadata={gameTokenMetadata}
+								game={game}
+							/>
+							<GamePots
+								web3={web3}
+								gameTokenMetadata={gameTokenMetadata}
+								game={game}
+								getERC20Token={getERC20Token}
+								getERC721Token={getERC721Token}
+							/>
 						</div>
 					</div>
 					<div className="row">
