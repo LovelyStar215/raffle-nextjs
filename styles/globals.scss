@@ -120,6 +120,9 @@ header {
       }
       .result {
         margin: 0 auto .75em;
+        &:last-of-type {
+          margin-bottom: 0;
+        }
         .panels .panel.brick {
           display: inline-block;
           font-size: 1.125em;

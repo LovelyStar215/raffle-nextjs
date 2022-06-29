@@ -125,7 +125,7 @@ const Game = ({
 
 	const panelManagementClasses = () => {
 		let arr = [
-			'tools'
+			'row'
 		];
 		if (!hasRole(CALLER_ROLE) && !hasRole(MANAGER_ROLE))
 			arr.push('hide');
@@ -232,9 +232,9 @@ const Game = ({
 							/>
 						</div>
 					</div>
-					<div className="row">
+					<div className={panelManagementClasses()}>
 						<div>
-							<div className={panelManagementClasses()}>
+							<div className="tools">
 								<div className="container">
 									<div className="buttons">
 										<h3>Management</h3>
