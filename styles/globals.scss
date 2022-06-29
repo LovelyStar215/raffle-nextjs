@@ -94,7 +94,6 @@ header {
 
 .tools {
   background-color: #461b4d;
-  margin: 0 .5em;
 }
 
 .games {
@@ -107,12 +106,6 @@ header {
       padding: 0;
       > .grid {
         .row {
-          > div:first-child {
-            padding-right: .5em;
-          }
-          > div:last-child {
-            padding-left: .5em;
-          }
           > div {
             padding: 1em;
           }
