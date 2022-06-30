@@ -599,7 +599,13 @@ export const gameMasterABI = [
       }
     ],
     "name": "endGame",
-    "outputs": [],
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "sufficient",
+        "type": "bool"
+      }
+    ],
     "stateMutability": "nonpayable",
     "type": "function"
   },
@@ -612,7 +618,13 @@ export const gameMasterABI = [
       }
     ],
     "name": "endCommunityGame",
-    "outputs": [],
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "sufficient",
+        "type": "bool"
+      }
+    ],
     "stateMutability": "nonpayable",
     "type": "function"
   },
@@ -802,6 +814,11 @@ export const gameMasterABI = [
       },
       {
         "internalType": "address",
+        "name": "ownerAddress",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
         "name": "winnerAddress",
         "type": "address"
       },
@@ -849,6 +866,19 @@ export const gameMasterABI = [
       }
     ],
     "name": "setTreasuryAddress",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint8",
+        "name": "_feePercent",
+        "type": "uint8"
+      }
+    ],
+    "name": "setTreasuryFeePercent",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
