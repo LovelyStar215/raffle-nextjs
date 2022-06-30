@@ -13,7 +13,7 @@ const GameStatus = ({
 		);
 	}
 
-	const winnerResult = game?._winnerResult?.map((val, idx) => {
+	const winnerResult = game?.winnerResult?.map((val, idx) => {
 		// console.log(idx);
 		// console.log(`winnerResult-${game.gameNumber}-${idx}`);
 		return (
