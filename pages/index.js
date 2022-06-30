@@ -32,7 +32,7 @@ function GamesList({
 		return null;
 	}
 
-  const [gameListRenderMode, setGameListRenderMode] = useState(-1);
+  const [gameListRenderMode, setGameListRenderMode] = useState(-3);
 
   const setToken = (data) => {
     // console.log('setToken');
@@ -326,7 +326,7 @@ function GamesList({
             break;
           }
 
-          // Active house games only
+          // House games only
           case -1:
           case 1: {
             if (game.status === '1')
@@ -339,6 +339,15 @@ function GamesList({
           case -2:
           case 2: {
             if (game.status === '2')
+              list.push(key);
+            
+            break;
+          }
+
+          // All active games
+          case -3:
+          case 3: {
+            if (game.status === '1' || game.status === '2')
               list.push(key);
             
             break;
@@ -368,11 +377,13 @@ function GamesList({
                   onChange={e => setGameListRenderMode(parseInt(e.target.value))}
                   value={gameListRenderMode}
                   defaultValue="-1">
+                    <option value="-3">Active games (newest first)</option>
                     <option value="-2">Community games (newest first)</option>
                     <option value="-1">House games (newest first)</option>
                     <option value="0">Finished games (newest first)</option>
                     <option value="1">House games (oldest first)</option>
                     <option value="2">Community games (oldest first)</option>
+                    <option value="3">Active games (oldest first)</option>
                 </select>
 					</div>
         </div>
