@@ -47,6 +47,8 @@ function MyApp({ Component, pageProps }) {
   // const [_playerIndexes, set_playerIndexes] = useState([])
 
   const endGameId = useRef();
+  const endCommunityGameId = useRef();
+
   const getGameStateId = useRef();
   const getActiveGamesMax = useRef();
 
@@ -342,7 +344,7 @@ function MyApp({ Component, pageProps }) {
   /**
    * Mangement: 
    */
-  const startGame = async (gameContract) => {
+   const startGame = async (gameContract) => {
     if (!gameContract || !activeAddress) {
       console.log('Not ready');
     } else {
@@ -382,6 +384,57 @@ function MyApp({ Component, pageProps }) {
    */
     const endGame = async (_gameContract, _gameNumber) => {
     let results = await _gameContract.methods.endGame(
+
+      // Game number
+      _gameNumber
+
+    ).send({from: activeAddress});
+    console.log(results);
+  }
+
+  /**
+   * Mangement: 
+   */
+   const startCommunityGame = async (gameContract) => {
+    if (!gameContract || !activeAddress) {
+      console.log('Not ready');
+    } else {
+      const decimals = web3.utils.toBN(18);
+      let feePercent = web3.utils.toBN(1);//web3.utils.toBN(2).mul(web3.utils.toBN(10).pow(decimals));
+      let ticketPrice = web3.utils.toBN(100000000000000000); // 0.1
+      let maxPlayers = web3.utils.toBN(50000);
+      let maxTicketsPlayer = web3.utils.toBN(20);
+
+      let results = await gameContract.methods.startCommunityGame(
+
+        // Token address
+        tokenAddress,
+  
+        // Game fee address
+        feeAddress,
+  
+        // Game fee percent
+        feePercent,
+  
+        // Ticket price
+        ticketPrice,
+  
+        // Max players
+        maxPlayers,
+  
+        // Max player tickets
+        maxTicketsPlayer
+  
+      ).send({from: activeAddress});
+      console.log(results);
+    }
+  }
+
+  /**
+   * Mangement: 
+   */
+    const endCommunityGame = async (_gameContract, _gameNumber) => {
+    let results = await _gameContract.methods.endCommunityGame(
 
       // Game number
       _gameNumber
@@ -516,35 +569,6 @@ function MyApp({ Component, pageProps }) {
               <div>endGame (A0)</div>
               <input ref={endGameId} defaultValue="0" size="1" min="0" type="number" />
             </div>
-            <div
-              onClick={(e) => {
-                if (e.target.tagName === 'DIV')
-                  getGameState(
-                    gameContract,
-                    web3.utils.toBN(getGameStateId.current.value)
-                  )
-              }}
-              className="button"
-              role="button"
-              tabIndex="0">
-              <div>getGameState</div>
-              <input ref={getGameStateId} defaultValue="0" size="1" min="0" type="number" />
-            </div>
-            <div
-              onClick={(e) => {
-                if (e.target.tagName === 'DIV') {
-                  console.log('getActiveGamesMax: ' + getActiveGamesMax.current.value);
-                  getActiveGames(
-                    web3.utils.toBN(getActiveGamesMax.current.value)
-                  )
-                }
-              }}
-              className="button"
-              role="button"
-              tabIndex="0">
-              <div>getActiveGames</div>
-              <input ref={getActiveGamesMax} defaultValue="1" size="1" min="1" type="number" />
-            </div>
           </div>
           <div className="buttons">
             <h3>Management &ndash; Transfers</h3>
@@ -628,6 +652,63 @@ function MyApp({ Component, pageProps }) {
               }}>
               Get contract balance
             </button> */}
+          </div>
+        </div>
+      </div>
+      <div className="tools">
+        <div className="container">
+          <div className="buttons">
+            <h3>Community Games</h3>
+            <button
+              onClick={() => startCommunityGame(gameContract)}
+              className="button">
+              startCommunityGame
+            </button>
+            <div
+              onClick={(e) => {
+                if (e.target.tagName === 'DIV') {
+                  console.log('endCommunityGame ID: ' + endCommunityGameId.current.value);
+                  endCommunityGame(
+                    gameContract,
+                    web3.utils.toBN(endCommunityGameId.current.value)
+                  )
+                }
+              }}
+              className="button"
+              role="button"
+              tabIndex="0">
+              <div>endCommunityGame</div>
+              <input ref={endCommunityGameId} defaultValue="0" size="1" min="0" type="number" />
+            </div>
+            <div
+              onClick={(e) => {
+                if (e.target.tagName === 'DIV')
+                  getGameState(
+                    gameContract,
+                    web3.utils.toBN(getGameStateId.current.value)
+                  )
+              }}
+              className="button"
+              role="button"
+              tabIndex="0">
+              <div>getGameState</div>
+              <input ref={getGameStateId} defaultValue="0" size="1" min="0" type="number" />
+            </div>
+            <div
+              onClick={(e) => {
+                if (e.target.tagName === 'DIV') {
+                  console.log('getActiveGamesMax: ' + getActiveGamesMax.current.value);
+                  getActiveGames(
+                    web3.utils.toBN(getActiveGamesMax.current.value)
+                  )
+                }
+              }}
+              className="button"
+              role="button"
+              tabIndex="0">
+              <div>getActiveGames</div>
+              <input ref={getActiveGamesMax} defaultValue="1" size="1" min="1" type="number" />
+            </div>
           </div>
         </div>
       </div>

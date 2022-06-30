@@ -456,6 +456,34 @@ export const gameMasterABI = [
     "constant": true
   },
   {
+    "inputs": [],
+    "name": "treasuryAddress",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function",
+    "constant": true
+  },
+  {
+    "inputs": [],
+    "name": "treasuryFeePercent",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function",
+    "constant": true
+  },
+  {
     "inputs": [
       {
         "internalType": "uint32",
@@ -509,6 +537,44 @@ export const gameMasterABI = [
   {
     "inputs": [
       {
+        "internalType": "address",
+        "name": "_gameTokenAddress",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_gameFeeAddress",
+        "type": "address"
+      },
+      {
+        "internalType": "uint8",
+        "name": "_gameFeePercent",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint128",
+        "name": "_ticketPrice",
+        "type": "uint128"
+      },
+      {
+        "internalType": "uint16",
+        "name": "_maxPlayers",
+        "type": "uint16"
+      },
+      {
+        "internalType": "uint16",
+        "name": "_maxTicketsPlayer",
+        "type": "uint16"
+      }
+    ],
+    "name": "startCommunityGame",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "uint32",
         "name": "_gameNumber",
         "type": "uint32"
@@ -533,6 +599,19 @@ export const gameMasterABI = [
       }
     ],
     "name": "endGame",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint32",
+        "name": "_gameNumber",
+        "type": "uint32"
+      }
+    ],
+    "name": "endCommunityGame",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -760,6 +839,19 @@ export const gameMasterABI = [
     "stateMutability": "view",
     "type": "function",
     "constant": true
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_address",
+        "type": "address"
+      }
+    ],
+    "name": "setTreasuryAddress",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
   }
 ];
 export const IERC20MetadataABI = [
