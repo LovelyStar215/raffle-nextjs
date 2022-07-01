@@ -127,7 +127,11 @@ const Game = ({
 		let arr = [
 			'row'
 		];
-		if (!hasRole(CALLER_ROLE) && !hasRole(MANAGER_ROLE))
+		if (
+			!hasRole(CALLER_ROLE)
+			&& !hasRole(MANAGER_ROLE)
+			&& game.ownerAddress !== activeAddress
+		)
 			arr.push('hide');
 		
 		return arr.join(' ');

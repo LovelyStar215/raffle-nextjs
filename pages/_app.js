@@ -156,7 +156,7 @@ function MyApp({ Component, pageProps }) {
       ethereum.request({ method: "eth_requestAccounts" }).then((accounts) => {
         console.log(accounts);
         // setAddresses(accounts)
-        setAddress(accounts[0])
+        setAddress(accounts[0].toLowerCase())
         setConnected(true)
         let w3 = new Web3(ethereum)
         w3.eth.defaultAccount = accounts[0];
@@ -166,7 +166,7 @@ function MyApp({ Component, pageProps }) {
         ethereum.on('accountsChanged', (accounts) => {
           console.log(now + ': Changed');
           if (accounts.length)
-            setAddress(accounts[0])
+            setAddress(accounts[0].toLowerCase())
           else
             setAddress(null)
         })
@@ -280,6 +280,8 @@ function MyApp({ Component, pageProps }) {
           }, {});
           // console.log(potRecord);
           result[key] = potRecord;
+        } else if (key.substring((key.length - 7)) === 'Address') {
+          result[key] = val.toLowerCase();
         } else {
           result[key] = val;
         }
@@ -457,7 +459,10 @@ function MyApp({ Component, pageProps }) {
 		let arr = [
 			'tools'
 		];
-		if (!hasRole(CALLER_ROLE) && !hasRole(MANAGER_ROLE))
+		if (
+      !hasRole(CALLER_ROLE)
+      && !hasRole(MANAGER_ROLE)
+    )
 			arr.push('hide');
 		
 		return arr.join(' ');
