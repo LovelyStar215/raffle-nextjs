@@ -273,6 +273,44 @@ const Game = ({
 								<div className="container">
 									<h3>Management</h3>
 									<div className="buttons">
+										<button
+											onClick={(e) => {
+												console.log('endGame ID: ' + game.gameNumber);
+												endGame(
+													gameContract,
+													web3.utils.toBN(game.gameNumber)
+												)
+											}}
+											className={(() => {
+												let classes = [
+													'button'
+												];
+												if (game.status !== '1')
+													classes.push('hide');
+
+												return classes.join(' ');
+											})()}>
+											endGame
+										</button>
+										<button
+											onClick={(e) => {
+												console.log('endCommunityGame ID: ' + game.gameNumber);
+												endCommunityGame(
+													gameContract,
+													web3.utils.toBN(game.gameNumber)
+												)
+											}}
+											className={(() => {
+												let classes = [
+													'button'
+												];
+												if (game.status !== '2')
+													classes.push('hide');
+
+												return classes.join(' ');
+											})()}>
+											endCommunityGame
+										</button>
 										<div
 											onClick={(e) => {
 												if (e.target.tagName === 'DIV') {

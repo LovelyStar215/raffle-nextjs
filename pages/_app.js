@@ -583,6 +583,22 @@ function MyApp({ Component, pageProps }) {
               <div>endGame (A0)</div>
               <input ref={endGameId} defaultValue="0" size="1" min="0" type="number" />
             </div>
+            <div
+              onClick={(e) => {
+                if (e.target.tagName === 'DIV') {
+                  console.log('endCommunityGame ID: ' + endCommunityGameId.current.value);
+                  endCommunityGame(
+                    gameContract,
+                    web3.utils.toBN(endCommunityGameId.current.value)
+                  )
+                }
+              }}
+              className="button"
+              role="button"
+              tabIndex="0">
+              <div>endCommunityGame</div>
+              <input ref={endCommunityGameId} defaultValue="0" size="1" min="0" type="number" />
+            </div>
           </div>
           <h3>Management &ndash; Transfers</h3>
           <div className="buttons">
@@ -744,22 +760,6 @@ function MyApp({ Component, pageProps }) {
               className="button">
               startCommunityGame
             </button>
-            <div
-              onClick={(e) => {
-                if (e.target.tagName === 'DIV') {
-                  console.log('endCommunityGame ID: ' + endCommunityGameId.current.value);
-                  endCommunityGame(
-                    gameContract,
-                    web3.utils.toBN(endCommunityGameId.current.value)
-                  )
-                }
-              }}
-              className="button"
-              role="button"
-              tabIndex="0">
-              <div>endCommunityGame</div>
-              <input ref={endCommunityGameId} defaultValue="0" size="1" min="0" type="number" />
-            </div>
           </div>
           <h3>Information</h3>
           <div className="buttons">
