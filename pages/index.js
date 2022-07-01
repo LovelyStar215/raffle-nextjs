@@ -366,8 +366,8 @@ function GamesList({
   return (
     <div key={`gamesList`} className="games">
 			<div className="container">
+        <h3>Display</h3>
         <div className="buttons">
-          <h3>Display</h3>
           <div
               className="button"
               role="button"
