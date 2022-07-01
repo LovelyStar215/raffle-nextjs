@@ -13,6 +13,7 @@ const GameMetrics = ({
 			key === 'gameNumber'
 			|| key === 'pot'
 			|| key === 'status'
+			|| key === 'ticketPrice'
 			|| key === 'winnerResult'
 		) return null;
 
@@ -28,16 +29,16 @@ const GameMetrics = ({
 		}
 		
 		// Format wei by decimals, and add symbol
-		else if(key === 'ticketPrice') {
-			// console.log('ticketPrice-gameTokenMetadata')
-			// console.log(gameTokenMetadata);
-			if (gameTokenMetadata) {
-				// console.log('gameItems-getERC20Token');
-				// console.log(gameTokenMetadata);
-				val = gameTokenMetadata.decimals === '18' ? web3.utils.fromWei(val) : val; // game._decimals
-				if (gameTokenMetadata.symbol) val += ' ' + gameTokenMetadata.symbol;
-			}
-		}
+		// else if(key === 'ticketPrice') {
+		// 	// console.log('ticketPrice-gameTokenMetadata')
+		// 	// console.log(gameTokenMetadata);
+		// 	if (gameTokenMetadata) {
+		// 		// console.log('gameItems-getERC20Token');
+		// 		// console.log(gameTokenMetadata);
+		// 		val = gameTokenMetadata.decimals === '18' ? web3.utils.fromWei(val) : val; // game._decimals
+		// 		if (gameTokenMetadata.symbol) val += ' ' + gameTokenMetadata.symbol;
+		// 	}
+		// }
 
 		return (
 			<div key={`game-${game.gameNumber}-${key}`}>

@@ -541,20 +541,22 @@ function MyApp({ Component, pageProps }) {
   return (
     <>
       <header>
-        <h3>Wallet</h3>
-        <div>
-          <button className="button" onClick={() => (connected ? disconnect() : connect())}>
-            { connected
-              ? activeAddress.length > 10 ? activeAddress.slice(0,4) + '...' + activeAddress.slice(-4) : activeAddress
-              : 'Connect'
-            }
-          </button>
+        <div className="container">
+          <h3>Wallet</h3>
+          <div className="buttons">
+            <button className="button" onClick={() => (connected ? disconnect() : connect())}>
+              { connected
+                ? activeAddress.length > 10 ? activeAddress.slice(0,4) + '...' + activeAddress.slice(-4) : activeAddress
+                : 'Connect'
+              }
+            </button>
+          </div>
         </div>
       </header>
       <div className={panelManagementClasses()}>
         <div className="container">
+          <h3>Management &ndash; Games</h3>
           <div className="buttons">
-            <h3>Management &ndash; Games</h3>
             <button
               onClick={() => startGame(gameContract)}
               className="button">
@@ -577,8 +579,8 @@ function MyApp({ Component, pageProps }) {
               <input ref={endGameId} defaultValue="0" size="1" min="0" type="number" />
             </div>
           </div>
+          <h3>Management &ndash; Transfers</h3>
           <div className="buttons">
-            <h3>Management &ndash; Transfers</h3>
             <div
               onClick={(e) => {
                 if (e.target.tagName === 'DIV')
@@ -664,55 +666,74 @@ function MyApp({ Component, pageProps }) {
       </div>
       <div className="tools">
         <div className="container">
-        <div className="buttons">
-            <h3>Community</h3>
-            <fieldset>
-              <legend>Start a game</legend>
-              <label>Ticket token address</label>
-              <input
-                ref={startCommunityGameTokenAddress}
-                type="text"
-                defaultValue={tokenAddress}
-              />
-              <label>Ticket price</label>
-              <input
-                ref={startCommunityGameTicketPrice}
-                type="text"
-                defaultValue="1"
-                min="0"
-                max="10000000"
-              />
-              <label>Max players</label>
-              <input
-                ref={startCommunityGameMaxPlayers}
-                type="number"
-                defaultValue="20"
-                min="10"
-                max="65535"
-              />
-              <label>Max tickets per player</label>
-              <input
-                ref={startCommunityGameMaxTicketsPlayer}
-                type="number"
-                defaultValue="20"
-                min="1"
-                max="50"
-              />
-              <label>Fee address</label>
-              <input
-                ref={startCommunityGameFeeAddress}
-                type="text"
-                defaultValue={activeAddress}
-              />
-              <label>Fee percent</label>
-              <input
-                ref={startCommunityGameFeePercent}
-                type="text"
-                defaultValue="10"
-                min="0"
-                max="100"
-              />
-            </fieldset>
+          <h3>Community</h3>
+          <div className="grid">
+            <div className="row">
+            </div>
+            <div className="row">
+              <div className="w50">
+                <label>Ticket token address</label>
+                <input
+                  ref={startCommunityGameTokenAddress}
+                  type="text"
+                  defaultValue={tokenAddress}
+                />
+              </div>
+              <div className="w50">
+                <label>Ticket price</label>
+                <input
+                  ref={startCommunityGameTicketPrice}
+                  type="text"
+                  defaultValue="1"
+                  min="0"
+                  max="10000000"
+                />
+              </div>
+            </div>
+            <div className="row">
+              <div className="w50">
+                <label>Max players</label>
+                <input
+                  ref={startCommunityGameMaxPlayers}
+                  type="number"
+                  defaultValue="20"
+                  min="10"
+                  max="65535"
+                />
+              </div>
+              <div className="w50">
+                <label>Max tickets per player</label>
+                <input
+                  ref={startCommunityGameMaxTicketsPlayer}
+                  type="number"
+                  defaultValue="20"
+                  min="1"
+                  max="50"
+                />
+              </div>
+            </div>
+            <div className="row">
+              <div className="w50">
+                <label>Fee address</label>
+                <input
+                  ref={startCommunityGameFeeAddress}
+                  type="text"
+                  defaultValue={activeAddress}
+                />
+              </div>
+              <div className="w50">
+                <label>Fee percent</label>
+                <input
+                  ref={startCommunityGameFeePercent}
+                  type="text"
+                  defaultValue="10"
+                  min="0"
+                  max="100"
+                />
+              </div>
+            </div>
+          </div>
+          <div className="buttons">
             <button
               onClick={() => startCommunityGame(gameContract)}
               className="button">
@@ -735,8 +756,8 @@ function MyApp({ Component, pageProps }) {
               <input ref={endCommunityGameId} defaultValue="0" size="1" min="0" type="number" />
             </div>
           </div>
+          <h3>Information</h3>
           <div className="buttons">
-            <h3>Information</h3>
             <div
               onClick={(e) => {
                 if (e.target.tagName === 'DIV')

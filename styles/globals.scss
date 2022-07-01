@@ -53,7 +53,6 @@ body {
 
 header {
   background-color: #000;
-  padding: 1.25em;
   > div {
     display: inline-block;
     padding: 0 1.25em;
@@ -66,11 +65,18 @@ header {
 
 .grid {
   font-size: 0;
-  .row > div {
-    @extend %root;
-    display: inline-block;
-    vertical-align: top;
-    width: 100%;
+  .row {
+    &.middle {
+      > div {
+        vertical-align: middle;
+      }
+    }
+    > div {
+      @extend %root;
+      display: inline-block;
+      vertical-align: top;
+      width: 100%;
+    }
   }
   @media screen and (min-width: 1024px) {
     .row {
@@ -107,7 +113,9 @@ header {
       > .grid {
         .row {
           > div {
-            padding: 1em;
+            > div {
+              padding: 1em;
+            }
           }
         }
       }
@@ -201,6 +209,11 @@ header {
         }
       }
     }
+    .tools {
+      margin: 1em;
+      padding: 0;
+      border-radius: .5em;
+    }
   }
 }
 
@@ -220,7 +233,39 @@ a {
 }
 
 h1, h2, h3 {
+  padding: 1em 0 0;
   font-size: 1.25em;
+}
+
+%input {
+  background-color: #fff;
+  border: .25em solid #000;
+  border-radius: .25em;
+  color: #000;
+  padding: .5em .5em;
+  font-weight: 700;
+  font-size: 1em;
+  line-height: 1;
+  font-family: $body-font;
+  margin: .5em 0;
+  &:hover {
+    background-color: #ccc;
+    border-color: #002593;
+  }
+  &:focus {
+    background-color: #ccc;
+    border-color: #007d1f;
+  }
+}
+
+label {
+  display: block;
+  margin: .5em 0;
+  font-weight: 500;
+}
+
+.input, input {
+  @extend %input;
 }
 
 %button {

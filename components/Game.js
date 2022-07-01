@@ -153,91 +153,122 @@ const Game = ({
 		return arr.join(' ');
 	};
 
+	const ticketPrice = () => {
+		let price;
+		if (gameTokenMetadata) {
+			price =
+				gameTokenMetadata.decimals === '18'
+				? web3.utils.fromWei(game.ticketPrice)
+				: game.ticketPrice;
+
+			if (gameTokenMetadata.symbol)
+				price += ' ' + gameTokenMetadata.symbol;
+		}
+
+		return (
+			<div>
+				<strong>Ticket price</strong>
+				<p>{price}</p>
+			</div>
+		);
+	};
+
 	return (
 		<div key={`game-${game.gameNumber}`} className="game">
 			<div className="container">
 				<div className="grid">
 					<div className="row">
 						<div className="w50">
-							<h4>Game #{game.gameNumber}</h4>
-							<GameMetrics
-								web3={web3}
-								gameTokenMetadata={gameTokenMetadata}
-								game={game}
-							/>
-							<div className="buttons">
-								<button
-									disabled={gameHasEnded}
-									className={buttonApproveClasses()}
-									onClick={() => {
-										gameToken.methods.approve(
-											gameAddress,
-											gameTokenApprovalMax
-										).send({from: activeAddress})
-										.on('receipt', function(receipt) {
-											let newAllowance = {
-												state: 1,
-												address: game.pot[0].assetAddress,
-												amount: gameTokenApprovalMax.toString()
-											};
-											console.log(newAllowance.amount);
-											let _playerAllowanceIdx = getAllowancePlayerIndex(activeAddress);
-											setAllowance(_playerAllowanceIdx, newAllowance);
-										});
-									}}>
-									Approve
-								</button>
-								<div
-									disabled={gameHasEnded}
-									className={buttonBuyTicketClasses()}
-									onClick={(e) => {
-										if (e.target.tagName === 'DIV')
-											buyTicket(
-												gameContract,
-												web3.utils.toBN(game.gameNumber),
-												web3.utils.toBN(numberOfTickets.current.value)
-											)
-									}}
-									role="button"
-									tabIndex="0">
-										<div>Buy tickets</div>
-										<input
-											ref={numberOfTickets}
-											max={game.maxTicketsPlayer}
-											defaultValue="1"
-											size="2"
-											min="1"
-											type="number"
-										/>
+							<div>
+								<div className="container">
+									<div className="grid">
+										<div className="row middle">
+											<div className="w50"><h4>Game #{game.gameNumber}</h4></div>
+											<div className="w50">{ticketPrice()}</div>
+										</div>
+									</div>
+								</div>
+								<GameMetrics
+									web3={web3}
+									gameTokenMetadata={gameTokenMetadata}
+									game={game}
+								/>
+								<div className="buttons">
+									<button
+										disabled={gameHasEnded}
+										className={buttonApproveClasses()}
+										onClick={() => {
+											gameToken.methods.approve(
+												gameAddress,
+												gameTokenApprovalMax
+											).send({from: activeAddress})
+											.on('receipt', function(receipt) {
+												let newAllowance = {
+													state: 1,
+													address: game.pot[0].assetAddress,
+													amount: gameTokenApprovalMax.toString()
+												};
+												console.log(newAllowance.amount);
+												let _playerAllowanceIdx = getAllowancePlayerIndex(activeAddress);
+												setAllowance(_playerAllowanceIdx, newAllowance);
+											});
+										}}>
+										Approve
+									</button>
+									<div
+										disabled={gameHasEnded}
+										className={buttonBuyTicketClasses()}
+										onClick={(e) => {
+											if (e.target.tagName === 'DIV')
+												buyTicket(
+													gameContract,
+													web3.utils.toBN(game.gameNumber),
+													web3.utils.toBN(numberOfTickets.current.value)
+												)
+										}}
+										role="button"
+										tabIndex="0">
+											<div>Buy tickets</div>
+											<input
+												ref={numberOfTickets}
+												max={game.maxTicketsPlayer}
+												defaultValue="1"
+												size="2"
+												min="1"
+												type="number"
+											/>
+									</div>
 								</div>
 							</div>
 						</div>
 						<div className="w50">
-							<GameStatus
-								game={game}
-							/>
-							<GameTickets
-								web3={web3}
-								activeAddress={activeAddress}
-								gameTickets={gameTickets}
-								gameTokenMetadata={gameTokenMetadata}
-								game={game}
-							/>
-							<GamePots
-								web3={web3}
-								gameTokenMetadata={gameTokenMetadata}
-								game={game}
-								getERC20Token={getERC20Token}
-								getERC721Token={getERC721Token}
-							/>
+							<div>
+								<GameStatus
+									game={game}
+								/>
+								<GameTickets
+									web3={web3}
+									activeAddress={activeAddress}
+									gameTickets={gameTickets}
+									gameTokenMetadata={gameTokenMetadata}
+									game={game}
+								/>
+								<GamePots
+									web3={web3}
+									gameTokenMetadata={gameTokenMetadata}
+									game={game}
+									getERC20Token={getERC20Token}
+									getERC721Token={getERC721Token}
+								/>
+							</div>
 						</div>
 					</div>
 					<div className={panelManagementClasses()}>
 						<div>
 							<div className="tools">
 								<div className="container">
+									<h3>Management</h3>
 									<div className="buttons">
-										<h3>Management</h3>
 										<div
 											onClick={(e) => {
 												if (e.target.tagName === 'DIV') {
