@@ -46,6 +46,13 @@ function MyApp({ Component, pageProps }) {
   const [allowances, setAllowances] = useState([[],[]])
   // const [_playerIndexes, set_playerIndexes] = useState([])
 
+  const startCommunityGameTokenAddress = useRef();
+  const startCommunityGameTicketPrice = useRef();
+  const startCommunityGameMaxPlayers = useRef();
+  const startCommunityGameMaxTicketsPlayer = useRef();
+  const startCommunityGameFeeAddress = useRef();
+  const startCommunityGameFeePercent = useRef();
+
   const endGameId = useRef();
   const endCommunityGameId = useRef();
 
@@ -400,18 +407,18 @@ function MyApp({ Component, pageProps }) {
       console.log('Not ready');
     } else {
       const decimals = web3.utils.toBN(18);
-      let feePercent = web3.utils.toBN(1);//web3.utils.toBN(2).mul(web3.utils.toBN(10).pow(decimals));
-      let ticketPrice = web3.utils.toBN(100000000000000000); // 0.1
-      let maxPlayers = web3.utils.toBN(50000);
-      let maxTicketsPlayer = web3.utils.toBN(20);
+      let feePercent = web3.utils.toBN(startCommunityGameFeePercent.current.value);
+      let ticketPrice = web3.utils.toBN(startCommunityGameTicketPrice.current.value).mul(web3.utils.toBN(10).pow(decimals));
+      let maxPlayers = web3.utils.toBN(startCommunityGameMaxPlayers.current.value);
+      let maxTicketsPlayer = web3.utils.toBN(startCommunityGameMaxTicketsPlayer.current.value);
 
       let results = await gameContract.methods.startCommunityGame(
 
         // Token address
-        tokenAddress,
+        startCommunityGameTokenAddress.current.value,
   
         // Game fee address
-        feeAddress,
+        startCommunityGameFeeAddress.current.value,
   
         // Game fee percent
         feePercent,
@@ -657,8 +664,55 @@ function MyApp({ Component, pageProps }) {
       </div>
       <div className="tools">
         <div className="container">
-          <div className="buttons">
-            <h3>Community Games</h3>
+        <div className="buttons">
+            <h3>Community</h3>
+            <fieldset>
+              <legend>Start a game</legend>
+              <label>Ticket token address</label>
+              <input
+                ref={startCommunityGameTokenAddress}
+                type="text"
+                defaultValue={tokenAddress}
+              />
+              <label>Ticket price</label>
+              <input
+                ref={startCommunityGameTicketPrice}
+                type="text"
+                defaultValue="1"
+                min="0"
+                max="10000000"
+              />
+              <label>Max players</label>
+              <input
+                ref={startCommunityGameMaxPlayers}
+                type="number"
+                defaultValue="20"
+                min="10"
+                max="65535"
+              />
+              <label>Max tickets per player</label>
+              <input
+                ref={startCommunityGameMaxTicketsPlayer}
+                type="number"
+                defaultValue="20"
+                min="1"
+                max="50"
+              />
+              <label>Fee address</label>
+              <input
+                ref={startCommunityGameFeeAddress}
+                type="text"
+                defaultValue={activeAddress}
+              />
+              <label>Fee percent</label>
+              <input
+                ref={startCommunityGameFeePercent}
+                type="text"
+                defaultValue="10"
+                min="0"
+                max="100"
+              />
+            </fieldset>
             <button
               onClick={() => startCommunityGame(gameContract)}
               className="button">
@@ -680,6 +734,9 @@ function MyApp({ Component, pageProps }) {
               <div>endCommunityGame</div>
               <input ref={endCommunityGameId} defaultValue="0" size="1" min="0" type="number" />
             </div>
+          </div>
+          <div className="buttons">
+            <h3>Information</h3>
             <div
               onClick={(e) => {
                 if (e.target.tagName === 'DIV')
