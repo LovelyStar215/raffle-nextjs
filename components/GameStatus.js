@@ -7,7 +7,7 @@ const GameStatus = ({
 		return (
 			<div className="result state active">
 				<div className="panels">
-					<h5>Game is active</h5>
+					<h5>{game.status === '2' ? `Community game is active` : `Game is active`}</h5>
 				</div>
 			</div>
 		);
