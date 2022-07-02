@@ -486,19 +486,6 @@ export const gameMasterABI = [
   {
     "inputs": [
       {
-        "internalType": "uint32",
-        "name": "_gameNumber",
-        "type": "uint32"
-      }
-    ],
-    "name": "resetGame",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
         "internalType": "address",
         "name": "_gameTokenAddress",
         "type": "address"
@@ -537,44 +524,6 @@ export const gameMasterABI = [
   {
     "inputs": [
       {
-        "internalType": "address",
-        "name": "_gameTokenAddress",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "_gameFeeAddress",
-        "type": "address"
-      },
-      {
-        "internalType": "uint8",
-        "name": "_gameFeePercent",
-        "type": "uint8"
-      },
-      {
-        "internalType": "uint128",
-        "name": "_ticketPrice",
-        "type": "uint128"
-      },
-      {
-        "internalType": "uint16",
-        "name": "_maxPlayers",
-        "type": "uint16"
-      },
-      {
-        "internalType": "uint16",
-        "name": "_maxTicketsPlayer",
-        "type": "uint16"
-      }
-    ],
-    "name": "startCommunityGame",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
         "internalType": "uint32",
         "name": "_gameNumber",
         "type": "uint32"
@@ -598,16 +547,17 @@ export const gameMasterABI = [
         "type": "uint32"
       }
     ],
-    "name": "endGame",
+    "name": "isAuthorised",
     "outputs": [
       {
         "internalType": "bool",
-        "name": "sufficient",
+        "name": "",
         "type": "bool"
       }
     ],
-    "stateMutability": "nonpayable",
-    "type": "function"
+    "stateMutability": "view",
+    "type": "function",
+    "constant": true
   },
   {
     "inputs": [
@@ -617,11 +567,11 @@ export const gameMasterABI = [
         "type": "uint32"
       }
     ],
-    "name": "endCommunityGame",
+    "name": "endGame",
     "outputs": [
       {
         "internalType": "bool",
-        "name": "sufficient",
+        "name": "",
         "type": "bool"
       }
     ],
