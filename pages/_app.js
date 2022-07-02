@@ -687,7 +687,7 @@ function MyApp({ Component, pageProps }) {
       </div>
       <div className="tools">
         <div className="container">
-          <h3>Community</h3>
+          <h3>Start a community raffle</h3>
           <div className="grid">
             <div className="row">
             </div>
@@ -701,6 +701,16 @@ function MyApp({ Component, pageProps }) {
                 />
               </div>
               <div className="w50">
+                <label>Fee address</label>
+                <input
+                  ref={startCommunityGameFeeAddress}
+                  type="text"
+                  defaultValue={activeAddress}
+                />
+              </div>
+            </div>
+            <div className="row">
+              <div className="w50">
                 <label>Ticket price</label>
                 <input
                   ref={startCommunityGameTicketPrice}
@@ -708,38 +718,6 @@ function MyApp({ Component, pageProps }) {
                   defaultValue="1"
                   min="0"
                   max="10000000"
-                />
-              </div>
-            </div>
-            <div className="row">
-              <div className="w50">
-                <label>Max players</label>
-                <input
-                  ref={startCommunityGameMaxPlayers}
-                  type="number"
-                  defaultValue="20"
-                  min="10"
-                  max="65535"
-                />
-              </div>
-              <div className="w50">
-                <label>Max tickets per player</label>
-                <input
-                  ref={startCommunityGameMaxTicketsPlayer}
-                  type="number"
-                  defaultValue="20"
-                  min="1"
-                  max="50"
-                />
-              </div>
-            </div>
-            <div className="row">
-              <div className="w50">
-                <label>Fee address</label>
-                <input
-                  ref={startCommunityGameFeeAddress}
-                  type="text"
-                  defaultValue={activeAddress}
                 />
               </div>
               <div className="w50">
@@ -753,14 +731,40 @@ function MyApp({ Component, pageProps }) {
                 />
               </div>
             </div>
+            <div className="row">
+              <div className="w50">
+                <label>Max tickets per player</label>
+                <input
+                  ref={startCommunityGameMaxTicketsPlayer}
+                  type="number"
+                  defaultValue="20"
+                  min="1"
+                  max="50"
+                />
+              </div>
+              <div className="w50">
+                <label>Max players</label>
+                <input
+                  ref={startCommunityGameMaxPlayers}
+                  type="number"
+                  defaultValue="20"
+                  min="10"
+                  max="65535"
+                />
+              </div>
+            </div>
           </div>
           <div className="buttons">
             <button
               onClick={() => startCommunityGame(gameContract)}
               className="button">
-              startCommunityGame
+              Start community game
             </button>
           </div>
+        </div>
+      </div>
+      <div className="tools">
+        <div className="container">
           <h3>Information</h3>
           <div className="buttons">
             <div
