@@ -21,7 +21,8 @@ function GamesList({
   setGames,
   setAllowances,
   setTokens,
-  hasRole
+  hasRole,
+  endGame
 }) {
 	if (!gameContract || !web3)
 		return null;
@@ -408,6 +409,7 @@ function GamesList({
 							setAllowance={setAllowance}
 							getAllowance={getAllowance}
 							hasRole={hasRole}
+							endGame={endGame}
 						/>
 					);
 				})}

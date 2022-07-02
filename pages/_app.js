@@ -414,7 +414,7 @@ function MyApp({ Component, pageProps }) {
       let maxPlayers = web3.utils.toBN(startCommunityGameMaxPlayers.current.value);
       let maxTicketsPlayer = web3.utils.toBN(startCommunityGameMaxTicketsPlayer.current.value);
 
-      let results = await gameContract.methods.startCommunityGame(
+      let results = await gameContract.methods.startGame(
 
         // Token address
         startCommunityGameTokenAddress.current.value,
@@ -443,7 +443,7 @@ function MyApp({ Component, pageProps }) {
    * Mangement: 
    */
     const endCommunityGame = async (_gameContract, _gameNumber) => {
-    let results = await _gameContract.methods.endCommunityGame(
+    let results = await _gameContract.methods.endGame(
 
       // Game number
       _gameNumber
@@ -587,7 +587,7 @@ function MyApp({ Component, pageProps }) {
               onClick={(e) => {
                 if (e.target.tagName === 'DIV') {
                   console.log('endCommunityGame ID: ' + endCommunityGameId.current.value);
-                  endCommunityGame(
+                  endGame(
                     gameContract,
                     web3.utils.toBN(endCommunityGameId.current.value)
                   )
@@ -813,6 +813,7 @@ function MyApp({ Component, pageProps }) {
         setTokens={setTokens}
         setRole={setRole}
         hasRole={hasRole}
+        endGame={endGame}
       />
       <div className="container">
         <button
