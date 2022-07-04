@@ -12,12 +12,14 @@ const GameMetrics = ({
 	if (gameTokenMetadata.state === 0) return false;
 
 	let labels = [
-		['playerCount', 'Total number of players currently in this game'],
-		['ticketCount', 'Total number of tickets bought by players'],
-		['maxPlayers', 'Maximum number of players allowed'],
-		['maxTicketsPlayer', 'Maximum number of tickets, a single player can have'],
-		['feePercent', 'The amount in percent, that will be deducted from the ticket prize pot'],
-		['feeAddress', 'The destination address, where the fee percentage will be sent'],
+		['playerCount', 'Player count', 'Total number of players currently in this game'],
+		['ticketCount', 'Ticket count', 'Total number of tickets bought by players'],
+		['maxPlayers', 'Max players', 'Maximum number of players allowed'],
+		['maxTicketsPlayer', 'Max tickets per player', 'Maximum number of tickets, a single player can have'],
+		['feePercent', 'Fee percent', 'The amount in percent, that will be deducted from the ticket prize pot'],
+		['feeAddress', 'Fee address', 'The destination address, where the fee percentage will be sent'],
+		['ownerAddress', 'Owner address', 'The user address, that started this game.'],
+		['winnerAddress', 'Winner address', 'The winner address, that won the game pots.']
 	];
 	
 	const items = Object.entries(game).map(([key, val]) => {
@@ -30,6 +32,11 @@ const GameMetrics = ({
 			|| key === 'winnerResult'
 		) return null;
 
+		// Get `key` label records
+		const keyLabel = labels.filter(function (label) {
+			return label[0] === key;
+		});
+
 		// Shorten address
 		if (key.substring((key.length - 7)) === 'Address') {
 			let isNull = (val == '0x0000000000000000000000000000000000000000');
@@ -37,7 +44,7 @@ const GameMetrics = ({
 			return (
 				<div key={`game-${game.gameNumber}-${key}`}>
 					<div className="pill">
-						<strong>{key}</strong>
+						<strong>{keyLabel.length ? keyLabel[0][1] : key}</strong>
 						<div title={val}>
 							{isNull
 								? `－`
@@ -69,7 +76,7 @@ const GameMetrics = ({
 		return (
 			<div key={`game-${game.gameNumber}-${key}`}>
 				<div className="pill">
-					<strong>{key}</strong>
+					<strong>{keyLabel.length ? keyLabel[0][1] : key}</strong>
 					<div>{val}</div>
 				</div>
 			</div>
