@@ -325,8 +325,13 @@ ul {
       > .grid {
         .row {
           > div {
+            &:first-child {
+              > div {
+                padding: 1em .5em 1em 1em;
+              }
+            }
             > div {
-              padding: 1em;
+              padding: 1em 1em 1em .5em;
             }
           }
         }
