@@ -435,7 +435,7 @@ ul {
     }
     .items {
       padding: .5em;
-      margin-top: 2em;
+      margin-top: 1.5em;
       > div {
         > div {
           display: inline-block;
@@ -467,8 +467,8 @@ ul {
         }
         background-color: #fff;
         color: #000;
-        border-radius: .5em;
-        padding: .5em .25em .25em;
+        border-radius: .25em;
+        padding: 0.5em 0.125em 0.125em;
         font-weight: 500;
         width: 90%;
         margin: 0 auto;
