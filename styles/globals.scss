@@ -382,6 +382,12 @@ ul {
           margin: 0;
         }
       }
+      &.empty {
+        > div {
+          background-color: #fff;
+          font-weight: 500;
+        }
+      }
       .panels {
         background-color: #f4d31e;
         border-radius: .5em;
@@ -453,6 +459,7 @@ ul {
           border-radius: .25em;
           padding: .5em;
           margin: .5em 0 0;
+          text-transform: none;
         }
         background-color: #fff;
         color: #000;
@@ -461,6 +468,7 @@ ul {
         font-weight: 500;
         width: 90%;
         margin: 0 auto;
+        text-transform: uppercase;
       }
     }
     .tools {

@@ -15,7 +15,7 @@ const GameTickets = ({
 
 	if (!gameTickets || !gameTickets[activeAddress] || !gameTickets[activeAddress].length) {
 		return (
-			<div key={`gameTickets-${game.gameNumber}`} className="result">
+			<div key={`gameTickets-${game.gameNumber}`} className="result empty">
 				<div className="panels">
 					<div>
 						<p>You don&apos;t have any tickets in this game.</p>
