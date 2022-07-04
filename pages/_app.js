@@ -12,6 +12,7 @@ import {
   gameTrophyAddress,
   tokenAddress,
   feeAddress,
+  EXPLORER_ADDRESS_URI,
 	CALLER_ROLE,
 	MANAGER_ROLE,
   LOCAL_STORAGE_KEY_ROLES,
@@ -26,9 +27,10 @@ import '../styles/globals.scss'
 // APP
 
 function MyApp({ Component, pageProps }) {
+  const [menu, setMenu] = useState(0)
+
   const [web3, setWeb3] = useState(null)
   const [activeAddress, setAddress] = useState(null)
-  // const [addresses, setAddresses] = useState(null)
   const [connected, setConnected] = useState(false)
 
   const [gameContract, setGameContract] = useState(null)
@@ -547,18 +549,98 @@ function MyApp({ Component, pageProps }) {
     <>
       <header>
         <div className="container">
-          <h3>Wallet</h3>
-          <div className="buttons">
-            <button className="button" onClick={() => (connected ? disconnect() : connect())}>
-              { connected
-                ? activeAddress.length > 10 ? activeAddress.slice(0,4) + '...' + activeAddress.slice(-4) : activeAddress
-                : 'Connect'
-              }
-            </button>
+          <div className="grid">
+            <div className="row">
+              <div className="sm-50">
+                <div className="buttons md-text-right">
+                  {/* <button
+                    onClick={() => {
+                      setMenu(!menu);
+                    }}
+                    className={(() => {
+                      let arr = [
+                        'button'
+                      ];
+              
+                      // if ((menu % 2) == 0)
+                      //   arr.push('active');
+                      
+                      return arr.join(' ');
+                    })()}
+                  >
+                    FAQ
+                  </button> */}
+                  <button
+                    onClick={() => {
+                      setMenu(!menu);
+                    }}
+                    className={(() => {
+                      let arr = [
+                        'button'
+                      ];
+              
+                      if (menu)
+                        arr.push('active');
+                      
+                      return arr.join(' ');
+                    })()}
+                  >
+                    Start raffle
+                  </button>
+                </div>
+              </div>
+              <div className="sm-50">
+                <div className="buttons md-text-left">
+                  <button
+                    className="button"
+                    onClick={() => connected ? disconnect() : connect()}
+                  >
+                    🗲 { connected
+                      ? activeAddress.length > 10 ? activeAddress.slice(0,6) + '...' + activeAddress.slice(-4) : activeAddress
+                      : 'Connect'
+                    }
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </header>
-      <div className={panelManagementClasses()}>
+      <div className="welcome">
+        <div className="container">
+          <div className="grid">
+            <div className="row">
+              <div className="text-left">
+                <h1>BlockRaffle, an open-source blockchain raffle service (currently in beta).</h1>
+                <h2>Run your own community raffle for tokens, and NFTs; for charities, air-drops, or just prizes!</h2>
+                
+                <p>
+                  <ul>
+                    <li>Each raffle can be set up to donate an optional fee (taken from <strong>P#0</strong>, which is the primary ticket pot), at the end of each game.</li>
+                    <li>After a game has started, additional prizes can be added and removed. All other game parameters (value of primary ticket pot, ticket price, fee, etc.) <strong>CANNOT</strong> be changed.</li>
+                    <li>A fee of 5% (taken from P#0) is transfered to the treasury address. This is taken at the end of the game, before the optional game fee.</li>
+                    <li>A winner is guaraneed at the end of every game!</li>
+                    <li>A game can only be ended by its owner, or management staff.</li>
+                  </ul>
+                </p>
+                <p>This user interface is still under development, with the aim to eventually deploy it directly onto blockchain storage for further decentralisation (currently on AWS S3). This apps appearance will likely change in the near future.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className={(() => {
+        let arr = [
+          'tools'
+        ];
+        if (
+          !hasRole(CALLER_ROLE)
+          && !hasRole(MANAGER_ROLE)
+        )
+          arr.push('hide');
+        
+        return arr.join(' ');
+      })()}>
         <div className="container">
           <h3>Management &ndash; Games</h3>
           <div className="buttons">
@@ -685,116 +767,101 @@ function MyApp({ Component, pageProps }) {
           </div>
         </div>
       </div>
-      <div className="tools">
+      <div className={(() => {
+        let arr = [
+          'raffle'
+        ];
+
+        if (!menu)
+          arr.push('hide');
+        
+        return arr.join(' ');
+      })()}>
         <div className="container">
-          <h3>Start a community raffle</h3>
           <div className="grid">
             <div className="row">
-            </div>
-            <div className="row">
-              <div className="w50">
-                <label>Ticket token address</label>
-                <input
-                  ref={startCommunityGameTokenAddress}
-                  type="text"
-                  defaultValue={tokenAddress}
-                />
+              <div className="md-50 text-left">
+                <h2>Start a community raffle</h2>
+                <p>Tip: Copy and paste from a trusted source, then verify using a tool such as &quot;Search/Find&quot; to highlight your pasted values against your source. This will ensure there isn't any malware on your device, potentialy changing addresses!</p>
+                <h3>Adding additional prizes</h3>
+                <p>Once game has started, you can add (and remove) additional prize pots, such as other tokens, or NFTs</p>
+                <h3>Remember</h3>
+                <p>Always double check the form values, before starting the game. You can not change these parameters after the game has started.</p>
+                <p>Prefer direct contract interaction? <a href={`${EXPLORER_ADDRESS_URI}${gameAddress}`}>{gameAddress}</a></p>
               </div>
-              <div className="w50">
-                <label>Fee address</label>
-                <input
-                  ref={startCommunityGameFeeAddress}
-                  type="text"
-                  defaultValue={activeAddress}
-                />
+              <div className="md-50">
+                <div className="grid">
+                  <div className="row">
+                    <div className="md-50">
+                      <label>Ticket token address</label>
+                      <input
+                        ref={startCommunityGameTokenAddress}
+                        type="text"
+                        defaultValue={tokenAddress}
+                      />
+                    </div>
+                    <div className="md-50">
+                      <label>Fee address</label>
+                      <input
+                        ref={startCommunityGameFeeAddress}
+                        type="text"
+                        defaultValue={activeAddress}
+                      />
+                    </div>
+                  </div>
+                  <div className="row">
+                    <div className="md-50">
+                      <label>Ticket price</label>
+                      <input
+                        ref={startCommunityGameTicketPrice}
+                        type="text"
+                        defaultValue="1"
+                        min="0"
+                        max="10000000"
+                      />
+                    </div>
+                    <div className="md-50">
+                      <label>Fee percent</label>
+                      <input
+                        ref={startCommunityGameFeePercent}
+                        type="text"
+                        defaultValue="10"
+                        min="0"
+                        max="100"
+                      />
+                    </div>
+                  </div>
+                  <div className="row">
+                    <div className="md-50">
+                      <label>Max tickets per player</label>
+                      <input
+                        ref={startCommunityGameMaxTicketsPlayer}
+                        type="number"
+                        defaultValue="20"
+                        min="1"
+                        max="50"
+                      />
+                    </div>
+                    <div className="md-50">
+                      <label>Max players</label>
+                      <input
+                        ref={startCommunityGameMaxPlayers}
+                        type="number"
+                        defaultValue="20"
+                        min="10"
+                        max="65535"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div className="buttons">
+                  <button
+                    onClick={() => startCommunityGame(gameContract)}
+                    className="button">
+                    Start game
+                  </button>
+                </div>
               </div>
-            </div>
-            <div className="row">
-              <div className="w50">
-                <label>Ticket price</label>
-                <input
-                  ref={startCommunityGameTicketPrice}
-                  type="text"
-                  defaultValue="1"
-                  min="0"
-                  max="10000000"
-                />
-              </div>
-              <div className="w50">
-                <label>Fee percent</label>
-                <input
-                  ref={startCommunityGameFeePercent}
-                  type="text"
-                  defaultValue="10"
-                  min="0"
-                  max="100"
-                />
-              </div>
-            </div>
-            <div className="row">
-              <div className="w50">
-                <label>Max tickets per player</label>
-                <input
-                  ref={startCommunityGameMaxTicketsPlayer}
-                  type="number"
-                  defaultValue="20"
-                  min="1"
-                  max="50"
-                />
-              </div>
-              <div className="w50">
-                <label>Max players</label>
-                <input
-                  ref={startCommunityGameMaxPlayers}
-                  type="number"
-                  defaultValue="20"
-                  min="10"
-                  max="65535"
-                />
-              </div>
-            </div>
-          </div>
-          <div className="buttons">
-            <button
-              onClick={() => startCommunityGame(gameContract)}
-              className="button">
-              Start community game
-            </button>
-          </div>
-        </div>
-      </div>
-      <div className="tools">
-        <div className="container">
-          <h3>Information</h3>
-          <div className="buttons">
-            <div
-              onClick={(e) => {
-                if (e.target.tagName === 'DIV')
-                  getGameState(
-                    gameContract,
-                    web3.utils.toBN(getGameStateId.current.value)
-                  )
-              }}
-              className="button"
-              role="button"
-              tabIndex="0">
-              <div>getGameState</div>
-              <input ref={getGameStateId} defaultValue="0" size="1" min="0" type="number" />
-            </div>
-            <div
-              onClick={(e) => {
-                if (e.target.tagName === 'DIV') {
-                  console.log('getActiveGamesMax: ' + getActiveGamesMax.current.value);
-                  getActiveGames(
-                    web3.utils.toBN(getActiveGamesMax.current.value)
-                  )
-                }
-              }}
-              className="button"
-              role="button"
-              tabIndex="0">
-              <div>getActiveGames</div>
-              <input ref={getActiveGamesMax} defaultValue="1" size="1" min="1" type="number" />
             </div>
           </div>
         </div>
@@ -819,27 +886,67 @@ function MyApp({ Component, pageProps }) {
         hasRole={hasRole}
         endGame={endGame}
       />
-      <div className="container">
-        <button
-            onClick={() => {
-              [
-                CALLER_ROLE,
-                MANAGER_ROLE
-              ]
-              .forEach(async role => {
-                console.log('role: ' + role);
-                let result = await gameContract.methods.hasRole(
-                  role,
-                  activeAddress
-                ).call();
-                if (result)
-                  setRole(role);
-              });
-            }}
-            className="button lightning"
-            title="Contract role call"
-          >✺</button>
-      </div>
+      <footer>
+        <div className="container">
+          <div className="buttons">
+            <a href={`${EXPLORER_ADDRESS_URI}${gameAddress}`} className="button">
+              Contract
+            </a>
+            <button
+              onClick={() => {
+                [
+                  CALLER_ROLE,
+                  MANAGER_ROLE
+                ]
+                .forEach(async role => {
+                  console.log('role: ' + role);
+                  let result = await gameContract.methods.hasRole(
+                    role,
+                    activeAddress
+                  ).call();
+                  if (result)
+                    setRole(role);
+                });
+              }}
+              className="button slim"
+              title="Contract role call"
+            >
+              <div className="doubled">✺</div>
+            </button>
+            <div
+              onClick={(e) => {
+                if (e.target.tagName === 'DIV')
+                  getGameState(
+                    gameContract,
+                    web3.utils.toBN(getGameStateId.current.value)
+                  )
+              }}
+              className="button"
+              title="Poll game for current data"
+              role="button"
+              tabIndex="0">
+              <div>Poll game</div>
+              <input ref={getGameStateId} defaultValue="0" size="1" min="0" type="number" />
+            </div>
+            <div
+              onClick={(e) => {
+                if (e.target.tagName === 'DIV') {
+                  console.log('getActiveGamesMax: ' + getActiveGamesMax.current.value);
+                  getActiveGames(
+                    web3.utils.toBN(getActiveGamesMax.current.value)
+                  )
+                }
+              }}
+              className="button"
+              title="Poll active games"
+              role="button"
+              tabIndex="0">
+              <div>Poll active</div>
+              <input ref={getActiveGamesMax} defaultValue="1" size="1" min="1" type="number" />
+            </div>
+          </div>
+        </div>
+      </footer>
     </>
   )
 }

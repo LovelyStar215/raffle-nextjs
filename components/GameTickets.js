@@ -28,7 +28,7 @@ const GameTickets = ({
 	ticketItems = gameTickets[activeAddress].map((val, key) => {
 		return (
 			<div className="ticket" key={`game-${game.gameNumber}-ticket-${key}`}>
-				<span>#{val}</span>
+				<span>T#{val}</span>
 			</div>
 		);
 	}, {});

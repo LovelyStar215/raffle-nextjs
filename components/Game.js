@@ -172,8 +172,8 @@ const Game = ({
 
 		return (
 			<div>
+				<h2>{price}</h2>
 				<strong>Ticket price</strong>
-				<p>{price}</p>
 			</div>
 		);
 	};
@@ -183,13 +183,15 @@ const Game = ({
 			<div className="container">
 				<div className="grid">
 					<div className="row">
-						<div className="w50">
+						<div className="md-50">
 							<div>
 								<div className="container">
 									<div className="grid">
-										<div className="row middle">
-											<div className="w50"><h4>Game #{game.gameNumber}</h4></div>
-											<div className="w50">{ticketPrice()}</div>
+										<div className="row middle banner">
+											<div className="md-50"><h4>Game #{game.gameNumber}</h4></div>
+											<div className="md-50">
+												<div className="price">{ticketPrice()}</div>
+											</div>
 										</div>
 									</div>
 								</div>
@@ -246,7 +248,7 @@ const Game = ({
 								</div>
 							</div>
 						</div>
-						<div className="w50">
+						<div className="md-50">
 							<div>
 								<GameStatus
 									game={game}
@@ -265,6 +267,11 @@ const Game = ({
 									getERC20Token={getERC20Token}
 									getERC721Token={getERC721Token}
 								/>
+								<div class="tip">
+									<div>
+										<p>Always remember to check all details above, before buying tickets. Games can be created by anyone, and be made them look simillar to another.</p>
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>

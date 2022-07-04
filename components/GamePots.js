@@ -1,5 +1,9 @@
 import React from 'react';
 
+import {
+	EXPLORER_ADDRESS_URI
+} from '../features/configure/env.js'
+
 const GamePots = ({
 	web3,
 	gameTokenMetadata,
@@ -52,12 +56,18 @@ const GamePots = ({
 							// 	value += ' ' + assetMetadata.symbol;
 							// }
 						}
+						//${EXPLORER_ADDRESS_URI}
 
 						return (
 							<div className="panel" key={`game-${game.gameNumber}-pot-${key}`}>
 								<div className="items">
+									<div>P#{key}</div>
 									<div>{pot.assetType == 1 ? 'NFT' : 'Token'}</div>
-									<div>{displayAddress}</div>
+									<div>
+										<a href={`${EXPLORER_ADDRESS_URI}${pot.assetAddress}`}>
+											{displayAddress}
+										</a>
+									</div>
 									<div>{value}</div>
 								</div>
 							</div>
