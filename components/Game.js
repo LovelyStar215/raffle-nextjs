@@ -269,7 +269,7 @@ const Game = ({
 								/>
 								<div class="tip">
 									<div>
-										<p>Always remember to check all details above, before buying tickets. Games can be created by anyone, and be made them look simillar to another.</p>
+										<p>Game numbers are unique. Always remember to check game details before buying tickets. Games can be created by anyone, and be made to look simillar to another.</p>
 									</div>
 								</div>
 							</div>
