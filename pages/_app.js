@@ -603,8 +603,8 @@ function MyApp({ Component, pageProps }) {
                   </button>
                 </div>
                 <div className="text-left">
-                  <h1>BlockRaffle, an open-source blockchain raffle service (currently in beta).</h1>
-                  <h2>Run your own community raffle for tokens, and NFTs; for charities, air-drops, or just prizes!</h2>
+                  <h1>...an Ethereum raffle app</h1>
+                  <h2>Create raffles for any number of NFTs and tokens, optional fee, with token/price of your choice.</h2>
                   
                   <p>
                     <ul>
