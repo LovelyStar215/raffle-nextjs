@@ -570,6 +570,11 @@ function MyApp({ Component, pageProps }) {
                   >
                     FAQ
                   </button> */}
+                  
+                </div>
+              </div>
+              <div className="sm-50">
+                <div className="buttons md-text-left">
                   <button
                     onClick={() => {
                       setMenu(!menu);
@@ -587,10 +592,6 @@ function MyApp({ Component, pageProps }) {
                   >
                     Start raffle
                   </button>
-                </div>
-              </div>
-              <div className="sm-50">
-                <div className="buttons md-text-left">
                   <button
                     className="button"
                     onClick={() => connected ? disconnect() : connect()}
@@ -601,34 +602,26 @@ function MyApp({ Component, pageProps }) {
                     }
                   </button>
                 </div>
+                <div className="text-left">
+                  <h1>BlockRaffle, an open-source blockchain raffle service (currently in beta).</h1>
+                  <h2>Run your own community raffle for tokens, and NFTs; for charities, air-drops, or just prizes!</h2>
+                  
+                  <p>
+                    <ul>
+                      <li>Each raffle can be set up to donate an optional fee (taken from <strong>P#0</strong>, which is the primary ticket pot), at the end of each game.</li>
+                      <li>After a game has started, additional prizes can be added and removed. All other game parameters (value of primary ticket pot, ticket price, fee, etc.) <strong>CANNOT</strong> be changed.</li>
+                      <li>A fee of 5% (taken from P#0) is transfered to the treasury address. This is taken at the end of the game, before the optional game fee.</li>
+                      <li>A winner is guaraneed at the end of every game!</li>
+                      <li>A game can only be ended by its owner, or management staff.</li>
+                    </ul>
+                  </p>
+                  <p>This user interface is still under development, with the aim to eventually deploy it directly onto blockchain storage for further decentralisation (currently on AWS S3). This apps appearance will likely change in the near future.</p>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </header>
-      <div className="welcome">
-        <div className="container">
-          <div className="grid">
-            <div className="row">
-              <div className="text-left">
-                <h1>BlockRaffle, an open-source blockchain raffle service (currently in beta).</h1>
-                <h2>Run your own community raffle for tokens, and NFTs; for charities, air-drops, or just prizes!</h2>
-                
-                <p>
-                  <ul>
-                    <li>Each raffle can be set up to donate an optional fee (taken from <strong>P#0</strong>, which is the primary ticket pot), at the end of each game.</li>
-                    <li>After a game has started, additional prizes can be added and removed. All other game parameters (value of primary ticket pot, ticket price, fee, etc.) <strong>CANNOT</strong> be changed.</li>
-                    <li>A fee of 5% (taken from P#0) is transfered to the treasury address. This is taken at the end of the game, before the optional game fee.</li>
-                    <li>A winner is guaraneed at the end of every game!</li>
-                    <li>A game can only be ended by its owner, or management staff.</li>
-                  </ul>
-                </p>
-                <p>This user interface is still under development, with the aim to eventually deploy it directly onto blockchain storage for further decentralisation (currently on AWS S3). This apps appearance will likely change in the near future.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
       <div className={(() => {
         let arr = [
           'tools'
@@ -781,7 +774,7 @@ function MyApp({ Component, pageProps }) {
           <div className="grid">
             <div className="row">
               <div className="md-50 text-left">
-                <h2>Start a community raffle</h2>
+                <h1>Start a raffle</h1>
                 <p>Tip: Copy and paste from a trusted source, then verify using a tool such as &quot;Search/Find&quot; to highlight your pasted values against your source. This will ensure there isn't any malware on your device, potentialy changing addresses!</p>
                 <h3>Adding additional prizes</h3>
                 <p>Once game has started, you can add (and remove) additional prize pots, such as other tokens, or NFTs</p>

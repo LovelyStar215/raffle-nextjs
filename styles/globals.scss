@@ -82,9 +82,10 @@ body {
 }
 
 header {
-  background-color: #000;
+  background-color: #9accd5;
   padding-bottom: 1em;
   border-bottom: .25em solid #fff;
+  color: #000;
 }
 
 footer {
@@ -283,15 +284,8 @@ ul {
   }
 }
 
-.welcome {
-  background-color: #f4d31e;
-  color: #000;
-  padding-bottom: 1em;
-  border-bottom: .25em solid #fff;
-}
-
 .raffle {
-  background-color: #155b20;
+  background-color: #07554a;
   border-bottom: .25em solid #fff;
   .row > div {
     padding: 1em;
@@ -312,10 +306,11 @@ ul {
 .tools {
   background-color: #461b4d;
   padding: 0 0 1em !important;
+  border-bottom: .25em solid #fff;
 }
 
 .games {
-  background-color: #1d0182;
+  background-color: #012d82;
   padding-bottom: 1em;
   .game {
     padding: .5em;
@@ -341,6 +336,11 @@ ul {
           }
         }
       }
+    }
+    h4 {
+      font-size: 3em;
+      font-weight: 700;
+      padding: 0;
     }
     .tip {
       background-color: #fff;
