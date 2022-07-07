@@ -11,14 +11,14 @@ const GameStatus = ({
 		return (
 			<div className="result state active">
 				<div className="panels">
-					<h5>{game.status === '2' ? `Community game is active` : `House game is active`}</h5>
+					<h5>{game.status === '2' ? `Active community raffle` : `Active house raffle`}</h5>
 					<p>{game.status === '2'
-						? <span>This is an independent game started by&nbsp; 
+						? <span>Started by&nbsp; 
 							<a href={`${EXPLORER_ADDRESS_URI}${game.ownerAddress}`}>
 								{game.ownerAddress}
 							</a>
 						</span>
-						: `This game was started by the management team`
+						: `This raffle was started by the management team`
 					}</p>
 				</div>
 			</div>

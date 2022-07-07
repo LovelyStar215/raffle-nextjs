@@ -170,7 +170,7 @@ const Game = ({
 		return (
 			<div>
 				<h2>{price}</h2>
-				<strong>Price per ticket</strong>
+				<span>Price per ticket</span>
 			</div>
 		);
 	};
