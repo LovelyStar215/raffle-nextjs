@@ -49,9 +49,6 @@ const Game = ({
 
 	let gameHasEnded = (game.status == 0);
 
-	// User has the necessary contract roles?
-	let hasManagementAccess = true; // TBC
-
 	// Set current game token allowance/approval state
 	let gameTokenApprovalMax;
 	let gameTokenAllowance;
@@ -173,7 +170,7 @@ const Game = ({
 		return (
 			<div>
 				<h2>{price}</h2>
-				<strong>Ticket price</strong>
+				<strong>Price per ticket</strong>
 			</div>
 		);
 	};
@@ -188,7 +185,9 @@ const Game = ({
 								<div className="container">
 									<div className="grid">
 										<div className="row middle banner">
-											<div className="md-50"><h4>Game #{game.gameNumber}</h4></div>
+											<div className="md-50">
+												<h4>R#{game.gameNumber}</h4>
+											</div>
 											<div className="md-50">
 												<div className="price">{ticketPrice()}</div>
 											</div>
@@ -269,7 +268,7 @@ const Game = ({
 								/>
 								<div class="tip">
 									<div>
-										<p>Game numbers are unique. Always remember to check game details before buying tickets. Games can be created by anyone, and be made to look simillar to another.</p>
+										<p>Game numbers are unique. Always remember to verify game details before buying tickets. Games can be created by anyone, and may look simillar to another.</p>
 									</div>
 								</div>
 							</div>
