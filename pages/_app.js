@@ -600,7 +600,7 @@ function MyApp({ Component, pageProps }) {
                     </ul>
                   </p>
                   <div className="tip">
-                    <p>This user interface is still under development, with the aim to eventually deploy it directly onto blockchain storage for further decentralisation (currently on AWS S3).</p>
+                    <p>This user interface is still under development, with the aim to eventually deploy it directly onto blockchain storage, for further decentralisation.</p>
                   </div>
                 </div>
               </div>
