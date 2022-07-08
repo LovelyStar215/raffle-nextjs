@@ -581,7 +581,7 @@ function MyApp({ Component, pageProps }) {
                     onClick={() => connected ? disconnect() : connect()}
                   >
                     🗲 { connected
-                      ? activeAddress.length > 10 ? activeAddress.slice(0,6) + '...' + activeAddress.slice(-4) : activeAddress
+                      ? activeAddress.length > 10 ? '0x' + activeAddress.slice(2,6).toUpperCase() + '...' + activeAddress.slice(-4).toUpperCase() : activeAddress
                       : 'Connect'
                     }
                   </button>
@@ -594,13 +594,13 @@ function MyApp({ Component, pageProps }) {
                     <ul>
                       <li>Each raffle can be set up to donate an optional fee (taken from <strong>P#0</strong>, which is the primary ticket pot), at the end of each game.</li>
                       <li>After a game has started, only new prizes can be added. Nothing else can be changed.</li>
-                      <li>A fee  (currently 5%, can vary 0~20%) (taken from P#0) is transfered to the treasury address. This is taken at the end of the game, before the optional game fee.</li>
                       <li>A winner is guaraneed at the end of every game!</li>
+                      <li>In community raffles; a fee  (currently 5%, can vary 0~20%) (taken from P#0) is transfered to the treasury address. This is taken at the end of the game, before the optional game fee.</li>
                       <li>A game can only be ended by its owner, or management staff.</li>
                     </ul>
                   </p>
                   <div className="tip">
-                    <p>This user interface is still under development, with the aim to eventually deploy it directly onto blockchain storage for further decentralisation (currently on AWS S3). This apps appearance will likely change in the near future.</p>
+                    <p>This user interface is still under development, with the aim to eventually deploy it directly onto blockchain storage for further decentralisation (currently on AWS S3).</p>
                   </div>
                 </div>
               </div>
