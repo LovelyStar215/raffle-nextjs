@@ -93,6 +93,24 @@ footer {
   padding-bottom: 1em;
 }
 
+@keyframes floatSmall {
+  0% {
+    transform: translate(-50%, -25%);
+  }
+  100% {
+    transform: translate(-50%, -28%);
+  }
+}
+
+@keyframes floatMain {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-3%);
+  }
+}
+
 .icons {
   position: relative;
   padding-top: 1em;
@@ -104,7 +122,14 @@ footer {
 .icon {
   &:first-of-type {
     position: absolute;
-    transform: scale(.5) translateY(-75%);
+    width: 50%;
+    left: 50%;
+    transform: translate(-50%, -25%);
+    animation: floatSmall alternate 1s .5s infinite ease-in-out;
+    z-index: 1;
+  }
+  &:last-of-type {
+    animation: floatMain alternate 1s 0s infinite ease-in-out;
   }
   .left,
   .right {
