@@ -125,11 +125,11 @@ footer {
     width: 50%;
     left: 50%;
     transform: translate(-50%, -25%);
-    animation: floatSmall alternate 1s .5s infinite ease-in-out;
+    animation: floatSmall alternate 1.5s .75s infinite ease-in-out;
     z-index: 1;
   }
   &:last-of-type {
-    animation: floatMain alternate 1s 0s infinite ease-in-out;
+    animation: floatMain alternate 1.5s 0s infinite ease-in-out;
   }
   .left,
   .right {
