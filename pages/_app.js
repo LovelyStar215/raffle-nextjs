@@ -22,6 +22,8 @@ import {
   LOCAL_STORAGE_KEY_ALLOWANCES
 } from '../features/configure/env';
 
+import { HeaderIcon } from '../components/HeaderIcon'
+
 import '../styles/globals.scss'
 
 // APP
@@ -552,26 +554,7 @@ function MyApp({ Component, pageProps }) {
           <div className="grid">
             <div className="row">
               <div className="sm-50">
-                <div className="buttons md-text-right">
-                  {/* <button
-                    onClick={() => {
-                      setMenu(!menu);
-                    }}
-                    className={(() => {
-                      let arr = [
-                        'button'
-                      ];
-              
-                      // if ((menu % 2) == 0)
-                      //   arr.push('active');
-                      
-                      return arr.join(' ');
-                    })()}
-                  >
-                    FAQ
-                  </button> */}
-                  
-                </div>
+                <HeaderIcon />
               </div>
               <div className="sm-50">
                 <div className="buttons md-text-left">

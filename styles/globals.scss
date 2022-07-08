@@ -75,7 +75,7 @@ strong {
 
 html,
 body {
-  background-color: #222;
+  background-color: #012d82;
   color: #fff;
   text-align: center;
   font-family: $body-font;
@@ -91,6 +91,28 @@ header {
 footer {
   background-color: #000;
   padding-bottom: 1em;
+}
+
+.icons {
+  position: relative;
+  padding-top: 1em;
+  width: 80%;
+  height: auto;
+  margin: 0 auto;
+}
+
+.icon {
+  &:first-of-type {
+    position: absolute;
+    transform: scale(.5) translateY(-75%);
+  }
+  .left,
+  .right {
+    fill: #f4d31e;
+  }
+  .top {
+    fill: #6a6a6a;
+  }
 }
 
 .doubled {
@@ -310,7 +332,6 @@ ul {
 }
 
 .games {
-  background-color: #012d82;
   padding-bottom: 1em;
   .game {
     padding: .5em;
