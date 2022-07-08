@@ -761,7 +761,7 @@ function MyApp({ Component, pageProps }) {
             <div className="row">
               <div className="md-50 text-left">
                 <h1>Start a raffle</h1>
-                <p>Tip: Copy and paste from a trusted source, then verify using a tool such as &quot;Search/Find&quot; to highlight your pasted values against your source. This will ensure there isn't any malware on your device, potentialy changing addresses!</p>
+                <p>Tip: Copy and paste from a trusted source, then verify using a tool such as &quot;Search/Find&quot; to highlight your pasted values against your source. This will ensure there isn&apos;t any malware on your device, potentialy changing addresses!</p>
                 <h3>Adding additional prizes</h3>
                 <p>Once game has started, you can add (and remove) additional prize pots, such as other tokens, or NFTs</p>
                 <h3>Remember</h3>

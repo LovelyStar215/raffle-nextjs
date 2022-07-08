@@ -266,7 +266,7 @@ const Game = ({
 									getERC20Token={getERC20Token}
 									getERC721Token={getERC721Token}
 								/>
-								<div class="tip">
+								<div className="tip">
 									<div>
 										<p>Game numbers are unique. Always remember to verify game details before buying tickets. Games can be created by anyone, and may look simillar to another.</p>
 									</div>

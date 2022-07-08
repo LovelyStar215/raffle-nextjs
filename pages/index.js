@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 import {
   IERC20MetadataABI,
@@ -24,6 +24,8 @@ function GamesList({
   hasRole,
   endGame
 }) {
+  const [gameListRenderMode, setGameListRenderMode] = useState(-3);
+
 	if (!gameContract || !web3)
 		return null;
 
@@ -32,8 +34,6 @@ function GamesList({
 		getActiveGames(10, runOnce);
 		return null;
 	}
-
-  const [gameListRenderMode, setGameListRenderMode] = useState(-3);
 
   const setToken = (data) => {
     // console.log('setToken');
@@ -364,28 +364,50 @@ function GamesList({
     return list;
   };
 
+  // const changeGameListRenderMode = (e) => {
+  //   let _gameListRenderMode = gameListRenderMode;
+  //   let val = parseInt(e.target.getAttribute('data-value'));
+  //   if (val === 0) {
+  //     setGameListRenderMode(0);
+  //   } else {
+  //     if (_gameListRenderMode >= val) {
+  //       setGameListRenderMode(_gameListRenderMode - val);
+  //     } else {
+  //       setGameListRenderMode(_gameListRenderMode + val);
+  //     }
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   console.log('gameListRenderMode: ' + gameListRenderMode);
+  // }, [gameListRenderMode]);
+
+//aws s3api put-object-acl --bucket caedmon --acl public-read
+
   return (
     <div key={`gamesList`} className="games">
 			<div className="container">
-        <h3>Display</h3>
         <div className="buttons">
+          {/* <button onClick={e => changeGameListRenderMode(e)} data-value="2">Community</button>
+          <button onClick={e => changeGameListRenderMode(e)} data-value="1">House</button>
+          <button onClick={e => changeGameListRenderMode(e)} data-value="0">Finished</button> */}
           <div
-              className="button"
-              role="button"
-              tabIndex="0">
-                <div>Filter:</div>
-                <select
-                  onChange={e => setGameListRenderMode(parseInt(e.target.value))}
-                  value={gameListRenderMode}
-                  defaultValue="-1">
-                    <option value="-3">Active games (newest first)</option>
-                    <option value="-2">Community games (newest first)</option>
-                    <option value="-1">House games (newest first)</option>
-                    <option value="0">Finished games (newest first)</option>
-                    <option value="1">House games (oldest first)</option>
-                    <option value="2">Community games (oldest first)</option>
-                    <option value="3">Active games (oldest first)</option>
-                </select>
+            className="button"
+            role="button"
+            tabIndex="0">
+              <div>Filter:</div>
+              <select
+                onChange={e => setGameListRenderMode(parseInt(e.target.value))}
+                value={gameListRenderMode}
+                defaultValue="-1">
+                  <option value="-3">Active games (newest first)</option>
+                  <option value="-2">Community games (newest first)</option>
+                  <option value="-1">House games (newest first)</option>
+                  <option value="0">Finished games (newest first)</option>
+                  <option value="1">House games (oldest first)</option>
+                  <option value="2">Community games (oldest first)</option>
+                  <option value="3">Active games (oldest first)</option>
+              </select>
 					</div>
         </div>
 				{gameRenderList().map((gameNumber) => {
