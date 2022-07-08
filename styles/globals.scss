@@ -274,6 +274,19 @@ label {
     background-color: #ccc;
     border-color: #007d1f;
   }
+  &.inverse {
+    background-color: #000;
+    color: #fff;
+    &:hover {
+      background-color: #464646;
+      border-color: #002593;
+    }
+    &.active,
+    &:focus {
+      background-color: #464646;
+      border-color: #007d1f;
+    }
+  }
 }
 
 .button {

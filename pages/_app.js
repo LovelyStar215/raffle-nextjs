@@ -564,7 +564,8 @@ function MyApp({ Component, pageProps }) {
                     }}
                     className={(() => {
                       let arr = [
-                        'button'
+                        'button',
+                        'inverse'
                       ];
               
                       if (menu)
@@ -576,7 +577,7 @@ function MyApp({ Component, pageProps }) {
                     Start raffle
                   </button>
                   <button
-                    className="button"
+                    className="button inverse"
                     onClick={() => connected ? disconnect() : connect()}
                   >
                     🗲 { connected
