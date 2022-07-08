@@ -25,16 +25,16 @@ $body-font: 'Inter', sans-serif;
 }
 
 h1, h2, h3 {
-  padding: 1em 0 0;
+  padding: .5em 0 0;
   font-weight: 700;
 }
 
 h1 {
-  font-size: 1.75em;
+  font-size: 2.75em;
 }
 
 h2 {
-  font-size: 1.5em;
+  font-size: 1.75em;
 }
 
 h3 {
@@ -86,6 +86,7 @@ header {
   padding-bottom: 1em;
   border-bottom: .25em solid #fff;
   color: #000;
+  line-height: 1.25;
 }
 
 footer {
@@ -235,11 +236,11 @@ footer {
   width: 100%;
   &:hover {
     background-color: #ccc;
-    border-color: #002593;
+    border-color: #f4d31e;
   }
   &:focus {
     background-color: #ccc;
-    border-color: #007d1f;
+    border-color: #01822d;
   }
 }
 
@@ -266,25 +267,23 @@ label {
   font-family: $body-font;
   margin: .5em;
   &:hover {
-    background-color: #ccc;
-    border-color: #002593;
+    background-color: #f4d31e;
+    border-color: #f4d31e;
   }
   &.active,
   &:focus {
-    background-color: #ccc;
-    border-color: #007d1f;
+    background-color: #01822d;
+    border-color: #01822d;
   }
   &.inverse {
     background-color: #000;
     color: #fff;
     &:hover {
-      background-color: #464646;
-      border-color: #002593;
+      border-color: #f4d31e;
     }
     &.active,
     &:focus {
-      background-color: #464646;
-      border-color: #007d1f;
+      border-color: #01822d;
     }
   }
 }
@@ -529,6 +528,12 @@ ul {
             text-align: center;
           }
         }
+      }
+      &.metrics {
+        padding: 1.25em 0.5em 0.5em;
+        margin-top: 0.75em;
+        background-color: #6a6a6a;
+        border-radius: 0.5em;
       }
       &.mirrored > div > div > * {
         display: inline-block;

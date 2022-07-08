@@ -185,10 +185,10 @@ const Game = ({
 								<div className="container">
 									<div className="grid">
 										<div className="row middle banner">
-											<div className="md-50">
+											<div className="sm-50">
 												<h4>R#{game.gameNumber}</h4>
 											</div>
-											<div className="md-50">
+											<div className="sm-50">
 												<div className="price">{ticketPrice()}</div>
 											</div>
 										</div>
