@@ -592,13 +592,15 @@ function MyApp({ Component, pageProps }) {
                   <p>
                     <ul>
                       <li>Each raffle can be set up to donate an optional fee (taken from <strong>P#0</strong>, which is the primary ticket pot), at the end of each game.</li>
-                      <li>After a game has started, additional prizes can be added and removed. All other game parameters (value of primary ticket pot, ticket price, fee, etc.) <strong>CANNOT</strong> be changed.</li>
-                      <li>A fee of 5% (taken from P#0) is transfered to the treasury address. This is taken at the end of the game, before the optional game fee.</li>
+                      <li>After a game has started, only new prizes can be added. Nothing else can be changed.</li>
+                      <li>A fee  (currently 5%, can vary 0~20%) (taken from P#0) is transfered to the treasury address. This is taken at the end of the game, before the optional game fee.</li>
                       <li>A winner is guaraneed at the end of every game!</li>
                       <li>A game can only be ended by its owner, or management staff.</li>
                     </ul>
                   </p>
-                  <p>This user interface is still under development, with the aim to eventually deploy it directly onto blockchain storage for further decentralisation (currently on AWS S3). This apps appearance will likely change in the near future.</p>
+                  <div className="tip">
+                    <p>This user interface is still under development, with the aim to eventually deploy it directly onto blockchain storage for further decentralisation (currently on AWS S3). This apps appearance will likely change in the near future.</p>
+                  </div>
                 </div>
               </div>
             </div>
