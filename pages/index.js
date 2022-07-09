@@ -6,6 +6,7 @@ import {
 } from '../features/configure/abi.js'
 
 import Game from '../components/Game'
+import { GameFilters } from '../components/GameFilters.jsx';
 
 function GamesList({
   activeAddress,
@@ -22,13 +23,10 @@ function GamesList({
   setAllowances,
   setTokens,
   hasRole,
-  endGame
+  endGame,
+  getGameState
 }) {
-  const [gameListRenderMode, setGameListRenderMode] = useState(-3);
-
-  useEffect(() => {
-    console.log('gameListRenderMode: ' + gameListRenderMode);
-  }, [gameListRenderMode]);
+  const [gameListRenderMode, setGameListRenderMode] = useState(3);
 
 	if (!gameContract || !web3)
 		return null;
@@ -362,82 +360,21 @@ function GamesList({
     });
 
     // Reverse order (newest first)
-    if (gameListRenderMode < 0)
+    if (gameListRenderMode > 0)
       return list.reverse();
 
     return list;
   };
 
-  const changeGameListRenderMode = (e) => {
-    let val = parseInt(e.target.getAttribute('data-value'));
-    // let _gameListRenderMode = gameListRenderMode;
-    // if (val === 0) {
-    //   setGameListRenderMode(0);
-    // } else {
-    //   if (_gameListRenderMode >= val) {
-    //     setGameListRenderMode(_gameListRenderMode - val);
-    //   } else {
-    //     setGameListRenderMode(_gameListRenderMode + val);
-    //   }
-    // }
-    setGameListRenderMode(val);
-  };
-
-  const classesGameListRenderMode = (val) => {
-    let _gameListRenderMode = gameListRenderMode;
-    let arr = [
-      'button'
-    ];
-
-    if (_gameListRenderMode === val)
-      arr.push('active');
-    
-    return arr.join(' ');
-  };
-
   return (
     <div key={`gamesList`} className="games">
 			<div className="container">
-        <div className="buttons">
-          <button
-            className={(() => classesGameListRenderMode(3))()}
-            onClick={e => changeGameListRenderMode(e)}
-            data-value="3"
-          >All</button>
-          <button
-            className={(() => classesGameListRenderMode(2))()}
-            onClick={e => changeGameListRenderMode(e)}
-            data-value="2"
-          >Community</button>
-          <button
-            className={(() => classesGameListRenderMode(1))()}
-            onClick={e => changeGameListRenderMode(e)}
-            data-value="1"
-          >House</button>
-          <button
-            className={(() => classesGameListRenderMode(0))()}
-            onClick={e => changeGameListRenderMode(e)}
-            data-value="0"
-          >Finished</button>
-          {/* <div
-            className="button"
-            role="button"
-            tabIndex="0">
-              <div>Filter:</div>
-              <select
-                onChange={e => setGameListRenderMode(parseInt(e.target.value))}
-                value={gameListRenderMode}
-                defaultValue="-1">
-                  <option value="-3">Active games (newest first)</option>
-                  <option value="-2">Community games (newest first)</option>
-                  <option value="-1">House games (newest first)</option>
-                  <option value="0">Finished games (newest first)</option>
-                  <option value="1">House games (oldest first)</option>
-                  <option value="2">Community games (oldest first)</option>
-                  <option value="3">Active games (oldest first)</option>
-              </select>
-					</div> */}
-        </div>
+        <GameFilters
+          gameListRenderMode={gameListRenderMode}
+          setGameListRenderMode={setGameListRenderMode}
+          getGameState={getGameState}
+          gameContract={gameContract}
+        />
 				{gameRenderList().map((gameNumber) => {
 					let game = games[gameNumber];
 					if (!game)

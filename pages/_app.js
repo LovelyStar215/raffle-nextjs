@@ -60,7 +60,6 @@ function MyApp({ Component, pageProps }) {
   const endGameId = useRef();
   const endCommunityGameId = useRef();
 
-  const getGameStateId = useRef();
   const getActiveGamesMax = useRef();
 
   const sendFundsFrom = useRef();
@@ -864,6 +863,7 @@ function MyApp({ Component, pageProps }) {
         setRole={setRole}
         hasRole={hasRole}
         endGame={endGame}
+        getGameState={getGameState}
       />
       <footer>
         <div className="container">
@@ -892,21 +892,6 @@ function MyApp({ Component, pageProps }) {
             >
               <div className="doubled">✺</div>
             </button>
-            <div
-              onClick={(e) => {
-                if (e.target.tagName === 'DIV')
-                  getGameState(
-                    gameContract,
-                    web3.utils.toBN(getGameStateId.current.value)
-                  )
-              }}
-              className="button"
-              title="Poll game for current data"
-              role="button"
-              tabIndex="0">
-              <div>Poll game</div>
-              <input ref={getGameStateId} defaultValue="0" size="1" min="0" type="number" />
-            </div>
             <div
               onClick={(e) => {
                 if (e.target.tagName === 'DIV') {
