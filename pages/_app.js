@@ -556,7 +556,7 @@ function MyApp({ Component, pageProps }) {
                 <HeaderIcon />
               </div>
               <div className="md-50">
-                <div className="buttons md-text-right">
+                <div className="buttons md-text-left">
                   <button
                     onClick={() => {
                       setMenu(!menu);
@@ -585,7 +585,7 @@ function MyApp({ Component, pageProps }) {
                     }
                   </button>
                 </div>
-                <div className="text-left">
+                <div className="md-text-left">
                   <h1>...an Ethereum raffle app</h1>
                   <h2>Create raffles for any number of NFTs, tokens, with an optional fee, at  a price and ticket token of your choice.</h2>
                   
@@ -771,7 +771,7 @@ function MyApp({ Component, pageProps }) {
                 <div className="grid">
                   <div className="row">
                     <div className="md-50">
-                      <label>Ticket token address</label>
+                      <label>Ticket token (ERC-20) address</label>
                       <input
                         ref={startCommunityGameTokenAddress}
                         type="text"
