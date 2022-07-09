@@ -557,6 +557,24 @@ ul {
           padding: .5em;
           margin: .5em 0 0;
         }
+        &.p0 > div {
+          background-color: #003c14;
+        }
+        &.p20 > div {
+          background-color: #443b07;
+        }
+        &.p40 > div {
+          background-color: #5f520b;
+        }
+        &.p60 > div {
+          background-color: #6d5f0e;
+        }
+        &.p80 > div {
+          background-color: #887612;
+        }
+        &.p100 > div {
+          background-color: #998517;
+        }
         background-color: #fff;
         color: #000;
         border-radius: .25em;

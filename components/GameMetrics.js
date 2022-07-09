@@ -58,20 +58,26 @@ const GameMetrics = ({
 				</div>
 			)
 		} else if(key === 'feePercent') {
-			val = `${val}%`;
+			let percentage = parseInt(val);
+
+			let classes = ['pill'];
+			if (percentage) {
+				for (let i = 20; i <= 100; i += 20) {
+					if (percentage >= (i-20) && percentage <= i)
+						classes.push(`p${i}`);
+				}
+			} else
+				classes.push('p0');
+
+			return (
+				<div key={`game-${game.gameNumber}-${key}`}>
+					<div className={classes.join(' ')}>
+						<strong>{keyLabel.length ? keyLabel[0][1] : key}</strong>
+						<div>{val}%</div>
+					</div>
+				</div>
+			)
 		}
-		
-		// Format wei by decimals, and add symbol
-		// else if(key === 'ticketPrice') {
-		// 	// console.log('ticketPrice-gameTokenMetadata')
-		// 	// console.log(gameTokenMetadata);
-		// 	if (gameTokenMetadata) {
-		// 		// console.log('gameItems-getERC20Token');
-		// 		// console.log(gameTokenMetadata);
-		// 		val = gameTokenMetadata.decimals === '18' ? web3.utils.fromWei(val) : val; // game._decimals
-		// 		if (gameTokenMetadata.symbol) val += ' ' + gameTokenMetadata.symbol;
-		// 	}
-		// }
 
 		return (
 			<div key={`game-${game.gameNumber}-${key}`}>
