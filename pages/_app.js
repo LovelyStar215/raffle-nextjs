@@ -552,11 +552,11 @@ function MyApp({ Component, pageProps }) {
         <div className="container">
           <div className="grid">
             <div className="row">
-              <div className="sm-50">
+              <div className="md-50">
                 <HeaderIcon />
               </div>
-              <div className="sm-50">
-                <div className="buttons md-text-left">
+              <div className="md-50">
+                <div className="buttons md-text-right">
                   <button
                     onClick={() => {
                       setMenu(!menu);

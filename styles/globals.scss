@@ -14,7 +14,17 @@ $body-font: 'Inter', sans-serif;
   }
 }
 
-// $body-font: sans-serif;
+$black: #000;
+$grey-medium: #6a6a6a;
+$white: #fff;
+
+$blue-dark: #012d82;
+$blue-medium: #2193df;
+$blue-light: #9accd5;
+
+$green: #01822d;
+
+$yellow: #f4d31e;
 
 %root {
   font-size: 1rem;
@@ -75,22 +85,35 @@ strong {
 
 html,
 body {
-  background-color: #012d82;
-  color: #fff;
+  background-color: $blue-dark;
+  color: $white;
   text-align: center;
   font-family: $body-font;
 }
 
 header {
-  background-color: #9accd5;
+  background-color: $blue-light;
   padding-bottom: 1em;
-  border-bottom: .25em solid #fff;
-  color: #000;
+  border-bottom: .25em solid $white;
+  color: $black;
   line-height: 1.25;
+  @media screen and (min-width: 600px) {
+    padding: 0 0 4em;
+    > .container > .grid {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+  }
+  @media screen and (min-width: 1024px) {
+    padding: 0 0 1em;
+    > .container > .grid {
+      max-width: 100%;
+    }
+  }
 }
 
 footer {
-  background-color: #000;
+  background-color: $black;
   padding-bottom: 1em;
 }
 
@@ -113,8 +136,8 @@ footer {
 }
 
 .tip {
-  background-color: #fff;
-  color: #000;
+  background-color: $white;
+  color: $black;
   padding: 1em;
   border-radius: .5em;
   font-weight: 500;
@@ -145,10 +168,10 @@ footer {
   }
   .left,
   .right {
-    fill: #f4d31e;
+    fill: $yellow;
   }
   .top {
-    fill: #6a6a6a;
+    fill: $grey-medium;
   }
 }
 
@@ -223,10 +246,10 @@ footer {
 }
 
 %input {
-  background-color: #fff;
-  border: .25em solid #000;
+  background-color: $white;
+  border: .25em solid $black;
   border-radius: .25em;
-  color: #000;
+  color: $black;
   padding: .5em .5em;
   font-weight: 700;
   font-size: 1em;
@@ -236,11 +259,11 @@ footer {
   width: 100%;
   &:hover {
     background-color: #ccc;
-    border-color: #f4d31e;
+    border-color: $yellow;
   }
   &:focus {
     background-color: #ccc;
-    border-color: #01822d;
+    border-color: $green;
   }
 }
 
@@ -255,10 +278,10 @@ label {
 }
 
 %button {
-  background-color: #fff;
-  border: .25em solid #000;
+  background-color: $white;
+  border: .25em solid $black;
   border-radius: 1.5em;
-  color: #000;
+  color: $black;
   padding: .75em 1em;
   cursor: pointer;
   font-weight: 700;
@@ -268,28 +291,28 @@ label {
   margin: .5em;
   &.active,
   &:focus {
-    background-color: #01822d;
-    border-color: #000;
-    color: #fff;
+    background-color: $green;
+    border-color: $black;
+    color: $white;
   }
   &:hover {
-    background-color: #f4d31e;
-    border-color: #000;
-    color: #000;
+    background-color: $yellow;
+    border-color: $black;
+    color: $black;
   }
   &.inverse {
-    background-color: #000;
-    color: #fff;
+    background-color: $black;
+    color: $white;
     &.active,
     &:focus {
-      background-color: #01822d;
-      border-color: #000;
-      color: #fff;
+      background-color: $green;
+      border-color: $black;
+      color: $white;
     }
     &:hover {
-      background-color: #f4d31e;
-      border-color: #000;
-      color: #000;
+      background-color: $yellow;
+      border-color: $black;
+      color: $black;
     }
   }
 }
@@ -314,7 +337,7 @@ label {
     margin: .75em .75em .75em 1em;
   }
   input {
-    background-color: #fff;
+    background-color: $white;
     padding: .25em;
     border-width: .125em;
     border-style: solid;
@@ -362,7 +385,7 @@ ul {
 
 .raffle {
   background-color: #07554a;
-  border-bottom: .25em solid #fff;
+  border-bottom: .25em solid $white;
   .row > div {
     padding: 1em;
   }
@@ -382,7 +405,7 @@ ul {
 .tools {
   background-color: #461b4d;
   padding: 0 0 1em !important;
-  border-bottom: .25em solid #fff;
+  border-bottom: .25em solid $white;
 }
 
 .games {
@@ -390,7 +413,7 @@ ul {
   .game {
     padding: .5em;
     > .container {
-      background-color: #000;
+      background-color: $black;
       border-radius: 1em;
       > .grid {
         .row {
@@ -415,7 +438,10 @@ ul {
     h4 {
       font-size: 3em;
       font-weight: 700;
-      padding: 0;
+      padding: .5em 0 0;
+      @media screen and (min-width: 600px) {
+        padding: 0;
+      }
     }
     .price {
       // background-color: #005cd2;
@@ -427,8 +453,8 @@ ul {
       }
     }
     .banner {
-      background-color: #f4d31e;
-      color: #000;
+      background-color: $yellow;
+      color: $black;
       border-radius: .5rem;
       position: relative;
       overflow: hidden;
@@ -438,7 +464,7 @@ ul {
         top: 50%;
         transform: translate(-55%, -50%);
         height: 50px;
-        background-color: #000;
+        background-color: $black;
         width: 50px;
         border-radius: 50%;
       }
@@ -467,7 +493,7 @@ ul {
       }
       &.active {
         > div {
-          background-color: #2193df;
+          background-color: $blue-medium;
         }
         h5 {
           margin: 0;
@@ -475,18 +501,18 @@ ul {
       }
       &.empty {
         > div {
-          background-color: #fff;
+          background-color: $white;
           font-weight: 500;
         }
       }
       .panels {
-        background-color: #f4d31e;
+        background-color: $yellow;
         border-radius: .5em;
         padding: 0 1em 1em;
-        color: #000;
+        color: $black;
         .panel {
           > div {
-            color: #fff;
+            color: $white;
             border-radius: .25em;
             background-color: rgba(0, 0, 0, .4);
             margin: 1em 0 0;
@@ -502,11 +528,11 @@ ul {
       }
       .ticket {
         background-color: rgba(0, 0, 0, .5);
-        border: .125em solid #fff;
+        border: .125em solid $white;
         // border-left: .5em solid #ccc;
         // border-right: .5em solid #ccc;
         border-radius: .125em;
-        color: #fff;
+        color: $white;
         padding: .25em .75em;
         margin: .25em !important;
       }
@@ -538,7 +564,7 @@ ul {
       &.metrics {
         padding: 1.25em 0.5em 0.5em;
         margin-top: 0.75em;
-        background-color: #6a6a6a;
+        background-color: $grey-medium;
         border-radius: 0.5em;
       }
       &.mirrored > div > div > * {
@@ -551,8 +577,8 @@ ul {
       }
       .pill {
         > div {
-          background-color: #000;
-          color: #fff;
+          background-color: $black;
+          color: $white;
           border-radius: .25em;
           padding: .5em;
           margin: .5em 0 0;
@@ -575,8 +601,8 @@ ul {
         &.p100 > div {
           background-color: #998517;
         }
-        background-color: #fff;
-        color: #000;
+        background-color: $white;
+        color: $black;
         border-radius: .25em;
         padding: 0.5em 0.125em 0.125em;
         font-weight: 500;
