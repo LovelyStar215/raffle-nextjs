@@ -588,7 +588,7 @@ function MyApp({ Component, pageProps }) {
                 </div>
                 <div className="text-left">
                   <h1>...an Ethereum raffle app</h1>
-                  <h2>Create raffles for any number of NFTs and tokens, optional fee, with token/price of your choice.</h2>
+                  <h2>Create raffles for any number of NFTs, tokens, with an optional fee, at  a price and ticket token of your choice.</h2>
                   
                   <p>
                     <ul>
