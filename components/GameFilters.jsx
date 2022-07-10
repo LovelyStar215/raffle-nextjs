@@ -26,6 +26,7 @@ export const GameFilters = ({
 		
 		return (
 			<button
+				key={`gameFilter-${key}`}
 				onClick={() => setGameListRenderMode(key)}
 				className={arr.join(' ')}
 			>
