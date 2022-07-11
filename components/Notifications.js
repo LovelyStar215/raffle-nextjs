@@ -4,21 +4,21 @@ const Notifications = ({
 	console.log('Notifications changed');
 	// console.log(notifications);
     let latestNotification = notifications.slice(-1);
-	console.log(latestNotification);
+	// console.log(latestNotification);
 
 	let classes = ['notifications'];
 
 	// Default notification if none exist
 	if (!latestNotification.length) {
 		latestNotification[0] = {
-			message: 'Welcome to [insert name here]',
+			message: 'Connect your wallet, to access the latest raffle data.',
 			reference: false,
-			group: 0,
-			level: -1,
+			level: 'info',
 			time: Date.now()
 		};
-		console.log(latestNotification);
 	}
+	// console.log('latestNotification');
+	// console.log(latestNotification);
 
 	let groupLabel;
 	switch (latestNotification[0].group) {
@@ -26,26 +26,28 @@ const Notifications = ({
 			
 			break;
 		}
-		case 1: {
+		case 'game': {
 			groupLabel = `Raffle #${latestNotification[0].reference}`;
 			break;
 		}
 		default: {
-			groupLabel = `Braffle (${latestNotification[0].group})`;
+			groupLabel = 'App';
+			if (latestNotification[0].reference)
+				groupLabel = `${latestNotification[0].reference}`;
 			break;
 		}
 	}
 
 	switch (latestNotification[0].level) {
-		case 2: {
+		case 'error': {
 			classes.push('error');
 			break;
 		}
-		case 1: {
+		case 'warn': {
 			classes.push('warn');
 			break;
 		}
-		case 0: {
+		case 'info': {
 			classes.push('info');
 			break;
 		}

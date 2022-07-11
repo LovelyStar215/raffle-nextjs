@@ -152,6 +152,11 @@ function MyApp({ Component, pageProps }) {
    * 
    */
   const disconnect = () => {
+    setNotification(
+      'warn',
+      'Disconnected',
+      activeAddress
+    );
     console.log('disconnect()');
     setAddress(null)
     setWeb3(null)
@@ -170,31 +175,70 @@ function MyApp({ Component, pageProps }) {
         console.log(accounts);
         // setAddresses(accounts)
         setAddress(accounts[0].toLowerCase())
+        setNotification(
+          'info',
+          'Connected',
+          accounts[0].toLowerCase()
+        );
         setConnected(true)
         let w3 = new Web3(ethereum)
         w3.eth.defaultAccount = accounts[0];
         setWeb3(w3)
         console.log(now + ': Connected');
 
+
         ethereum.on('accountsChanged', (accounts) => {
           console.log(now + ': Changed');
-          if (accounts.length)
+          if (accounts.length) {
             setAddress(accounts[0].toLowerCase())
-          else
+            setNotification(
+              'info',
+              'Connected',
+              accounts[0].toLowerCase()
+            );
+          }
+          else {
+            setNotification(
+              'warn',
+              'Disconnected',
+              activeAddress
+            );
             setAddress(null)
+          }
+            
         })
       })
-      .catch((err) => console.log(err))
-      : console.log(now + ": Please install MetaMask")
+      .catch((err) => {
+        console.log(err);
+        setNotification(
+          'error',
+          'Something is wrong with the MetaMask connection'
+        )
+      })
+      : (
+        // console.log(now + ": Please install MetaMask");
+        setNotification(
+          'error',
+          'Please install MetaMask'
+        )
+      )
   };
   
   /**
   * 
   */
-  const setNotification = (message, reference, group, level) => {
-    console.log('setRole');
+  const setNotification = (scope, message, reference) => {
+    console.log('setNotification');
     let _notifications = notifications;
     let time = Date.now();
+
+    let group;
+    let level = scope;
+    if (scope.indexOf('.') >= 0) {
+      let _scope = scope.split('.');
+      group = _scope[0];
+      level = _scope[1];
+    }
  
     _notifications.push({
       message,
@@ -263,6 +307,12 @@ function MyApp({ Component, pageProps }) {
     
     _games[data.gameNumber] = { ...currGame, ...data };
 
+    setNotification(
+      'game.info',
+      'Updated',
+      data.gameNumber
+    )
+
     setGames([..._games]);
   }
 
@@ -285,6 +335,10 @@ function MyApp({ Component, pageProps }) {
         getGameState(gameContract, gameNumber);
       });
       console.log(results);
+      setNotification(
+        'info',
+        `Found ${results.length} games`
+      );
     } else {
       console.warn('There are no active games');
     }
@@ -299,17 +353,13 @@ function MyApp({ Component, pageProps }) {
     try {
       results = await gameContract.methods.getGameState(gameNumber).call();
     } catch (err) {
-      console.log(err.message);
-
-      // const dataObj = err.data.slice(-1);
-      // setNotification(
-      //   dataObj.reason,
-      //   gameNumber,
-      //   1
-      // );
+      setNotification(
+        'game.warn',
+        'Does not exist',
+        gameNumber
+      );
     }
-    console.log('getGameState-results');
-    console.log(results);
+    
     if (results) {
       let len = Object.keys(results).length/2;
       let items = Object.keys(results).slice(len).reduce((result, key) => {
@@ -339,6 +389,12 @@ function MyApp({ Component, pageProps }) {
       console.log(items);
       setGameState(items);
 
+      // setNotification(
+      //   'game.info',
+      //   'Information has been found and displayed below',
+      //   gameNumber
+      // );
+
       getGamePlayerState(
       	gameNumber,
       	activeAddress
@@ -367,6 +423,12 @@ function MyApp({ Component, pageProps }) {
 
     let newTickets = tickets[_gameNumber] || [];
     newTickets[_playerAddress] = results;
+
+    setNotification(
+      'game.info',
+      `Displaying player details ${_playerAddress}`,
+      _gameNumber
+    );
 
     setGameTickets(_gameNumber, newTickets);
   }
@@ -443,7 +505,26 @@ function MyApp({ Component, pageProps }) {
       // Game number
       _gameNumber
 
-    ).send({from: activeAddress});
+    ).send({from: activeAddress})
+
+    .once('sent', function(payload){
+      console.log(payload);
+      setNotification(
+        'game.warn',
+        `Closing`,
+        _gameNumber
+      );
+    })
+
+    .on('error', function(error) {
+      console.log(error);
+      setNotification(
+        'game.error',
+        'Unable to close',
+        _gameNumber
+      );
+    });
+
     console.log(results);
   }
 
@@ -480,7 +561,25 @@ function MyApp({ Component, pageProps }) {
         // Max player tickets
         maxTicketsPlayer
   
-      ).send({from: activeAddress});
+      ).send({from: activeAddress})
+
+      .once('sent', function(payload){
+        console.log(payload);
+        setNotification(
+          'warn',
+          'Starting new game'
+        );
+      })
+  
+      .on('error', function(error) {
+        console.log(error);
+        setNotification(
+          'game.error',
+          'Unable to start',
+          _gameNumber
+        );
+      });
+
       console.log(results);
     }
   }
@@ -540,6 +639,11 @@ function MyApp({ Component, pageProps }) {
           // console.log(data);
           if (data.returnValues) {
             // setGameState(data.returnValues);
+            setNotification(
+              'game.info',
+              'Started',
+              data.returnValues.gameNumber
+            );
             getGameState(gameContract, data.returnValues.gameNumber);
           }
         }
@@ -552,6 +656,11 @@ function MyApp({ Component, pageProps }) {
         } else {
           // console.log(data);
           if (data.returnValues) {
+            setNotification(
+              'game.info',
+              'Updated',
+              data.returnValues.gameNumber
+            );
             getGameState(gameContract, data.returnValues.gameNumber);
           }
         }
@@ -565,6 +674,11 @@ function MyApp({ Component, pageProps }) {
           // console.log(data);
           if (data.returnValues) {
             // setGameState(data.returnValues);
+            setNotification(
+              'game.warn',
+              'Ended',
+              data.returnValues.gameNumber
+            );
             getGameState(gameContract, data.returnValues.gameNumber);
           }
         }
@@ -577,12 +691,17 @@ function MyApp({ Component, pageProps }) {
         } else {
           // console.log(data);
           if (data.returnValues) {
-            // setGameState(data.returnValues);
+            setGameState(data.returnValues);
             getGameState(gameContract, data.returnValues.gameNumber);
             getGamePlayerState(
               data.returnValues.gameNumber,
               activeAddress
             )
+            setNotification(
+              'game.info',
+              `Ticket(s) bought`,
+              data.returnValues.gameNumber
+            );
           }
         }
       });

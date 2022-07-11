@@ -23,6 +23,7 @@ $blue-medium: #2193df;
 $blue-light: #9accd5;
 
 $green: #01822d;
+$green-light: #21df51;
 
 $yellow: #f4d31e;
 
@@ -182,9 +183,10 @@ footer {
   color: $black;
   border-bottom: .25em solid $white;
   font-weight: 600;
-  font-size: 1.125em;
+  font-size: 1.25em;
   transition-timing-function: ease;
   transition: color .2s, background-color .2s;
+  word-break: break-word;
   &.warn {
     background-color: $yellow;
   }
@@ -192,7 +194,7 @@ footer {
     background-color: $red;
   }
   &.info {
-    background-color: $blue-medium;
+    background-color: $green-light;
   }
 
   
@@ -286,7 +288,7 @@ footer {
   }
   &:focus {
     background-color: #ccc;
-    border-color: $green;
+    border-color: $green-light;
   }
 }
 
@@ -314,23 +316,21 @@ label {
   margin: .5em;
   &.active,
   &:focus {
-    background-color: $green;
+    background-color: $green-light;
     border-color: $black;
-    color: $white;
   }
   &:hover {
     background-color: $yellow;
     border-color: $black;
-    color: $black;
   }
   &.inverse {
     background-color: $black;
     color: $white;
     &.active,
     &:focus {
-      background-color: $green;
+      background-color: $green-light;
       border-color: $black;
-      color: $white;
+      color: $black;
     }
     &:hover {
       background-color: $yellow;
