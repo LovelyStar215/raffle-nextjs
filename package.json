@@ -17,7 +17,7 @@
     "reset-css": "^5.0.1",
     "sass": "^1.49.7",
     "use-deep-compare-effect": "^1.8.1",
-    "web3": "^1.7.0"
+    "web3": "^1.7.4"
   },
   "devDependencies": {
     "eslint": "8.8.0",
