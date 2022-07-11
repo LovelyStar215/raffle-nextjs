@@ -375,7 +375,11 @@ function GamesList({
           getGameState={getGameState}
           gameContract={gameContract}
         />
-				{gameRenderList().map((gameNumber) => {
+				{gameRenderList().length === 0
+          ? <div className="no-results">
+              <p>No results found. Try a different filter.</p>
+            </div>
+          : gameRenderList().map((gameNumber) => {
 					let game = games[gameNumber];
 					if (!game)
 						return null;

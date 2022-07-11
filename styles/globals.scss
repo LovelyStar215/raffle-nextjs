@@ -196,8 +196,12 @@ footer {
   &.info {
     background-color: $green-light;
   }
+}
 
-  
+.no-results {
+  font-size: 2.25em;
+  font-weight: 600;
+  padding: 1.5em 0;
 }
 
 .doubled {
