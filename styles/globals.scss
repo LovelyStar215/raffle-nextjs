@@ -26,6 +26,8 @@ $green: #01822d;
 
 $yellow: #f4d31e;
 
+$red: #f4491e;
+
 %root {
   font-size: 1rem;
 }
@@ -172,6 +174,28 @@ footer {
   .top {
     fill: $grey-medium;
   }
+}
+
+.notifications {
+  background-color: $white;
+  padding: 1em 0;
+  color: $black;
+  border-bottom: .25em solid $white;
+  font-weight: 600;
+  font-size: 1.125em;
+  transition-timing-function: ease;
+  transition: color .2s, background-color .2s;
+  &.warn {
+    background-color: $yellow;
+  }
+  &.error {
+    background-color: $red;
+  }
+  &.info {
+    background-color: $blue-medium;
+  }
+
+  
 }
 
 .doubled {
@@ -410,7 +434,7 @@ ul {
 .games {
   padding-bottom: 1em;
   .game {
-    padding: .5em;
+    padding: 1em 0 0;
     > .container {
       background-color: $black;
       border-radius: 1em;

@@ -22,6 +22,7 @@ import {
   LOCAL_STORAGE_KEY_ALLOWANCES
 } from '../features/configure/env';
 
+import Notifications from '../components/Notifications.js';
 import { HeaderIcon } from '../components/HeaderIcon'
 
 import '../styles/globals.scss'
@@ -30,6 +31,8 @@ import '../styles/globals.scss'
 
 function MyApp({ Component, pageProps }) {
   const [menu, setMenu] = useState(0)
+
+  const [notifications, setNotifications] = useState([])
 
   const [web3, setWeb3] = useState(null)
   const [activeAddress, setAddress] = useState(null)
@@ -102,6 +105,13 @@ function MyApp({ Component, pageProps }) {
     if (storedApprovals)
     setAllowances(storedApprovals);
 	}, [])
+
+	// useEffect(() => {
+	// 	console.log('Notifications changed');
+	// 	console.log(notifications);
+  //   let latestNotification = notifications.slice(-1);
+  //   setBanner(latestNotification);
+	// }, [notifications])
 
 	useEffect(() => {
 		console.log('Roles changed');
@@ -177,6 +187,25 @@ function MyApp({ Component, pageProps }) {
       .catch((err) => console.log(err))
       : console.log(now + ": Please install MetaMask")
   };
+  
+  /**
+  * 
+  */
+  const setNotification = (message, reference, group, level) => {
+    console.log('setRole');
+    let _notifications = notifications;
+    let time = Date.now();
+ 
+    _notifications.push({
+      message,
+      reference,
+      group,
+      level,
+      time
+    });
+    
+    setNotifications([..._notifications]);
+ }
 
   /**
    * 
@@ -265,7 +294,21 @@ function MyApp({ Component, pageProps }) {
    * Fetch and store data for `gameNumber`
    */
    const getGameState = async (gameContract, gameNumber) => {
-    let results = await gameContract.methods.getGameState(gameNumber).call();
+     console.log('getGameState');
+    let results;
+    try {
+      results = await gameContract.methods.getGameState(gameNumber).call();
+    } catch (err) {
+      console.log(err.message);
+
+      // const dataObj = err.data.slice(-1);
+      // setNotification(
+      //   dataObj.reason,
+      //   gameNumber,
+      //   1
+      // );
+    }
+    console.log('getGameState-results');
     console.log(results);
     if (results) {
       let len = Object.keys(results).length/2;
@@ -607,6 +650,9 @@ function MyApp({ Component, pageProps }) {
           </div>
         </div>
       </header>
+      <Notifications
+        notifications={notifications}
+      />
       <div className={(() => {
         let arr = [
           'tools'
