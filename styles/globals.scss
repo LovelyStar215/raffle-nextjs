@@ -181,7 +181,6 @@ footer {
   background-color: $white;
   padding: 1em 0;
   color: $black;
-  border-bottom: .25em solid $white;
   font-weight: 600;
   font-size: 1.25em;
   transition-timing-function: ease;
@@ -439,6 +438,7 @@ ul {
 
 .games {
   padding-bottom: 1em;
+  border-top: .25em solid $white;
   .game {
     padding: 1em 0 0;
     > .container {
