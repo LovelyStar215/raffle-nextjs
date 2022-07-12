@@ -330,18 +330,21 @@ function MyApp({ Component, pageProps }) {
     setActiveGameCalls(newActiveGameCalls);
 
     let results = await gameContract.methods.getActiveGames(_total).call();
+    let totalResults = 0;
     if (results?.length) {
+      totalResults = results.length;
       results.forEach(gameNumber => {
         getGameState(gameContract, gameNumber);
       });
       console.log(results);
-      setNotification(
-        'info',
-        `Found ${results.length} games`
-      );
     } else {
       console.warn('There are no active games');
     }
+      
+    setNotification(
+      'info',
+      `Found ${totalResults} games`
+    );
   };
 
   /**
@@ -424,13 +427,13 @@ function MyApp({ Component, pageProps }) {
     let newTickets = tickets[_gameNumber] || [];
     newTickets[_playerAddress] = results;
 
-    setNotification(
-      'game.info',
-      `Displaying player details ${_playerAddress}`,
-      _gameNumber
-    );
-
     setGameTickets(_gameNumber, newTickets);
+
+    // setNotification(
+    //   'game.info',
+    //   `Displaying player details ${_playerAddress}`,
+    //   _gameNumber
+    // );
   }
 
   /**
@@ -691,7 +694,7 @@ function MyApp({ Component, pageProps }) {
         } else {
           // console.log(data);
           if (data.returnValues) {
-            setGameState(data.returnValues);
+            // setGameState(data.returnValues);
             getGameState(gameContract, data.returnValues.gameNumber);
             getGamePlayerState(
               data.returnValues.gameNumber,
@@ -1029,6 +1032,7 @@ function MyApp({ Component, pageProps }) {
         hasRole={hasRole}
         endGame={endGame}
         getGameState={getGameState}
+        setNotification={setNotification}
       />
       <footer>
         <div className="container">

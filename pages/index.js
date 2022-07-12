@@ -24,7 +24,8 @@ function GamesList({
   setTokens,
   hasRole,
   endGame,
-  getGameState
+  getGameState,
+  setNotification
 }) {
   const [gameListRenderMode, setGameListRenderMode] = useState(3);
 
@@ -310,7 +311,26 @@ function GamesList({
       // Number of tickets to buy
       _numberOfTickets
 
-    ).send({from: activeAddress});
+    ).send({from: activeAddress})
+
+    .once('sent', function(payload){
+      console.log(payload);
+      setNotification(
+        'game.warn',
+        `Purchasing tickets...`,
+        _gameNumber
+      );
+    })
+
+    .on('error', function(error) {
+      console.log(error);
+      setNotification(
+        'game.error',
+        'Unable to purchase tickets',
+        _gameNumber
+      );
+    });
+
     console.log(results);
   }
 
