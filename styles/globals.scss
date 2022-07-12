@@ -23,7 +23,7 @@ $blue-medium: #2193df;
 $blue-light: #9accd5;
 
 
-$green: #21df51;
+$green: #6cdb9d;
 
 $yellow: #f4d31e;
 
@@ -411,8 +411,10 @@ ul {
 }
 
 .raffle {
-  background-color: #07554a;
+  background-color: $green;
   border-bottom: .25em solid $white;
+  color: #000;
+  line-height: 1.25;
   .row > div {
     padding: 1em;
   }
