@@ -772,9 +772,6 @@ function MyApp({ Component, pageProps }) {
           </div>
         </div>
       </header>
-      <Notifications
-        notifications={notifications}
-      />
       <div className={(() => {
         let arr = [
           'tools'
@@ -1012,6 +1009,9 @@ function MyApp({ Component, pageProps }) {
           </div>
         </div>
       </div>
+      <Notifications
+        notifications={notifications}
+      />
       <Component
         {...pageProps}
         activeAddress={activeAddress}
