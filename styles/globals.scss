@@ -22,8 +22,8 @@ $blue-dark: #012d82;
 $blue-medium: #2193df;
 $blue-light: #9accd5;
 
-$green: #01822d;
-$green-light: #21df51;
+
+$green: #21df51;
 
 $yellow: #f4d31e;
 
@@ -194,7 +194,7 @@ footer {
     background-color: $red;
   }
   &.info {
-    background-color: $green-light;
+    background-color: $green;
   }
 }
 
@@ -292,7 +292,7 @@ footer {
   }
   &:focus {
     background-color: #ccc;
-    border-color: $green-light;
+    border-color: $green;
   }
 }
 
@@ -320,7 +320,7 @@ label {
   margin: .5em;
   &.active,
   &:focus {
-    background-color: $green-light;
+    background-color: $green;
     border-color: $black;
   }
   &:hover {
@@ -332,7 +332,7 @@ label {
     color: $white;
     &.active,
     &:focus {
-      background-color: $green-light;
+      background-color: $green;
       border-color: $black;
       color: $black;
     }
@@ -511,7 +511,7 @@ ul {
       }
       &.state {
         > div {
-          background-color: #27df21;
+          background-color: #21df51;
         }
         .ticket {
           margin: 1em .5em 0;
