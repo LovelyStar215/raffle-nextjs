@@ -41,12 +41,25 @@ const GamePots = ({
 							if (assetMetadata) {
 								// console.log('gamePots-getERC20Token');
 								// console.log(token);
-								value =
+								let convertedValue =
 									assetMetadata.decimals === '18'
 									? web3.utils.fromWei(pot.value)
 									: pot.value; // game._decimals
 								
-								if (assetMetadata.symbol) value += ' ' + assetMetadata.symbol;
+								value = convertedValue;
+								
+								if (assetMetadata.symbol)
+									value += ' ' + assetMetadata.symbol;
+
+								// On game pot zero, show value minus the fee (if applicable)
+								if (!key) {
+									let feePercent = parseInt(game.feePercent);
+									if (feePercent) {
+										let feePercent = parseInt(game.feePercent);
+										let valueWithFee = (parseInt(convertedValue) / 100) * (100 - feePercent);
+										value += ` (${valueWithFee} ${assetMetadata.symbol})`;
+									}
+								}
 							}
 						} else if (pot.assetType == 1) {
 							value = `#${pot.value}`
