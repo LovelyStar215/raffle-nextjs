@@ -1,7 +1,7 @@
 const Notifications = ({
 	notifications,
 }) => {
-	console.log('Notifications changed');
+	// console.log('Notifications changed');
 	// console.log(notifications);
     let latestNotification = notifications.slice(-1);
 	// console.log(latestNotification);

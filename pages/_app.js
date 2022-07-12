@@ -228,7 +228,7 @@ function MyApp({ Component, pageProps }) {
   * 
   */
   const setNotification = (scope, message, reference) => {
-    console.log('setNotification');
+    // console.log('setNotification');
     let _notifications = notifications;
     let time = Date.now();
 
