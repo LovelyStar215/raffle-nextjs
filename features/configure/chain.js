@@ -6,17 +6,19 @@ import {
 
 export const getChainDeployment = (_chainId) => {
 	switch (_chainId) {
-		case 1:
-			return {
-				name: 'Ethereum',
-				addressContractGameMaster: '',
-				addressContractGameTrophy: '',
-				addressContractToken: '',
-				explorerURI: 'https://etherscan.io/',
-				explorerAddressURI: 'https://etherscan.io/address/'
-			};
+		// case 1:
+		// 	return {
+		// 		status: 0,
+		// 		name: 'Ethereum',
+		// 		addressContractGameMaster: '',
+		// 		addressContractGameTrophy: '',
+		// 		addressContractToken: '',
+		// 		explorerURI: 'https://etherscan.io/',
+		// 		explorerAddressURI: 'https://etherscan.io/address/'
+		// 	};
 		case 4:
 			return {
+				status: -1,
 				name: 'Rinkeby',
 				addressContractGameMaster: '0x35242de9626c603ec5caff32c185550cd4cd40b4',
 				addressContractGameTrophy: '',
@@ -26,6 +28,7 @@ export const getChainDeployment = (_chainId) => {
 			};
 		case 1337:
 			return {
+				status: -2,
 				name: 'Ganache',
 				addressContractGameMaster: gameAddress,
 				addressContractGameTrophy: gameTrophyAddress,
