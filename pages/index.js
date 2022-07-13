@@ -71,34 +71,50 @@ function GamesList({
 
   const _getERC20Token = async (_address) => {
     let gameToken = new web3.eth.Contract(IERC20MetadataABI, _address);
-    let token, name, symbol, decimals;
-    
-    const result = await gameToken.methods.name().call();
-    // console.log('name: ' + result);
-    if (result) {
-      name = result;
-    }
-    
-    result = await gameToken.methods.symbol().call();
-    // console.log('symbol: ' + result);
-    if (result) {
-      symbol = result;
-    }
 
-    result = await gameToken.methods.decimals().call();
-    // console.log('decimals: ' + result);
-    if (result) {
-      decimals = result;
-    }
+    try {
+      let name, symbol, decimals;
 
-    if (name.length && symbol.length && decimals.length) {
-      token = {
+      const result = await gameToken.methods.name().call();
+      // console.log('name: ' + result);
+      if (result) {
+        name = result;
+      }
+      
+      result = await gameToken.methods.symbol().call();
+      // console.log('symbol: ' + result);
+      if (result) {
+        symbol = result;
+      }
+
+      result = await gameToken.methods.decimals().call();
+      // console.log('decimals: ' + result);
+      if (result) {
+        decimals = result;
+      }
+
+      let token = {
         state: 1,
         address: _address,
         name,
         symbol,
         decimals
       };
+      // console.log('token');
+      // console.log(token);
+      setToken(token);
+    } catch(err) {
+      console.error(err);
+      console.error('gameToken: ' + _address);
+      
+      let token = {
+        state: 1,
+        address: _address,
+        name: '???',
+        symbol: '???',
+        decimals: '18'
+      };
+      // console.log('token');
       // console.log(token);
       setToken(token);
     }
@@ -222,17 +238,32 @@ function GamesList({
 
   const _getAllowance = async (_playerAllowanceIdx, _address) => {
     let token = new web3.eth.Contract(IERC20MetadataABI, _address);
-    const result = await token.methods.allowance(
-      activeAddress,
-      gameAddress
-    ).call();
-    // console.log('allowance: ' + result);
-    if (result) {
+
+    try {
+      const result = await token.methods.allowance(
+        activeAddress,
+        gameAddress
+      ).call();
+
       let newAllowance = {
         state: 1,
         address: _address,
         amount: result.toString()
       };
+      // console.log('newAllowance');
+      // console.log(newAllowance);
+      setAllowance(_playerAllowanceIdx, newAllowance);
+
+    } catch (err) {
+      console.error(err);
+      console.error('_getAllowance: ' + _address);
+
+      let newAllowance = {
+        state: 1,
+        address: _address,
+        amount: '0'
+      };
+      // console.log('newAllowance');
       // console.log(newAllowance);
       setAllowance(_playerAllowanceIdx, newAllowance);
     }
