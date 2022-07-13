@@ -87,13 +87,9 @@ function MyApp({ Component, pageProps }) {
         console.error(err);
       });
 
-      // Get current chain ID
+    // Get current chain ID
     const chainId = await ethereum.request({ method: 'eth_chainId' });
     handleChainChanged(chainId);
-
-    ethereum.on('accountsChanged', (accounts) => handleAccountsChanged);
-
-    ethereum.on('chainChanged', (_chainId) => handleChainChanged);
 	}, [])
 
 
@@ -131,6 +127,27 @@ function MyApp({ Component, pageProps }) {
       setAllowances(storedApprovals);
     }
   }, [chainId]);
+
+  useEffect(() => {
+    if (web3) {
+      web3.currentProvider.on(
+        'chainChanged',
+        chainId => {
+          // console.log('chainChanged EVENT');
+          // handleChainChanged(chainId);
+          window.location.reload();
+        },
+      );
+
+      web3.currentProvider.on(
+        'accountsChanged',
+        accounts => {
+          console.log('accountsChanged EVENT');
+          handleAccountsChanged(accounts);
+        },
+      );
+    }
+  }, [web3]);
 
 	// useEffect(() => {
 	// 	console.log('Notifications changed');
