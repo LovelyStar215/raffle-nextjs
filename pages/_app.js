@@ -7,6 +7,8 @@ import {
   gameTrophyABI
 } from '../features/configure/abi.js'
 
+import { getChainDeployment } from '../features/configure/chain.js';
+
 import {
   gameAddress,
   gameTrophyAddress,
@@ -36,7 +38,7 @@ function MyApp({ Component, pageProps }) {
 
   const [web3, setWeb3] = useState(null)
   const [activeAddress, setAddress] = useState(null)
-  const [connected, setConnected] = useState(false)
+  const [chainId, setChainId] = useState(0)
 
   const [gameContract, setGameContract] = useState(null)
 
@@ -72,35 +74,54 @@ function MyApp({ Component, pageProps }) {
   const awardItemTo = useRef();
   const awardItemURI = useRef();
 
-	useEffect(() => {
-		console.log('The data from local storage;');
+	useEffect(async () => {
 
-		const storedRoles = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY_ROLES));
-		console.log('Roles from cache');
+    // Get MetaMask account details
+    ethereum
+      .request({ method: 'eth_accounts' })
+      .then(handleAccountsChanged)
+      .catch((err) => {
+        // Some unexpected error.
+        // For backwards compatibility reasons, if no accounts are available,
+        // eth_accounts will return an empty array.
+        console.error(err);
+      });
+
+      // Get current chain ID
+    const chainId = await ethereum.request({ method: 'eth_chainId' });
+    handleChainChanged(chainId);
+
+    ethereum.on('accountsChanged', (accounts) => handleAccountsChanged);
+
+    ethereum.on('chainChanged', (_chainId) => handleChainChanged);
+
+    console.log('The data from local storage;');
+    const storedRoles = JSON.parse(localStorage.getItem(`${LOCAL_STORAGE_KEY_ROLES}.${chainId}`));
+    console.log('Roles from cache');
     console.log(storedRoles);
-		if (storedRoles)
-			setRoles(storedRoles);
+    if (storedRoles)
+      setRoles(storedRoles);
     
-		const storedGames = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY_GAMES));
-		console.log('Games from cache');
+    const storedGames = JSON.parse(localStorage.getItem(`${LOCAL_STORAGE_KEY_GAMES}.${chainId}`));
+    console.log('Games from cache');
     console.log(storedGames);
-		if (storedGames)
-			setGames(storedGames);
+    if (storedGames)
+      setGames(storedGames);
 
-    const storedTickets = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY_TICKETS));
-		console.log('Tickets from cache');
+    const storedTickets = JSON.parse(localStorage.getItem(`${LOCAL_STORAGE_KEY_TICKETS}.${chainId}`));
+    console.log('Tickets from cache');
     console.log(storedTickets);
     if (storedTickets)
       setTickets(storedTickets);
 
-    const storedTokens = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY_TOKENS));
-		console.log('Tokens from cache');
+    const storedTokens = JSON.parse(localStorage.getItem(`${LOCAL_STORAGE_KEY_TOKENS}.${chainId}`));
+    console.log('Tokens from cache');
     console.log(storedTokens);
     if (storedTokens)
       setTokens(storedTokens);
 
-    const storedApprovals = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY_ALLOWANCES));
-		console.log('Allowances from cache');
+    const storedApprovals = JSON.parse(localStorage.getItem(`${LOCAL_STORAGE_KEY_ALLOWANCES}.${chainId}`));
+    console.log('Allowances from cache');
     console.log(storedApprovals);
     if (storedApprovals)
     setAllowances(storedApprovals);
@@ -117,35 +138,35 @@ function MyApp({ Component, pageProps }) {
 		console.log('Roles changed');
 		console.log(roles);
 		const storedRoles = JSON.stringify(roles);
-		localStorage.setItem(LOCAL_STORAGE_KEY_ROLES, storedRoles);
+		localStorage.setItem(`${LOCAL_STORAGE_KEY_ROLES}.${chainId}`, storedRoles);
 	}, [roles])
 
 	useEffect(() => {
 		console.log('Games changed');
 		console.log(games);
 		const storedGames = JSON.stringify(games);
-		localStorage.setItem(LOCAL_STORAGE_KEY_GAMES, storedGames);
+		localStorage.setItem(`${LOCAL_STORAGE_KEY_GAMES}.${chainId}`, storedGames);
 	}, [games])
 
 	useEffect(() => {
 		console.log('Tickets changed');
 		console.log(tickets);
 		const storedTickets = JSON.stringify(tickets);
-		localStorage.setItem(LOCAL_STORAGE_KEY_TICKETS, storedTickets);
+		localStorage.setItem(`${LOCAL_STORAGE_KEY_TICKETS}.${chainId}`, storedTickets);
 	}, [tickets])
 
 	useEffect(() => {
 		console.log('Tokens changed');
 		console.log(tokens);
 		const storedTokens = JSON.stringify(tokens);
-		localStorage.setItem(LOCAL_STORAGE_KEY_TOKENS, storedTokens);
+		localStorage.setItem(`${LOCAL_STORAGE_KEY_TOKENS}.${chainId}`, storedTokens);
 	}, [tokens])
 
 	useEffect(() => {
 		console.log('Allowances changed');
 		console.log(allowances);
 		const storedApprovals = JSON.stringify(allowances);
-		localStorage.setItem(LOCAL_STORAGE_KEY_ALLOWANCES, storedApprovals);
+		localStorage.setItem(`${LOCAL_STORAGE_KEY_ALLOWANCES}.${chainId}`, storedApprovals);
 	}, [allowances])
 
   /**
@@ -159,9 +180,54 @@ function MyApp({ Component, pageProps }) {
     );
     console.log('disconnect()');
     setAddress(null)
+    setChainId(0)
     setWeb3(null)
     setGameContract(null)
-    setConnected(false)
+  };
+
+  const handleAccountsChanged = (accounts) => {
+    if (!web3) {
+      let _web3 = new Web3(window.ethereum)
+      _web3.eth.defaultAccount = accounts[0];
+      setWeb3(_web3)
+    }
+
+    if (accounts.length) {
+      setAddress(accounts[0].toLowerCase())
+
+      setNotification(
+        'info',
+        'Connected',
+        accounts[0].toLowerCase()
+      );
+    } else {
+      setAddress(null)
+
+      setNotification(
+        'warn',
+        'Disconnected',
+        activeAddress
+      );
+    }
+  };
+
+  const handleChainChanged = (chainId) => {
+    let _networkId = Web3.utils.isHex(chainId) ? Web3.utils.hexToNumber(chainId) : chainId;
+    setChainId(parseInt(_networkId))
+
+    const deployment = getChainDeployment(_networkId);
+    if (deployment === false) {
+      setNotification(
+        'error',
+        `Chain ID (${_networkId}) is not supported.`
+      );
+    } else {
+      setNotification(
+        'info',
+        `Connected to chain`,
+        deployment.name
+      );
+    }
   };
 
   /**
@@ -169,59 +235,35 @@ function MyApp({ Component, pageProps }) {
    */
    const connect = () => {
     console.log('connect()');
-    let now = new Date().toLocaleString('en-us', { weekday:"long", year:"numeric", month:"short", day:"numeric", hour:"numeric", minute:"numeric", second:"numeric"});
+
     window.ethereum ?
-      ethereum.request({ method: "eth_requestAccounts" }).then((accounts) => {
-        console.log(accounts);
-        // setAddresses(accounts)
-        setAddress(accounts[0].toLowerCase())
-        setNotification(
-          'info',
-          'Connected',
-          accounts[0].toLowerCase()
-        );
-        setConnected(true)
-        let w3 = new Web3(ethereum)
-        w3.eth.defaultAccount = accounts[0];
-        setWeb3(w3)
-        console.log(now + ': Connected');
+      ethereum
+      .request({ method: 'eth_requestAccounts' })
+      .then((accounts) => {
 
-
-        ethereum.on('accountsChanged', (accounts) => {
-          console.log(now + ': Changed');
-          if (accounts.length) {
-            setAddress(accounts[0].toLowerCase())
-            setNotification(
-              'info',
-              'Connected',
-              accounts[0].toLowerCase()
-            );
-          }
-          else {
-            setNotification(
-              'warn',
-              'Disconnected',
-              activeAddress
-            );
-            setAddress(null)
-          }
-            
-        })
+        // let w3 = new Web3(ethereum)
+        // w3.eth.defaultAccount = accounts[0];
+        // setWeb3(w3)
+        // setNotification(
+        //   'error',
+        //   'Please install MetaMask'
+        // )
+        handleAccountsChanged(accounts);
       })
       .catch((err) => {
-        console.log(err);
+        console.error(err);
+
         setNotification(
           'error',
-          'Something is wrong with the MetaMask connection'
+          'Something went wrong with the MetaMask connection'
         )
       })
-      : (
-        // console.log(now + ": Please install MetaMask");
-        setNotification(
-          'error',
-          'Please install MetaMask'
-        )
+    : (
+      setNotification(
+        'error',
+        'Please install MetaMask'
       )
+    );
   };
   
   /**
@@ -620,13 +662,18 @@ function MyApp({ Component, pageProps }) {
    * `GameMaster` contract
    */
   useEffect(() => {
-    if (web3) {
-      setGameContract(new web3.eth.Contract(
-        gameMasterABI,
-        gameAddress
-      ))
+    if (web3 && chainId) {
+      const deployment = getChainDeployment(chainId);
+      if (deployment !== false) {
+        setGameContract(new web3.eth.Contract(
+          gameMasterABI,
+          deployment.addressContractGameMaster
+        ))
+      } else {
+        console.error('Unsupported chain: ' + chainId);
+      }
     }
-  }, [web3])
+  }, [web3, chainId])
 
   /**
    * `GameMaster` events
@@ -742,9 +789,9 @@ function MyApp({ Component, pageProps }) {
                   </button>
                   <button
                     className="button inverse"
-                    onClick={() => connected ? disconnect() : connect()}
+                    onClick={() => activeAddress ? disconnect() : connect()}
                   >
-                    🗲 { connected
+                    🗲 { activeAddress
                       ? activeAddress.length > 10 ? '0x' + activeAddress.slice(2,6).toUpperCase() + '...' + activeAddress.slice(-4).toUpperCase() : activeAddress
                       : 'Connect'
                     }
