@@ -94,38 +94,43 @@ function MyApp({ Component, pageProps }) {
     ethereum.on('accountsChanged', (accounts) => handleAccountsChanged);
 
     ethereum.on('chainChanged', (_chainId) => handleChainChanged);
-
-    console.log('The data from local storage;');
-    const storedRoles = JSON.parse(localStorage.getItem(`${LOCAL_STORAGE_KEY_ROLES}.${chainId}`));
-    console.log('Roles from cache');
-    console.log(storedRoles);
-    if (storedRoles)
-      setRoles(storedRoles);
-    
-    const storedGames = JSON.parse(localStorage.getItem(`${LOCAL_STORAGE_KEY_GAMES}.${chainId}`));
-    console.log('Games from cache');
-    console.log(storedGames);
-    if (storedGames)
-      setGames(storedGames);
-
-    const storedTickets = JSON.parse(localStorage.getItem(`${LOCAL_STORAGE_KEY_TICKETS}.${chainId}`));
-    console.log('Tickets from cache');
-    console.log(storedTickets);
-    if (storedTickets)
-      setTickets(storedTickets);
-
-    const storedTokens = JSON.parse(localStorage.getItem(`${LOCAL_STORAGE_KEY_TOKENS}.${chainId}`));
-    console.log('Tokens from cache');
-    console.log(storedTokens);
-    if (storedTokens)
-      setTokens(storedTokens);
-
-    const storedApprovals = JSON.parse(localStorage.getItem(`${LOCAL_STORAGE_KEY_ALLOWANCES}.${chainId}`));
-    console.log('Allowances from cache');
-    console.log(storedApprovals);
-    if (storedApprovals)
-    setAllowances(storedApprovals);
 	}, [])
+
+
+  useEffect(() => {
+    if (chainId) {
+      console.log('The data from local storage;');
+      const storedRoles = JSON.parse(localStorage.getItem(`${LOCAL_STORAGE_KEY_ROLES}.${chainId}`));
+      console.log('Roles from cache');
+      console.log(storedRoles);
+      if (storedRoles)
+        setRoles(storedRoles);
+      
+      const storedGames = JSON.parse(localStorage.getItem(`${LOCAL_STORAGE_KEY_GAMES}.${chainId}`));
+      console.log('Games from cache');
+      console.log(storedGames);
+      if (storedGames)
+        setGames(storedGames);
+
+      const storedTickets = JSON.parse(localStorage.getItem(`${LOCAL_STORAGE_KEY_TICKETS}.${chainId}`));
+      console.log('Tickets from cache');
+      console.log(storedTickets);
+      if (storedTickets)
+        setTickets(storedTickets);
+
+      const storedTokens = JSON.parse(localStorage.getItem(`${LOCAL_STORAGE_KEY_TOKENS}.${chainId}`));
+      console.log('Tokens from cache');
+      console.log(storedTokens);
+      if (storedTokens)
+        setTokens(storedTokens);
+
+      const storedApprovals = JSON.parse(localStorage.getItem(`${LOCAL_STORAGE_KEY_ALLOWANCES}.${chainId}`));
+      console.log('Allowances from cache');
+      console.log(storedApprovals);
+      if (storedApprovals)
+      setAllowances(storedApprovals);
+    }
+  }, [chainId]);
 
 	// useEffect(() => {
 	// 	console.log('Notifications changed');
@@ -135,38 +140,48 @@ function MyApp({ Component, pageProps }) {
 	// }, [notifications])
 
 	useEffect(() => {
-		console.log('Roles changed');
-		console.log(roles);
-		const storedRoles = JSON.stringify(roles);
-		localStorage.setItem(`${LOCAL_STORAGE_KEY_ROLES}.${chainId}`, storedRoles);
+    if (chainId) {
+      console.log('Roles changed');
+      console.log(roles);
+      const storedRoles = JSON.stringify(roles);
+      localStorage.setItem(`${LOCAL_STORAGE_KEY_ROLES}.${chainId}`, storedRoles);
+    }
 	}, [roles])
 
 	useEffect(() => {
-		console.log('Games changed');
-		console.log(games);
-		const storedGames = JSON.stringify(games);
-		localStorage.setItem(`${LOCAL_STORAGE_KEY_GAMES}.${chainId}`, storedGames);
+		if (chainId) {
+      console.log('Games changed');
+      console.log(games);
+      const storedGames = JSON.stringify(games);
+      localStorage.setItem(`${LOCAL_STORAGE_KEY_GAMES}.${chainId}`, storedGames);
+    }
 	}, [games])
 
 	useEffect(() => {
-		console.log('Tickets changed');
-		console.log(tickets);
-		const storedTickets = JSON.stringify(tickets);
-		localStorage.setItem(`${LOCAL_STORAGE_KEY_TICKETS}.${chainId}`, storedTickets);
+		if (chainId) {
+      console.log('Tickets changed');
+      console.log(tickets);
+      const storedTickets = JSON.stringify(tickets);
+      localStorage.setItem(`${LOCAL_STORAGE_KEY_TICKETS}.${chainId}`, storedTickets);
+    }
 	}, [tickets])
 
 	useEffect(() => {
-		console.log('Tokens changed');
-		console.log(tokens);
-		const storedTokens = JSON.stringify(tokens);
-		localStorage.setItem(`${LOCAL_STORAGE_KEY_TOKENS}.${chainId}`, storedTokens);
+		if (chainId) {
+      console.log('Tokens changed');
+      console.log(tokens);
+      const storedTokens = JSON.stringify(tokens);
+      localStorage.setItem(`${LOCAL_STORAGE_KEY_TOKENS}.${chainId}`, storedTokens);
+    }
 	}, [tokens])
 
 	useEffect(() => {
-		console.log('Allowances changed');
-		console.log(allowances);
-		const storedApprovals = JSON.stringify(allowances);
-		localStorage.setItem(`${LOCAL_STORAGE_KEY_ALLOWANCES}.${chainId}`, storedApprovals);
+		if (chainId) {
+      console.log('Allowances changed');
+      console.log(allowances);
+      const storedApprovals = JSON.stringify(allowances);
+      localStorage.setItem(`${LOCAL_STORAGE_KEY_ALLOWANCES}.${chainId}`, storedApprovals);
+    }
 	}, [allowances])
 
   /**
