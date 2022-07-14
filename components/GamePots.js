@@ -1,7 +1,6 @@
-import React from 'react';
+import Web3 from 'web3'
 
 const GamePots = ({
-	web3,
 	gameTokenMetadata,
 	game,
 	getERC20Token,
@@ -40,7 +39,7 @@ const GamePots = ({
 								// console.log(token);
 								let convertedValue =
 									assetMetadata.decimals === '18'
-									? web3.utils.fromWei(pot.value)
+									? Web3.utils.fromWei(pot.value)
 									: pot.value; // game._decimals
 								
 								value = convertedValue;

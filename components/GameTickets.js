@@ -1,7 +1,6 @@
-import React from 'react';
+import Web3 from 'web3'
 
 const GameTickets = ({
-	web3,
 	activeAddress,
 	gameTickets,
 	gameTokenMetadata,
@@ -40,24 +39,24 @@ const GameTickets = ({
 		// console.log(game.ticketPrice);
 		// console.log('ticketCount');
 		let playerTicketCount = gameTickets[activeAddress].length;
-		let playerTicketCountBN = web3.utils.toBN(playerTicketCount);
+		let playerTicketCountBN = Web3.utils.toBN(playerTicketCount);
 		// console.log(playerTicketCount);
-		// let decimals = web3.utils.toBN(gameTokenMetadata.decimals);
+		// let decimals = Web3.utils.toBN(gameTokenMetadata.decimals);
 		// console.log('gameTokenMetadata.decimals');
 		// console.log(decimals);
-		// totalShareValue = web3.utils
+		// totalShareValue = Web3.utils
 		// 	.toBN(game.ticketPrice)
 		// 	.mul(playerTicketCount);
 		// console.log('shareBN');
 		// console.log(totalShareValue.toString());
-		// totalShareValue = web3.utils
+		// totalShareValue = Web3.utils
 		// 	.toBN(game.ticketPrice).div(
-		// 		web3.utils
+		// 		Web3.utils
 		// 		.toBN(10)
 		// 		.pow(decimals)
 		// 	)
 		// 	.toString() + ' ' + gameTokenMetadata.symbol;
-		totalShareValue = web3.utils.fromWei(web3.utils.toBN(game.ticketPrice).mul(playerTicketCountBN));
+		totalShareValue = Web3.utils.fromWei(Web3.utils.toBN(game.ticketPrice).mul(playerTicketCountBN));
 		if (gameTokenMetadata.symbol) totalShareValue += ' ' + gameTokenMetadata.symbol;
 
 		let gameTicketCount = parseInt(game.ticketCount);

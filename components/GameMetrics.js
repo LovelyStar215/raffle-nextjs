@@ -1,7 +1,4 @@
-import React from 'react';
-
 const GameMetrics = ({
-	web3,
 	gameTokenMetadata,
 	game,
 	deployment

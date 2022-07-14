@@ -1,4 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
+import Web3 from 'web3';
+
 import {
 	IERC20MetadataABI,
 	IERC721MetadataABI
@@ -66,7 +68,7 @@ const Game = ({
 		let result = [];
 
 		// Non-null addresses only
-		if (web3.utils.toBN(pot.assetAddress).gt(web3.utils.toBN(0))) {
+		if (Web3.utils.toBN(pot.assetAddress).gt(Web3.utils.toBN(0))) {
 			switch (pot.assetType) {
 				case '0': {
 					if (gameERC20Tokens.length)
@@ -105,19 +107,19 @@ const Game = ({
 		if (!pot) {
 			gameTokenMetadata = tokenResult;
 
-			gameTokenApprovalMax = web3.utils
+			gameTokenApprovalMax = Web3.utils
 				.toBN(game.ticketPrice)
-				.mul(web3.utils.toBN(game.maxTicketsPlayer));
+				.mul(Web3.utils.toBN(game.maxTicketsPlayer));
 			
 			// console.log('gameERC20Tokens-getAllowance');
 			gameTokenAllowance = getAllowance(address);
 			// console.log(gameTokenAllowance);
 			
 			hasGameTokenApproval =
-				web3.utils.toBN(gameTokenAllowance.amount)
+				Web3.utils.toBN(gameTokenAllowance.amount)
 				.sub(gameTokenApprovalMax)
-				.gte(web3.utils.toBN('0'));
-			// console.log(web3.utils.toBN(gameTokenAllowance.amount).sub(gameTokenApprovalMax).toString());
+				.gte(Web3.utils.toBN('0'));
+			// console.log(Web3.utils.toBN(gameTokenAllowance.amount).sub(gameTokenApprovalMax).toString());
 			// console.log('hasGameTokenApproval: ' + hasGameTokenApproval);
 		}
 	});
@@ -164,7 +166,7 @@ const Game = ({
 		if (gameTokenMetadata) {
 			price =
 				gameTokenMetadata.decimals === '18'
-				? web3.utils.fromWei(game.ticketPrice)
+				? Web3.utils.fromWei(game.ticketPrice)
 				: game.ticketPrice;
 
 			if (gameTokenMetadata.symbol)
@@ -199,7 +201,6 @@ const Game = ({
 									</div>
 								</div>
 								<GameMetrics
-									web3={web3}
 									gameTokenMetadata={gameTokenMetadata}
 									game={game}
 									deployment={deployment}
@@ -233,8 +234,8 @@ const Game = ({
 											if (e.target.tagName === 'DIV')
 												buyTicket(
 													gameContract,
-													web3.utils.toBN(game.gameNumber),
-													web3.utils.toBN(numberOfTickets.current.value)
+													Web3.utils.toBN(game.gameNumber),
+													Web3.utils.toBN(numberOfTickets.current.value)
 												)
 										}}
 										role="button"
@@ -259,14 +260,12 @@ const Game = ({
 									deployment={deployment}
 								/>
 								<GameTickets
-									web3={web3}
 									activeAddress={activeAddress}
 									gameTickets={gameTickets}
 									gameTokenMetadata={gameTokenMetadata}
 									game={game}
 								/>
 								<GamePots
-									web3={web3}
 									gameTokenMetadata={gameTokenMetadata}
 									game={game}
 									getERC20Token={getERC20Token}
@@ -292,7 +291,7 @@ const Game = ({
 												console.log('endGame ID: ' + game.gameNumber);
 												endGame(
 													gameContract,
-													web3.utils.toBN(game.gameNumber)
+													Web3.utils.toBN(game.gameNumber)
 												)
 											}}
 											className={(() => {
@@ -309,9 +308,9 @@ const Game = ({
 										<div
 											onClick={(e) => {
 												if (e.target.tagName === 'DIV') {
-													let _amount = web3.utils.toBN(
+													let _amount = Web3.utils.toBN(
 														addGamePotERC20AssetAmount.current.value)
-														.mul(web3.utils.toBN(10).pow(web3.utils.toBN(18)));
+														.mul(Web3.utils.toBN(10).pow(Web3.utils.toBN(18)));
 													new web3.eth.Contract(
 														IERC20MetadataABI,
 														addGamePotERC20AssetAddress.current.value
@@ -321,7 +320,7 @@ const Game = ({
 													).send({from: activeAddress})
 													.on('receipt', function(receipt) {
 														gameContract.methods.addGamePotERC20Asset(
-															web3.utils.toBN(game.gameNumber),
+															Web3.utils.toBN(game.gameNumber),
 															_amount,
 															addGamePotERC20AssetAddress.current.value
 														).send({from: activeAddress})
@@ -354,10 +353,10 @@ const Game = ({
 											onClick={(e) => {
 												if (e.target.tagName === 'DIV')
 													gameContract.methods.removeGamePotERC20Asset(
-														web3.utils.toBN(game.gameNumber),
-														web3.utils.toBN(
+														Web3.utils.toBN(game.gameNumber),
+														Web3.utils.toBN(
 															removeGamePotERC20AssetAmount.current.value)
-															.mul(web3.utils.toBN(10).pow(web3.utils.toBN(18))),
+															.mul(Web3.utils.toBN(10).pow(Web3.utils.toBN(18))),
 															removeGamePotERC20AssetAddress.current.value
 													).send({from: activeAddress})
 													.on('receipt', function(receipt) {
@@ -398,7 +397,7 @@ const Game = ({
 														console.log(receipt);
 
 														gameContract.methods.addGamePotERC721Asset(
-															web3.utils.toBN(game.gameNumber),
+															Web3.utils.toBN(game.gameNumber),
 															addGamePotERC721AssetId.current.value,
 															addGamePotERC721AssetAddress.current.value
 														).send({from: activeAddress})
@@ -429,7 +428,7 @@ const Game = ({
 											onClick={(e) => {
 												if (e.target.tagName === 'DIV')
 													gameContract.methods.removeGamePotERC721Asset(
-														web3.utils.toBN(game.gameNumber),
+														Web3.utils.toBN(game.gameNumber),
 														removeGamePotERC721AssetId.current.value,
 														removeGamePotERC721AssetAddress.current.value
 													).send({from: activeAddress})
