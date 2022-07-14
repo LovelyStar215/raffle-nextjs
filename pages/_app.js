@@ -27,7 +27,7 @@ import '../styles/globals.scss'
 // APP
 
 function MyApp({ Component, pageProps }) {
-  const [menu, setMenu] = useState(0)
+  const [menus, setMenus] = useState([])
 
   const [notifications, setNotifications] = useState([])
 
@@ -216,6 +216,18 @@ function MyApp({ Component, pageProps }) {
       localStorage.setItem(`${LOCAL_STORAGE_KEY_ALLOWANCES}.${chainId}`, storedApprovals);
     }
 	}, [allowances])
+
+  const getMenu = (_menuId) => {
+    if (menus[_menuId])
+      return menus[_menuId];
+    return false;
+  };
+
+  const setMenu = (_menuId, _state) => {
+    let _menus = menus;
+    _menus[_menuId] = Number(_state);
+    setMenus([..._menus]);
+  };
 
   /**
    * 
@@ -780,7 +792,7 @@ function MyApp({ Component, pageProps }) {
                 <div className="buttons md-text-left">
                   <button
                     onClick={() => {
-                      setMenu(!menu);
+                      setMenu(0, !getMenu(0));
                     }}
                     className={(() => {
                       let arr = [
@@ -788,7 +800,7 @@ function MyApp({ Component, pageProps }) {
                         'inverse'
                       ];
               
-                      if (menu)
+                      if (getMenu(0))
                         arr.push('active');
                       
                       return arr.join(' ');
@@ -801,10 +813,31 @@ function MyApp({ Component, pageProps }) {
                     onClick={() => activeAddress ? disconnect() : connect()}
                   >
                     🗲 { activeAddress
-                      ? activeAddress.length > 10 ? '0x' + activeAddress.slice(2,6).toUpperCase() + '...' + activeAddress.slice(-4).toUpperCase() : activeAddress
+                      ?
+                        activeAddress.length > 10
+                        ? '0x' + activeAddress.slice(2,6).toUpperCase() + '...' + activeAddress.slice(-4).toUpperCase()
+                        : activeAddress
                       : 'Connect'
                     }
                   </button>
+                  {/* <button
+                    onClick={() => {
+                      setMenu(1, !getMenu(1));
+                    }}
+                    className={(() => {
+                      let arr = [
+                        'button',
+                        'inverse'
+                      ];
+              
+                      if (getMenu(1))
+                        arr.push('active');
+                      
+                      return arr.join(' ');
+                    })()}
+                  >
+                    Network
+                  </button> */}
                 </div>
                 <div className="md-text-left">
                   <h1>...an Ethereum raffle app</h1>
@@ -972,7 +1005,7 @@ function MyApp({ Component, pageProps }) {
           'raffle'
         ];
 
-        if (!menu)
+        if (!getMenu(0))
           arr.push('hide');
         
         return arr.join(' ');
