@@ -16,6 +16,26 @@ export const getChainDeployment = (_chainId) => {
 		// 		explorerURI: 'https://etherscan.io/',
 		// 		explorerAddressURI: 'https://etherscan.io/address/'
 		// 	};
+		// case 137:
+		// 	return {
+		// 		status: 0,
+		// 		name: 'Polygon',
+		// 		addressContractGameMaster: '',
+		// 		addressContractGameTrophy: '',
+		// 		addressContractGameToken: '',
+		// 		explorerURI: 'https://polygonscan.com/',
+		// 		explorerAddressURI: 'https://polygonscan.com/address/'
+		// 	};
+		// case 250:
+		// 	return {
+		// 		status: 0,
+		// 		name: 'Fantom',
+		// 		addressContractGameMaster: '',
+		// 		addressContractGameTrophy: '',
+		// 		addressContractGameToken: '',
+		// 		explorerURI: 'https://ftmscan.com/',
+		// 		explorerAddressURI: 'https://ftmscan.com/address/'
+		// 	};
 		case 4:
 			return {
 				status: -1,
