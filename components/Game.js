@@ -205,7 +205,7 @@ const Game = ({
 									game={game}
 									deployment={deployment}
 								/>
-								<div className="buttons">
+								<div className="controls">
 									<button
 										disabled={gameHasEnded}
 										className={buttonApproveClasses()}
@@ -285,7 +285,7 @@ const Game = ({
 							<div className="tools">
 								<div className="container">
 									<h3>Management</h3>
-									<div className="buttons">
+									<div className="controls">
 										<button
 											onClick={(e) => {
 												console.log('endGame ID: ' + game.gameNumber);

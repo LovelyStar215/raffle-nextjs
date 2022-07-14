@@ -789,7 +789,7 @@ function MyApp({ Component, pageProps }) {
                 <HeaderIcon />
               </div>
               <div className="md-50">
-                <div className="buttons md-text-left">
+                <div className="controls md-text-left">
                   <button
                     onClick={() => {
                       setMenu(0, !getMenu(0));
@@ -820,24 +820,55 @@ function MyApp({ Component, pageProps }) {
                       : 'Connect'
                     }
                   </button>
-                  {/* <button
-                    onClick={() => {
-                      setMenu(1, !getMenu(1));
-                    }}
-                    className={(() => {
+                  <div className="control switch">
+                    <div className={(() => {
                       let arr = [
-                        'button',
-                        'inverse'
+                        'menu'
                       ];
               
                       if (getMenu(1))
                         arr.push('active');
                       
                       return arr.join(' ');
-                    })()}
-                  >
-                    Network
-                  </button> */}
+                    })()}>
+                      <div>
+                        <ul>
+                          <li><button onClick={async () => {
+                            await ethereum.request({
+                              method: 'wallet_switchEthereumChain',
+                              params: [{ chainId: Web3.utils.toHex(1337) }],
+                            })
+                            // setChainId(1337)
+                          }}>Ganache</button></li>
+                          <li><button onClick={async () => {
+                            await ethereum.request({
+                              method: 'wallet_switchEthereumChain',
+                              params: [{ chainId: Web3.utils.toHex(4) }],
+                            })
+                            // setChainId(4)
+                          }}>Rinkeby</button></li>
+                        </ul>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => {
+                        setMenu(1, !getMenu(1));
+                      }}
+                      className={(() => {
+                        let arr = [
+                          'button',
+                          'inverse'
+                        ];
+                
+                        if (getMenu(1))
+                          arr.push('active');
+                        
+                        return arr.join(' ');
+                      })()}
+                    >
+                      Network
+                    </button>
+                  </div>
                 </div>
                 <div className="md-text-left">
                   <h1>...an Ethereum raffle app</h1>
@@ -872,7 +903,7 @@ function MyApp({ Component, pageProps }) {
       })()}>
         <div className="container">
           <h3>Management &ndash; Games</h3>
-          <div className="buttons">
+          <div className="controls">
             <div
               onClick={(e) => {
                 if (e.target.tagName === 'DIV') {
@@ -907,7 +938,7 @@ function MyApp({ Component, pageProps }) {
             </div>
           </div>
           <h3>Management &ndash; Transfers</h3>
-          <div className="buttons">
+          <div className="controls">
             <div
               onClick={(e) => {
                 if (e.target.tagName === 'DIV') {
@@ -1087,7 +1118,7 @@ function MyApp({ Component, pageProps }) {
                     </div>
                   </div>
                 </div>
-                <div className="buttons">
+                <div className="controls">
                   <button
                     onClick={() => startCommunityGame(gameContract)}
                     className="button">
@@ -1126,7 +1157,7 @@ function MyApp({ Component, pageProps }) {
       />
       <footer>
         <div className="container">
-          <div className="buttons">
+          <div className="controls">
             <a href={`${deployment.explorerAddressURI}${deployment.addressContractGameMaster}`} className="button">
               Contract
             </a>

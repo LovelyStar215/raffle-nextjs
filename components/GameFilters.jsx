@@ -16,7 +16,7 @@ export const GameFilters = ({
 		'All',
 	];
 
-	const buttons = states.map((val, key) => {
+	const controls = states.map((val, key) => {
 		let arr = [
 			'button'
 		];
@@ -40,7 +40,7 @@ export const GameFilters = ({
 			<div className="row">
 			<div className="md-50">
 					<div>
-						<div className="buttons">
+						<div className="controls">
 						<div
 							onClick={(e) => {
 								if (e.target.tagName === 'DIV')
@@ -61,8 +61,8 @@ export const GameFilters = ({
 				</div>
 				<div className="md-50">
 					<div>
-						<div className="buttons">
-							{buttons}
+						<div className="controls">
+							{controls}
 						</div>
 					</div>
 				</div>
