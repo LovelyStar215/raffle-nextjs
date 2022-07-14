@@ -146,6 +146,23 @@ function MyApp({ Component, pageProps }) {
           handleAccountsChanged(accounts);
         },
       );
+
+      web3.currentProvider.on(
+        'disconnect',
+        error => {
+          console.log('disconnect EVENT');
+          console.error(error);
+          disconnect();
+        },
+      );
+
+      web3.currentProvider.on(
+        'message',
+        message => {
+          console.log('message EVENT');
+          console.log(message);
+        },
+      );
     }
   }, [web3]);
 
@@ -244,20 +261,19 @@ function MyApp({ Component, pageProps }) {
   };
 
   const handleChainChanged = (chainId) => {
-    let _networkId = Web3.utils.isHex(chainId) ? Web3.utils.hexToNumber(chainId) : chainId;
-    setChainId(parseInt(_networkId))
+    let _networkId = Web3.utils.isHex(chainId) ? Web3.utils.hexToNumber(chainId) : parseInt(chainId);
+    setChainId(_networkId)
 
     const deployment = getChainDeployment(_networkId);
-    if (deployment === false) {
+    if (deployment) {
       setNotification(
-        'error',
-        `Chain ID (${_networkId}) is not supported.`
+        'info',
+        `Connected to ${deployment.name}`
       );
     } else {
       setNotification(
-        'info',
-        `Connected to chain`,
-        deployment.name
+        'error',
+        `Chain ID (${_networkId}) is not supported.`
       );
     }
   };
@@ -538,44 +554,6 @@ function MyApp({ Component, pageProps }) {
   /**
    * Mangement: 
    */
-   const startGame = async (gameContract) => {
-    if (!gameContract || !activeAddress) {
-      console.log('Not ready');
-    } else {
-      const decimals = web3.utils.toBN(18);
-      let feePercent = web3.utils.toBN(1);//web3.utils.toBN(2).mul(web3.utils.toBN(10).pow(decimals));
-      let ticketPrice = web3.utils.toBN(100000000000000000); // 0.1
-      let maxPlayers = web3.utils.toBN(50000);
-      let maxTicketsPlayer = web3.utils.toBN(20);
-
-      let results = await gameContract.methods.startGame(
-
-        // Token address
-        tokenAddress,
-  
-        // Game fee address
-        feeAddress,
-  
-        // Game fee percent
-        feePercent,
-  
-        // Ticket price
-        ticketPrice,
-  
-        // Max players
-        maxPlayers,
-  
-        // Max player tickets
-        maxTicketsPlayer
-  
-      ).send({from: activeAddress});
-      console.log(results);
-    }
-  }
-
-  /**
-   * Mangement: 
-   */
     const endGame = async (_gameContract, _gameNumber) => {
     let results = await _gameContract.methods.endGame(
 
@@ -696,7 +674,7 @@ function MyApp({ Component, pageProps }) {
   useEffect(() => {
     if (web3 && chainId) {
       const deployment = getChainDeployment(chainId);
-      if (deployment !== false) {
+      if (deployment) {
         setGameContract(new web3.eth.Contract(
           gameMasterABI,
           deployment.addressContractGameMaster
@@ -863,11 +841,6 @@ function MyApp({ Component, pageProps }) {
         <div className="container">
           <h3>Management &ndash; Games</h3>
           <div className="buttons">
-            <button
-              onClick={() => startGame(gameContract)}
-              className="button">
-              startGame (A0)
-            </button>
             <div
               onClick={(e) => {
                 if (e.target.tagName === 'DIV') {
@@ -905,13 +878,22 @@ function MyApp({ Component, pageProps }) {
           <div className="buttons">
             <div
               onClick={(e) => {
-                if (e.target.tagName === 'DIV')
-                  sendFunds(
-                    tokenAddress,
-                    sendFundsFrom.current.value,
-                    sendFundsTo.current.value,
-                    sendFundsAmount.current.value
-                  )
+                if (e.target.tagName === 'DIV') {
+                  let deployment = getChainDeployment(chainId);
+                  if (!deployment) {
+                    setNotification(
+                      'error',
+                      `Unable to transfer game token a game on this chain`
+                    );
+                  } else {
+                    sendFunds(
+                      deployment.addressContractGameToken,
+                      sendFundsFrom.current.value,
+                      sendFundsTo.current.value,
+                      sendFundsAmount.current.value
+                    )
+                  }
+                }
               }}
               className="button"
               role="button"
@@ -1109,6 +1091,7 @@ function MyApp({ Component, pageProps }) {
         endGame={endGame}
         getGameState={getGameState}
         setNotification={setNotification}
+        chainId={chainId}
       />
       <footer>
         <div className="container">

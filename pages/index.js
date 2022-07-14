@@ -7,6 +7,7 @@ import {
 
 import Game from '../components/Game'
 import { GameFilters } from '../components/GameFilters.jsx';
+import { getChainDeployment } from '../features/configure/chain.js';
 
 function GamesList({
   activeAddress,
@@ -25,7 +26,8 @@ function GamesList({
   hasRole,
   endGame,
   getGameState,
-  setNotification
+  setNotification,
+  chainId
 }) {
   const [gameListRenderMode, setGameListRenderMode] = useState(3);
 
@@ -100,8 +102,8 @@ function GamesList({
         symbol,
         decimals
       };
-      // console.log('token');
-      // console.log(token);
+      console.log('token');
+      console.log(token);
       setToken(token);
     } catch(err) {
       console.error(err);
@@ -114,8 +116,8 @@ function GamesList({
         symbol: '???',
         decimals: '18'
       };
-      // console.log('token');
-      // console.log(token);
+      console.log('token');
+      console.log(token);
       setToken(token);
     }
   };
@@ -240,20 +242,22 @@ function GamesList({
     let token = new web3.eth.Contract(IERC20MetadataABI, _address);
 
     try {
-      const result = await token.methods.allowance(
-        activeAddress,
-        gameAddress
-      ).call();
-
-      let newAllowance = {
-        state: 1,
-        address: _address,
-        amount: result.toString()
-      };
-      // console.log('newAllowance');
-      // console.log(newAllowance);
-      setAllowance(_playerAllowanceIdx, newAllowance);
-
+      const deployment = getChainDeployment(chainId);
+      if (deployment) {
+        const result = await token.methods.allowance(
+          activeAddress,
+          deployment.addressContractGameMaster
+        ).call();
+  
+        let newAllowance = {
+          state: 1,
+          address: _address,
+          amount: result.toString()
+        };
+        // console.log('newAllowance');
+        // console.log(newAllowance);
+        setAllowance(_playerAllowanceIdx, newAllowance);
+      }
     } catch (err) {
       console.error(err);
       console.error('_getAllowance: ' + _address);
@@ -431,30 +435,31 @@ function GamesList({
               <p>No results found. Try a different filter.</p>
             </div>
           : gameRenderList().map((gameNumber) => {
-					let game = games[gameNumber];
-					if (!game)
-						return null;
+            let game = games[gameNumber];
+            if (!game)
+              return null;
 
-					return (
-						<Game
-							key={`gameNumber-${game.gameNumber}`}
-							getAllowancePlayerIndex={getAllowancePlayerIndex}
-							getERC20Token={getERC20Token}
-							getERC721Token={getERC721Token}
-							game={game}
-							gameTickets={tickets[game.gameNumber]}
-							web3={web3}
-							gameContract={gameContract}
-							activeAddress={activeAddress}
-							buyTicket={buyTicket}
-							getGamePlayerState={getGamePlayerState}
-							setAllowance={setAllowance}
-							getAllowance={getAllowance}
-							hasRole={hasRole}
-							endGame={endGame}
-						/>
-					);
-				})}
+            return (
+              <Game
+                key={`gameNumber-${game.gameNumber}`}
+                getAllowancePlayerIndex={getAllowancePlayerIndex}
+                getERC20Token={getERC20Token}
+                getERC721Token={getERC721Token}
+                game={game}
+                gameTickets={tickets[game.gameNumber]}
+                web3={web3}
+                gameContract={gameContract}
+                activeAddress={activeAddress}
+                buyTicket={buyTicket}
+                getGamePlayerState={getGamePlayerState}
+                setAllowance={setAllowance}
+                getAllowance={getAllowance}
+                hasRole={hasRole}
+                endGame={endGame}
+              />
+            );
+				  })
+        }
 			</div>
 		</div>
   )
