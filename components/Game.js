@@ -5,9 +5,6 @@ import {
 } from '../features/configure/abi.js';
 
 import {
-	gameAddress,
-	gameTrophyAddress,
-	tokenAddress,
 	CALLER_ROLE,
 	MANAGER_ROLE
 } from '../features/configure/env';
@@ -16,6 +13,7 @@ import GameMetrics from '../components/GameMetrics'
 import GamePots from '../components/GamePots'
 import GameStatus from '../components/GameStatus'
 import GameTickets from '../components/GameTickets'
+import { getChainDeployment } from '../features/configure/chain.js';
 
 const Game = ({
 	getAllowancePlayerIndex,
@@ -30,8 +28,12 @@ const Game = ({
 	setAllowance,
 	getAllowance,
 	hasRole,
-	endGame
+	endGame,
+	chainId
 }) => {
+	// if (!chainId)
+	// 	return null;
+
 	const numberOfTickets = useRef();
 	const addGamePotERC20AssetAddress = useRef();
 	const addGamePotERC20AssetAmount = useRef();
@@ -41,6 +43,8 @@ const Game = ({
 	const removeGamePotERC20AssetAmount = useRef();
 	const removeGamePotERC721AssetAddress = useRef();
 	const removeGamePotERC721AssetId = useRef();
+
+	const deployment = getChainDeployment(chainId);
 
 	let gameToken = new web3.eth.Contract(IERC20MetadataABI, game.pot[0].assetAddress);
 
@@ -198,6 +202,7 @@ const Game = ({
 									web3={web3}
 									gameTokenMetadata={gameTokenMetadata}
 									game={game}
+									deployment={deployment}
 								/>
 								<div className="buttons">
 									<button
@@ -205,7 +210,7 @@ const Game = ({
 										className={buttonApproveClasses()}
 										onClick={() => {
 											gameToken.methods.approve(
-												gameAddress,
+												deployment.addressContractGameMaster,
 												gameTokenApprovalMax
 											).send({from: activeAddress})
 											.on('receipt', function(receipt) {
@@ -251,6 +256,7 @@ const Game = ({
 							<div>
 								<GameStatus
 									game={game}
+									deployment={deployment}
 								/>
 								<GameTickets
 									web3={web3}
@@ -265,6 +271,7 @@ const Game = ({
 									game={game}
 									getERC20Token={getERC20Token}
 									getERC721Token={getERC721Token}
+									deployment={deployment}
 								/>
 								<div className="tip">
 									<div>
@@ -309,7 +316,7 @@ const Game = ({
 														IERC20MetadataABI,
 														addGamePotERC20AssetAddress.current.value
 													).methods.approve(
-														gameAddress,
+														deployment.addressContractGameMaster,
 														_amount
 													).send({from: activeAddress})
 													.on('receipt', function(receipt) {
@@ -331,7 +338,7 @@ const Game = ({
 												<div>addGamePotERC20Asset</div>
 												<input
 													ref={addGamePotERC20AssetAddress}
-													defaultValue={tokenAddress}
+													defaultValue={deployment.addressContractGameToken}
 													placeholder="Address"
 													size="6"
 													type="text"/>
@@ -364,7 +371,7 @@ const Game = ({
 												<div>removeGamePotERC20Asset</div>
 												<input
 													ref={removeGamePotERC20AssetAddress}
-													defaultValue={tokenAddress}
+													defaultValue={deployment.addressContractGameToken}
 													placeholder="Address"
 													size="6"
 													type="text"/>
@@ -383,7 +390,7 @@ const Game = ({
 														IERC721MetadataABI,
 														addGamePotERC721AssetAddress.current.value
 													).methods.approve(
-														gameAddress,
+														deployment.addressContractGameMaster,
 														addGamePotERC721AssetId.current.value
 													)
 													.send({from: activeAddress})
@@ -407,7 +414,7 @@ const Game = ({
 												<div>addGamePotERC721Asset</div>
 												<input
 													ref={addGamePotERC721AssetAddress}
-													defaultValue={gameTrophyAddress}
+													defaultValue={deployment.addressContractGameTrophy}
 													placeholder="Address"
 													size="6"
 													type="text"/>
@@ -437,7 +444,7 @@ const Game = ({
 												<div>removeGamePotERC721Asset</div>
 												<input
 													ref={removeGamePotERC721AssetAddress}
-													defaultValue={gameTrophyAddress}
+													defaultValue={deployment.addressContractGameTrophy}
 													placeholder="Address"
 													size="6"
 													type="text"/>

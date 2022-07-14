@@ -1,15 +1,12 @@
 import React from 'react';
 
-import {
-	EXPLORER_ADDRESS_URI
-} from '../features/configure/env.js'
-
 const GamePots = ({
 	web3,
 	gameTokenMetadata,
 	game,
 	getERC20Token,
-	getERC721Token
+	getERC721Token,
+	deployment
 }) => {
 	if (gameTokenMetadata.state === 0)
 		return false;
@@ -69,7 +66,6 @@ const GamePots = ({
 							// 	value += ' ' + assetMetadata.symbol;
 							// }
 						}
-						//${EXPLORER_ADDRESS_URI}
 
 						return (
 							<div className="panel" key={`game-${game.gameNumber}-pot-${key}`}>
@@ -77,7 +73,7 @@ const GamePots = ({
 									<div>P#{key}</div>
 									<div>{pot.assetType == 1 ? 'NFT' : 'Token'}</div>
 									<div>
-										<a href={`${EXPLORER_ADDRESS_URI}${pot.assetAddress}`}>
+										<a href={`${deployment.explorerAddressURI}${pot.assetAddress}`}>
 											{displayAddress}
 										</a>
 									</div>

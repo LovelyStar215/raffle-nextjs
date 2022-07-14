@@ -1,9 +1,3 @@
-import {
-	gameAddress,
-	gameTrophyAddress,
-	tokenAddress
-} from './env';
-
 export const getChainDeployment = (_chainId) => {
 	switch (_chainId) {
 		// case 1:
@@ -50,11 +44,11 @@ export const getChainDeployment = (_chainId) => {
 			return {
 				status: -2,
 				name: 'Ganache',
-				addressContractGameMaster: gameAddress,
-				addressContractGameTrophy: gameTrophyAddress,
-				addressContractGameToken: tokenAddress,
-				explorerURI: '',
-				explorerAddressURI: ''
+				addressContractGameMaster: process.env.NEXT_PUBLIC_GAMEMASTER_ADDRESS || null,
+				addressContractGameTrophy: process.env.NEXT_PUBLIC_GAME_TROPHY_ADDRESS || null,
+				addressContractGameToken: process.env.NEXT_PUBLIC_TOKEN_ADDRESS || null,
+				explorerURI: process.env.NEXT_PUBLIC_EXPLORER_URI || null,
+				explorerAddressURI: process.env.NEXT_PUBLIC_EXPLORER_ADDRESS_URI || null
 
 			};
 		default:

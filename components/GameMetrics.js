@@ -1,13 +1,10 @@
 import React from 'react';
 
-import {
-	EXPLORER_ADDRESS_URI
-} from '../features/configure/env.js'
-
 const GameMetrics = ({
 	web3,
 	gameTokenMetadata,
-	game
+	game,
+	deployment
 }) => {
 	if (gameTokenMetadata.state === 0) return false;
 
@@ -48,7 +45,7 @@ const GameMetrics = ({
 						<div title={val}>
 							{isNull
 								? `－`
-								: <a href={`${EXPLORER_ADDRESS_URI}${val}`}>
+								: <a href={`${deployment.explorerAddressURI}${val}`}>
 									{val.length > 10
 									? val.slice(0,6) + '...' + val.slice(-4)
 									: val}

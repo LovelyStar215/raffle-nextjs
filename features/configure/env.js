@@ -1,12 +1,5 @@
 import Web3 from 'web3'
 
-export const gameAddress = process.env.NEXT_PUBLIC_GAMEMASTER_ADDRESS || null;
-export const gameTrophyAddress = process.env.NEXT_PUBLIC_GAME_TROPHY_ADDRESS || null;
-export const tokenAddress = process.env.NEXT_PUBLIC_TOKEN_ADDRESS || null;
-export const feeAddress = process.env.NEXT_PUBLIC_TESTA1_ADDRESS || null;
-
-export const EXPLORER_ADDRESS_URI = process.env.NEXT_PUBLIC_EXPLORER_ADDRESS_URI || null;
-
 export const CALLER_ROLE = Web3.utils.keccak256('CALLER_ROLE');
 export const MANAGER_ROLE = Web3.utils.keccak256('MANAGER_ROLE');
 

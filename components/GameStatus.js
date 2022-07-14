@@ -1,11 +1,8 @@
 import React from 'react';
 
-import {
-	EXPLORER_ADDRESS_URI
-} from '../features/configure/env.js'
-
 const GameStatus = ({
-	game
+	game,
+	deployment
 }) => {
 	if (game.status > 0) {
 		return (
@@ -14,7 +11,7 @@ const GameStatus = ({
 					<h5>{game.status === '2' ? `Active community raffle` : `Active house raffle`}</h5>
 					<p>{game.status === '2'
 						? <span>Started by&nbsp; 
-							<a href={`${EXPLORER_ADDRESS_URI}${game.ownerAddress}`}>
+							<a href={`${deployment.explorerAddressURI}${game.ownerAddress}`}>
 								{game.ownerAddress}
 							</a>
 						</span>

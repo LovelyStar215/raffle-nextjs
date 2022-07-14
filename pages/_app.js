@@ -10,11 +10,6 @@ import {
 import { getChainDeployment } from '../features/configure/chain.js';
 
 import {
-  gameAddress,
-  gameTrophyAddress,
-  tokenAddress,
-  feeAddress,
-  EXPLORER_ADDRESS_URI,
 	CALLER_ROLE,
 	MANAGER_ROLE,
   LOCAL_STORAGE_KEY_ROLES,
@@ -74,6 +69,8 @@ function MyApp({ Component, pageProps }) {
   const awardItemTo = useRef();
   const awardItemURI = useRef();
 
+  let deployment = false;
+
 	useEffect(async () => {
 
     // Get MetaMask account details
@@ -95,6 +92,8 @@ function MyApp({ Component, pageProps }) {
 
   useEffect(() => {
     if (chainId) {
+      deployment = getChainDeployment(chainId);
+
       console.log('The data from local storage;');
       const storedRoles = JSON.parse(localStorage.getItem(`${LOCAL_STORAGE_KEY_ROLES}.${chainId}`));
       console.log('Roles from cache');
@@ -673,11 +672,11 @@ function MyApp({ Component, pageProps }) {
    */
   useEffect(() => {
     if (web3 && chainId) {
-      const deployment = getChainDeployment(chainId);
-      if (deployment) {
+      const _deployment = getChainDeployment(chainId);
+      if (_deployment) {
         setGameContract(new web3.eth.Contract(
           gameMasterABI,
-          deployment.addressContractGameMaster
+          _deployment.addressContractGameMaster
         ))
       } else {
         console.error('Unsupported chain: ' + chainId);
@@ -925,7 +924,7 @@ function MyApp({ Component, pageProps }) {
                 if (e.target.tagName === 'DIV') {
                   new web3.eth.Contract(
                     gameTrophyABI,
-                    gameTrophyAddress
+                    deployment.addressContractGameTrophy
                   ).methods.awardItem(
                     awardItemTo.current.value,
                     awardItemURI.current.value
@@ -988,7 +987,7 @@ function MyApp({ Component, pageProps }) {
                 <p>Once game has started, you can add (and remove) additional prize pots, such as other tokens, or NFTs</p>
                 <h3>Remember</h3>
                 <p>Always double check the form values, before starting the game. You can not change these parameters after the game has started.</p>
-                <p>Prefer direct contract interaction? <a href={`${EXPLORER_ADDRESS_URI}${gameAddress}`}>{gameAddress}</a></p>
+                <p>Prefer direct contract interaction? <a href={`${deployment.explorerAddressURI}${deployment.addressContractGameMaster}`}>{deployment.addressContractGameMaster}</a></p>
               </div>
               <div className="md-50">
                 <div className="grid">
@@ -998,7 +997,7 @@ function MyApp({ Component, pageProps }) {
                       <input
                         ref={startCommunityGameTokenAddress}
                         type="text"
-                        defaultValue={tokenAddress}
+                        defaultValue={deployment ? deployment.addressContractGameToken : null}
                       />
                     </div>
                     <div className="md-50">
@@ -1078,7 +1077,6 @@ function MyApp({ Component, pageProps }) {
         tickets={tickets}
         tokens={tokens}
         games={games}
-        gameAddress={gameAddress}
         gameContract={gameContract}
         roles={roles}
         getActiveGames={getActiveGames}
@@ -1096,7 +1094,7 @@ function MyApp({ Component, pageProps }) {
       <footer>
         <div className="container">
           <div className="buttons">
-            <a href={`${EXPLORER_ADDRESS_URI}${gameAddress}`} className="button">
+            <a href={`${deployment.explorerAddressURI}${deployment.addressContractGameMaster}`} className="button">
               Contract
             </a>
             <button

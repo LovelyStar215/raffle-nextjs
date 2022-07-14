@@ -16,7 +16,6 @@ function GamesList({
   tickets,
   tokens,
   games,
-  gameAddress,
   gameContract,
   getActiveGames,
   getGamePlayerState,
@@ -456,6 +455,7 @@ function GamesList({
                 getAllowance={getAllowance}
                 hasRole={hasRole}
                 endGame={endGame}
+                chainId={chainId}
               />
             );
 				  })
