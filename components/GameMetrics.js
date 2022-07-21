@@ -15,7 +15,22 @@ const GameMetrics = ({
 		['ownerAddress', 'Owner address', 'The user address, that started this game.'],
 		['winnerAddress', 'Winner address', 'The winner address, that won the game pots.']
 	];
+
+	// Base class names
+	let classes = ['pill'];
+	let classesFees = [...classes];
+
+	// Class names for fee graded styling
+	const feePercent = parseInt(game.feePercent);
+	if (feePercent) {
+		for (let i = 20; i <= 100; i += 20) {
+			if (feePercent >= (i-20) && feePercent <= i)
+				classesFees.push(`p${i}`);
+		}
+	} else
+		classesFees.push('p0');
 	
+	// Render each metric
 	const items = Object.entries(game).map(([key, val]) => {
 		// console.log('gameItems');
 		if (
@@ -35,9 +50,15 @@ const GameMetrics = ({
 		if (key.substring((key.length - 7)) === 'Address') {
 			let isNull = (val == '0x0000000000000000000000000000000000000000');
 
+			// Prep class names
+			let _classes =
+				key === 'feeAddress'
+				? classesFees
+				: classes;
+
 			return (
 				<div key={`game-${game.gameNumber}-${key}`}>
-					<div className="pill">
+					<div className={_classes.join(' ')}>
 						<strong>{keyLabel.length ? keyLabel[0][1] : key}</strong>
 						<div title={val}>
 							{isNull
@@ -52,20 +73,9 @@ const GameMetrics = ({
 				</div>
 			)
 		} else if(key === 'feePercent') {
-			let percentage = parseInt(val);
-
-			let classes = ['pill'];
-			if (percentage) {
-				for (let i = 20; i <= 100; i += 20) {
-					if (percentage >= (i-20) && percentage <= i)
-						classes.push(`p${i}`);
-				}
-			} else
-				classes.push('p0');
-
 			return (
 				<div key={`game-${game.gameNumber}-${key}`}>
-					<div className={classes.join(' ')}>
+					<div className={classesFees.join(' ')}>
 						<strong>{keyLabel.length ? keyLabel[0][1] : key}</strong>
 						<div>{val}%</div>
 					</div>
@@ -75,7 +85,7 @@ const GameMetrics = ({
 
 		return (
 			<div key={`game-${game.gameNumber}-${key}`}>
-				<div className="pill">
+				<div className={classes.join(' ')}>
 					<strong>{keyLabel.length ? keyLabel[0][1] : key}</strong>
 					<div>{val}</div>
 				</div>
