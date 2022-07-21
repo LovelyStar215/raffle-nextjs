@@ -158,7 +158,14 @@ footer {
   margin: 0 auto;
 }
 
-.icon {
+.icon-search {
+  fill: $black;
+  width: 1.5em;
+  height: 1.5em;
+  margin: .5em 1em .25em .25em !important;
+}
+
+.logo {
   fill: $black;
   &:first-of-type {
     position: absolute;
@@ -439,6 +446,15 @@ label {
 
 div.button {
   padding: 0;
+  &.search {
+    input {
+      min-width: 14em;
+      margin-left: 1em;
+    }
+    > div {
+      margin: 0;
+    }
+  }
   > div {
     border: 0;
   }

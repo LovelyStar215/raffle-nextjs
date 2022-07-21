@@ -20,7 +20,7 @@ import {
 } from '../features/configure/env';
 
 import Notifications from '../components/Notifications.js';
-import { HeaderIcon } from '../components/HeaderIcon'
+import { HeaderLogo } from '../components/HeaderLogo'
 
 import '../styles/globals.scss'
 
@@ -786,7 +786,7 @@ function MyApp({ Component, pageProps }) {
           <div className="grid">
             <div className="row">
               <div className="md-50">
-                <HeaderIcon />
+                <HeaderLogo />
               </div>
               <div className="md-50">
                 <div className="controls md-text-left">

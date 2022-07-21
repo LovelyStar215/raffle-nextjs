@@ -1,5 +1,6 @@
 import React, { useRef } from 'react';
 import Web3 from 'web3'
+import { IconSearch } from './IconSearch';
 
 export const GameFilters = ({
 	gameListRenderMode,
@@ -43,18 +44,29 @@ export const GameFilters = ({
 						<div className="controls">
 						<div
 							onClick={(e) => {
-								if (e.target.tagName === 'DIV')
-								getGameState(
-									gameContract,
-									Web3.utils.toBN(getGameStateId.current.value)
+								if (
+									e.target.tagName === 'DIV'
+									|| e.target.tagName.toUpperCase() === 'SVG'
+									|| e.target.tagName.toUpperCase() === 'PATH'
 								)
+									getGameState(
+										gameContract,
+										Web3.utils.toBN(getGameStateId.current.value)
+									)
 							}}
-							className="button"
+							className="button search"
 							title="Poll blockchain for raffle information"
 							role="button"
 							tabIndex="0">
-								<div>Raffle search</div>
-								<input ref={getGameStateId} placeholder="Enter a raffle number" size="8" min="0" type="number" />
+								<input
+									ref={getGameStateId}
+									placeholder="Enter a raffle number"
+									min="0"
+									type="number"
+								/>
+								<div>
+									<IconSearch />
+								</div>
 							</div>
 						</div>
 					</div>
