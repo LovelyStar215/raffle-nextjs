@@ -58,7 +58,6 @@ function MyApp({ Component, pageProps }) {
   const startCommunityGameFeePercent = useRef();
 
   const endGameId = useRef();
-  const endCommunityGameId = useRef();
 
   const getActiveGamesMax = useRef();
 
@@ -920,22 +919,6 @@ function MyApp({ Component, pageProps }) {
               <div>endGame (A0)</div>
               <input ref={endGameId} defaultValue="0" size="1" min="0" type="number" />
             </div>
-            <div
-              onClick={(e) => {
-                if (e.target.tagName === 'DIV') {
-                  console.log('endCommunityGame ID: ' + endCommunityGameId.current.value);
-                  endGame(
-                    gameContract,
-                    web3.utils.toBN(endCommunityGameId.current.value)
-                  )
-                }
-              }}
-              className="button"
-              role="button"
-              tabIndex="0">
-              <div>endCommunityGame</div>
-              <input ref={endCommunityGameId} defaultValue="0" size="1" min="0" type="number" />
-            </div>
           </div>
           <h3>Management &ndash; Transfers</h3>
           <div className="controls">
@@ -990,8 +973,8 @@ function MyApp({ Component, pageProps }) {
                     gameTrophyABI,
                     deployment.addressContractGameTrophy
                   ).methods.awardItem(
-                    awardItemTo.current.value,
-                    awardItemURI.current.value
+                    awardItemTo.current.value
+                    // awardItemURI.current.value
                   )
                   .send({from: activeAddress})
                   .on('receipt', (receipt) => {
