@@ -274,11 +274,11 @@ function MyApp({ Component, pageProps }) {
     let _networkId = Web3.utils.isHex(chainId) ? Web3.utils.hexToNumber(chainId) : parseInt(chainId);
     setChainId(_networkId)
 
-    const deployment = getChainDeployment(_networkId);
-    if (deployment) {
+    const _deployment = getChainDeployment(_networkId);
+    if (_deployment) {
       setNotification(
         'info',
-        `Connected to ${deployment.name}`
+        `Connected to ${_deployment.name}`
       );
     } else {
       setNotification(
@@ -925,15 +925,15 @@ function MyApp({ Component, pageProps }) {
             <div
               onClick={(e) => {
                 if (e.target.tagName === 'DIV') {
-                  let deployment = getChainDeployment(chainId);
-                  if (!deployment) {
+                  const _deployment = getChainDeployment(chainId);
+                  if (!_deployment) {
                     setNotification(
                       'error',
                       `Unable to transfer game token a game on this chain`
                     );
                   } else {
                     sendFunds(
-                      deployment.addressContractGameToken,
+                      _deployment.addressContractGameToken,
                       sendFundsFrom.current.value,
                       sendFundsTo.current.value,
                       sendFundsAmount.current.value
@@ -969,9 +969,10 @@ function MyApp({ Component, pageProps }) {
             <div
               onClick={(e) => {
                 if (e.target.tagName === 'DIV') {
+                  const _deployment = getChainDeployment(chainId);
                   new web3.eth.Contract(
                     gameTrophyABI,
-                    deployment.addressContractGameTrophy
+                    _deployment.addressContractGameTrophy
                   ).methods.awardItem(
                     awardItemTo.current.value
                     // awardItemURI.current.value

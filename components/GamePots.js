@@ -21,11 +21,8 @@ const GamePots = ({
 				</div>
 				<div>
 					{game.pot.map((pot, key) => {
-						let value = pot.value;
-
-						// Skip game pots (except for pot zero for tickets)
-						// that have been removed
-						if (key && value == 0) return null;
+						console.log(pot);
+						let displayValue = pot.value;
 
 						let displayAddress =
 							pot?.assetAddress?.slice(0,6)
@@ -42,10 +39,10 @@ const GamePots = ({
 									? Web3.utils.fromWei(pot.value)
 									: pot.value; // game._decimals
 								
-								value = convertedValue;
+								displayValue = convertedValue;
 								
 								if (assetMetadata.symbol)
-									value += ' ' + assetMetadata.symbol;
+									displayValue += ' ' + assetMetadata.symbol;
 
 								// On game pot zero, show value minus the fee (if applicable)
 								if (!key) {
@@ -53,16 +50,23 @@ const GamePots = ({
 									if (feePercent) {
 										let feePercent = parseInt(game.feePercent);
 										let valueWithFee = (parseInt(convertedValue) / 100) * (100 - feePercent);
-										value += ` (${valueWithFee} ${assetMetadata.symbol})`;
+										displayValue += ` (${valueWithFee} ${assetMetadata.symbol})`;
 									}
 								}
 							}
 						} else if (pot.assetType == 1) {
-							value = `#${pot.value}`
+							displayValue = `#${pot.value}`
 							
 							// let assetMetadata = getERC721Token(pot.assetAddress);
 							// if (assetMetadata) {
-							// 	value += ' ' + assetMetadata.symbol;
+							// 	displayValue += ' ' + assetMetadata.symbol;
+							// }
+						} else if (pot.assetType == 2) {
+							displayValue = `#${pot.value}`
+							
+							// let assetMetadata = getERC721Token(pot.assetAddress);
+							// if (assetMetadata) {
+							// 	displayValue += ' ' + assetMetadata.symbol;
 							// }
 						}
 
@@ -76,7 +80,7 @@ const GamePots = ({
 											{displayAddress}
 										</a>
 									</div>
-									<div>{value}</div>
+									<div>{displayValue}</div>
 								</div>
 							</div>
 						);
