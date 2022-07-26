@@ -3,7 +3,8 @@ import Web3 from 'web3';
 
 import {
 	IERC20MetadataABI,
-	IERC721MetadataABI
+	IERC721MetadataABI,
+	IERC1155ABI
 } from '../features/configure/abi.js';
 
 import {
@@ -41,10 +42,12 @@ const Game = ({
 	const addGamePotERC20AssetAmount = useRef();
 	const addGamePotERC721AssetAddress = useRef();
 	const addGamePotERC721AssetId = useRef();
-	const removeGamePotERC20AssetAddress = useRef();
-	const removeGamePotERC20AssetAmount = useRef();
-	const removeGamePotERC721AssetAddress = useRef();
-	const removeGamePotERC721AssetId = useRef();
+	const addGamePotERC1155AssetAddress = useRef();
+	const addGamePotERC1155AssetId = useRef();
+	// const removeGamePotERC20AssetAddress = useRef();
+	// const removeGamePotERC20AssetAmount = useRef();
+	// const removeGamePotERC721AssetAddress = useRef();
+	// const removeGamePotERC721AssetId = useRef();
 
 	const deployment = getChainDeployment(chainId);
 
@@ -349,7 +352,7 @@ const Game = ({
 													min="0"
 													type="number"/>
 										</div>
-										<div
+										{/* <div
 											onClick={(e) => {
 												if (e.target.tagName === 'DIV')
 													gameContract.methods.removeGamePotERC20Asset(
@@ -381,7 +384,7 @@ const Game = ({
 													size="3"
 													min="0"
 													type="number"/>
-										</div>
+										</div> */}
 										<div
 											onClick={(e) => {
 												if (e.target.tagName === 'DIV')
@@ -427,6 +430,51 @@ const Game = ({
 										<div
 											onClick={(e) => {
 												if (e.target.tagName === 'DIV')
+													new web3.eth.Contract(
+														IERC1155ABI,
+														addGamePotERC1155AssetAddress.current.value
+													).methods.setApprovalForAll(
+														deployment.addressContractGameMaster,
+														true
+													)
+													.send({from: activeAddress})
+													.on('receipt', (receipt) => {
+														console.log(receipt);
+
+														gameContract.methods.addGamePotERC1155Asset(
+															Web3.utils.toBN(game.gameNumber),
+															addGamePotERC1155AssetId.current.value,
+															addGamePotERC1155AssetAddress.current.value
+														).send({from: activeAddress})
+														.on('receipt', function(receipt) {
+															console.log('receipt-addGamePotERC1155Asset');
+															console.log(receipt);
+														})
+														.on('error', err => {
+															console.error(err);
+														});
+													});
+											}}
+											className="button"
+											role="button"
+											tabIndex="0">
+												<div>addGamePotERC1155Asset</div>
+												<input
+													ref={addGamePotERC1155AssetAddress}
+													defaultValue={deployment.addressContractGameTrophy}
+													placeholder="Address"
+													size="6"
+													type="text"/>
+												<input
+													ref={addGamePotERC1155AssetId}
+													placeholder="ID/Amount"
+													size="3"
+													min="0"
+													type="number"/>
+										</div>
+										{/* <div
+											onClick={(e) => {
+												if (e.target.tagName === 'DIV')
 													gameContract.methods.removeGamePotERC721Asset(
 														Web3.utils.toBN(game.gameNumber),
 														removeGamePotERC721AssetId.current.value,
@@ -453,7 +501,7 @@ const Game = ({
 													size="3"
 													min="0"
 													type="number"/>
-										</div>
+										</div> */}
 									</div>
 								</div>
 							</div>
