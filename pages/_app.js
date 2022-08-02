@@ -48,7 +48,9 @@ function MyApp({ Component, pageProps }) {
   const [tokens, setTokens] = useState([])
 
   const [allowances, setAllowances] = useState([[],[]])
-  // const [_playerIndexes, set_playerIndexes] = useState([])
+
+  const [treasuryFeePercent, setTreasuryFeePercent] = useState(0)
+  const [treasuryFeeAddress, setTreasuryFeeAddress] = useState(0)
 
   const startCommunityGameTokenAddress = useRef();
   const startCommunityGameTicketPrice = useRef();
@@ -700,6 +702,18 @@ function MyApp({ Component, pageProps }) {
    */
   useEffect(() => {
     if (web3 && gameContract) {
+      gameContract.methods.treasuryAddress().call()
+        .then(res => {
+          console.log(res)
+          setTreasuryFeeAddress(res);
+        });
+
+      gameContract.methods.treasuryFeePercent().call()
+        .then(res => {
+          console.log(res)
+          setTreasuryFeePercent(res);
+        });
+
       gameContract.events.GameStarted({}, (error, data) => {
         console.log('EVENT: GameStarted');
         if (error) {
@@ -777,6 +791,20 @@ function MyApp({ Component, pageProps }) {
       });
     }
   }, [gameContract])
+
+  const getTreasureInformation = () => {
+    if (chainId) {
+      const _deployment = getChainDeployment(chainId);
+
+      return (
+        <span>
+          The treasury fee is currently <a href={`${_deployment.explorerAddressURI}${_deployment.addressContractGameMaster}#readContract#F14`}>
+          {treasuryFeePercent}%</a>, going to address <a href={`${_deployment.explorerAddressURI}${_deployment.addressContractGameMaster}#readContract#F13`}>{treasuryFeeAddress}</a>
+        </span>
+      )
+    }
+    return "...";
+  };
 
   return (
     <>
@@ -876,7 +904,7 @@ function MyApp({ Component, pageProps }) {
                     <li>Each raffle can be set up to donate an optional fee (taken from <strong>P#0</strong>, which is the primary ticket pot), at the end of each game.</li>
                     <li>After a game has started, only new prizes can be added. Nothing else can be changed.</li>
                     <li>A winner is guaranteed at the end of every game!</li>
-                    <li>In community raffles; a fee  (currently 5%, can vary 0~20%) (taken from P#0) is transfered to the treasury address. This is taken at the end of the game, before the optional game fee.</li>
+                    <li>In community raffles; a fee ({getTreasureInformation()}, can vary 0~20%) (taken from P#0) is transfered to the treasury address. This is taken at the end of the game, before the optional game fee.</li>
                     <li>A game can only be ended by its owner, or management staff.</li>
                   </ul>
                   <div className="tip">
