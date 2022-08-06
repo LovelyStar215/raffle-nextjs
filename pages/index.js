@@ -46,15 +46,16 @@ function GamesList({
     if (tokenIdx === false)
       tokenIdx = tokens.length;
     
-    const currToken = tokens[tokenIdx];
+    let newTokens = tokens;
+    const currToken = newTokens[tokenIdx];
     const newToken = { ...currToken, ...data };
     // console.log('setToken-newToken');
     // console.log(newToken);
 
-    tokens[tokenIdx] = newToken;
+    newTokens[tokenIdx] = newToken;
     // console.log('setToken-tokens');
-    // console.log(tokens);
-    setTokens([...tokens]);
+    // console.log(newTokens);
+    setTokens([...newTokens]);
   }
 
   const tokenExists = (_address) => {
