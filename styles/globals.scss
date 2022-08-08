@@ -676,33 +676,33 @@ ul {
       }
       .pill {
         > div {
-          background-color: $black;
-          color: $white;
+          background-color: $white;
+          color: $black;
           border-radius: .25em;
           padding: .5em;
-          margin: .5em 0 0;
+          margin: .5em .125em .125em;
         }
         &.p0 > div {
-          background-color: #003c14;
+          background-color: #6cdb9d;
         }
         &.p20 > div {
-          background-color: #443b07;
+          background-color: #fff1a0;
         }
         &.p40 > div {
-          background-color: #5f520b;
+          background-color: #fdea7d;
         }
         &.p60 > div {
-          background-color: #6d5f0e;
+          background-color: #fae25d;
         }
         &.p80 > div {
-          background-color: #887612;
+          background-color: #fade40;
         }
         &.p100 > div {
-          background-color: #998517;
+          background-color: #f4d31e;
         }
-        background-color: $white;
-        color: $black;
-        border-radius: .25em;
+        background-color: $black;
+        color: $white;
+        border-radius: .5em;
         padding: 0.5em 0.125em 0.125em;
         font-weight: 500;
         width: 90%;
