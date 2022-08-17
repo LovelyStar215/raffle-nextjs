@@ -711,7 +711,7 @@ function MyApp({ Component, pageProps }) {
       gameContract.methods.treasuryFeePercent().call()
         .then(res => {
           console.log('treasuryFeePercent: ' + res)
-          setTreasuryFeePercent(parseInt(res));
+          setTreasuryFeePercent(res);
         });
 
       gameContract.events.GameStarted({}, (error, data) => {
