@@ -16,7 +16,7 @@ const GamePots = ({
 		return false;
 	
 	return (
-		<div key={`gamePots-${game.gameNumber}`} className="result">
+		<div key={`gamePots-${game.gameNumber}`} className="result pots">
 			<div className="panels">
 				<div>
 					<h5>Game prize</h5>

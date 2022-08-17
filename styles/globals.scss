@@ -604,6 +604,21 @@ ul {
           font-weight: 500;
         }
       }
+      &.pots {
+        .items > div {
+          width: 50%;
+          @media screen and (min-width: 1200px) {
+            width: 15%;
+            &:nth-child(1n+3) {
+              width: 30%;
+            }
+            &:nth-child(1n+4) {
+              width: 40%;
+              text-align: right;
+            }
+          }
+        }
+      }
       .panels {
         background-color: $yellow;
         border-radius: .5em;
@@ -640,7 +655,8 @@ ul {
         font-weight: 700;
         div {
           display: inline-block;
-          margin: .5em;
+          padding: .5em;
+          vertical-align: middle;
         }
       }
     }
