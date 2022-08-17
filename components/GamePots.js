@@ -48,9 +48,13 @@ const GamePots = ({
 								if (!key) {
 									let feePercent = parseInt(game.feePercent);
 									if (feePercent) {
-										let feePercent = parseInt(game.feePercent);
-										let valueWithFee = (parseInt(convertedValue) / 100) * (100 - feePercent);
-										displayValue += ` (${valueWithFee} ${assetMetadata.symbol})`;
+										let valueWithFee =
+											convertedValue
+											- (
+												(convertedValue / 100)
+												* parseInt(game.feePercent)
+											);
+										displayValue = `${valueWithFee} ${assetMetadata.symbol} (min. fee)`;
 									}
 								}
 							}
