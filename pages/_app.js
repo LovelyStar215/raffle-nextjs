@@ -901,10 +901,10 @@ function MyApp({ Component, pageProps }) {
                   <h1>...an Ethereum raffle app</h1>
                   <h2>Create raffles for any number of NFTs, tokens, with an optional fee, at  a price and ticket token of your choice.</h2>
                   <ul>
-                    <li>Each raffle can be set up to donate an optional fee (taken from <strong>P#0</strong>, which is the primary ticket pot), at the end of each game.</li>
+                    <li>Each raffle can be set up to donate an optional fee (RF) (taken from <strong>P#0</strong>, which is the primary ticket pot), at the end of each game.</li>
                     <li>After a game has started, only new prizes can be added. Nothing else can be changed.</li>
                     <li>A winner is guaranteed at the end of every game!</li>
-                    <li>In community raffles; a fee ({getTreasureInformation()}, can vary 0~20%) (taken from P#0) is transfered to the treasury address. This is taken at the end of the game, before the optional game fee.</li>
+                    <li>In community raffles; a fee (TF) ({getTreasureInformation()}, can vary 0~20%) (taken from P#0) is transfered to the treasury address. This is taken at the end of the game, before the optional game fee.</li>
                     <li>A game can only be ended by its owner, or management staff.</li>
                   </ul>
                   <div className="tip">
