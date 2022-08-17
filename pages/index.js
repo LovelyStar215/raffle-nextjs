@@ -26,7 +26,8 @@ function GamesList({
   endGame,
   getGameState,
   setNotification,
-  chainId
+  chainId,
+  treasuryFeePercent
 }) {
   const [gameListRenderMode, setGameListRenderMode] = useState(3);
 
@@ -457,6 +458,7 @@ function GamesList({
                 hasRole={hasRole}
                 endGame={endGame}
                 chainId={chainId}
+                treasuryFeePercent={treasuryFeePercent}
               />
             );
 				  })

@@ -704,14 +704,14 @@ function MyApp({ Component, pageProps }) {
     if (web3 && gameContract) {
       gameContract.methods.treasuryAddress().call()
         .then(res => {
-          console.log(res)
+          console.log('treasuryFeeAddress: ' + res)
           setTreasuryFeeAddress(res);
         });
 
       gameContract.methods.treasuryFeePercent().call()
         .then(res => {
-          console.log(res)
-          setTreasuryFeePercent(res);
+          console.log('treasuryFeePercent: ' + res)
+          setTreasuryFeePercent(parseInt(res));
         });
 
       gameContract.events.GameStarted({}, (error, data) => {
@@ -1166,6 +1166,7 @@ function MyApp({ Component, pageProps }) {
         getGameState={getGameState}
         setNotification={setNotification}
         chainId={chainId}
+        treasuryFeePercent={treasuryFeePercent}
       />
       <footer>
         <div className="container">

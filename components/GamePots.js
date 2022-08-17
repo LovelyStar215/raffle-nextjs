@@ -5,12 +5,14 @@ const GamePots = ({
 	game,
 	getERC20Token,
 	getERC721Token,
-	deployment
+	deployment,
+	treasuryFeePercent
 }) => {
-	if (gameTokenMetadata.state === 0)
-		return false;
-
-	if (!game.pot)
+	if (
+		gameTokenMetadata.state === 0
+		|| !treasuryFeePercent
+		|| !game.pot
+	)
 		return false;
 	
 	return (
@@ -21,7 +23,7 @@ const GamePots = ({
 				</div>
 				<div>
 					{game.pot.map((pot, key) => {
-						console.log(pot);
+						// console.log(pot);
 						let displayValue = pot.value;
 
 						let displayAddress =
@@ -46,16 +48,24 @@ const GamePots = ({
 
 								// On game pot zero, show value minus the fee (if applicable)
 								if (!key) {
+									let valueMinusFess = convertedValue;
+
+									// Deduct treasury fee
+									if (treasuryFeePercent) {
+										valueMinusFess -=
+											(convertedValue / 100)
+											* parseInt(treasuryFeePercent);
+									}
+
+									// Deduct game fee
 									let feePercent = parseInt(game.feePercent);
 									if (feePercent) {
-										let valueWithFee =
-											convertedValue
-											- (
-												(convertedValue / 100)
-												* parseInt(game.feePercent)
-											);
-										displayValue = `${valueWithFee} ${assetMetadata.symbol} (min. fee)`;
+										valueMinusFess -=
+											(convertedValue / 100)
+											* feePercent;
 									}
+
+									displayValue = `${valueMinusFess} ${assetMetadata.symbol} (min. fee)`;
 								}
 							}
 						} else if (pot.assetType == 1) {

@@ -32,7 +32,8 @@ const Game = ({
 	getAllowance,
 	hasRole,
 	endGame,
-	chainId
+	chainId,
+	treasuryFeePercent
 }) => {
 	// if (!chainId)
 	// 	return null;
@@ -269,11 +270,12 @@ const Game = ({
 									game={game}
 								/>
 								<GamePots
-									gameTokenMetadata={gameTokenMetadata}
+									deployment={deployment}
 									game={game}
+									gameTokenMetadata={gameTokenMetadata}
 									getERC20Token={getERC20Token}
 									getERC721Token={getERC721Token}
-									deployment={deployment}
+									treasuryFeePercent={treasuryFeePercent}
 								/>
 								<div className="tip">
 									<div>
