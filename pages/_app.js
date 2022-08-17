@@ -792,7 +792,7 @@ function MyApp({ Component, pageProps }) {
     }
   }, [gameContract])
 
-  const getTreasureInformation = () => {
+  const getTreasuryInformation = () => {
     if (chainId) {
       const _deployment = getChainDeployment(chainId);
 
@@ -904,7 +904,7 @@ function MyApp({ Component, pageProps }) {
                     <li>Each raffle can be set up to donate an optional fee (RF) (taken from <strong>P#0</strong>, which is the primary ticket pot), at the end of each game.</li>
                     <li>After a game has started, only new prizes can be added. Nothing else can be changed.</li>
                     <li>A winner is guaranteed at the end of every game!</li>
-                    <li>In community raffles; a fee (TF) ({getTreasureInformation()}, can vary 0~20%) (taken from P#0) is transfered to the treasury address. This is taken at the end of the game, before the optional game fee.</li>
+                    <li>In community raffles; a fee (TF) ({getTreasuryInformation()}, can vary 0~20%) (taken from P#0) is transfered to the treasury address. This is taken at the end of the game, before the optional game fee.</li>
                     <li>A game can only be ended by its owner, or management staff.</li>
                   </ul>
                   <div className="tip">
