@@ -48,24 +48,34 @@ const GamePots = ({
 
 								// On game pot zero, show value minus the fee (if applicable)
 								if (!key) {
-									let valueMinusFess = convertedValue;
+									let feeList = [];
+									let valueMinusFees = convertedValue;
 
 									// Deduct treasury fee
-									if (treasuryFeePercent) {
-										valueMinusFess -=
-											(convertedValue / 100)
-											* parseInt(treasuryFeePercent);
-									}
-
-									// Deduct game fee
-									let feePercent = parseInt(game.feePercent);
+									let feePercent = parseInt(treasuryFeePercent);
 									if (feePercent) {
-										valueMinusFess -=
+										feeList.push('TF');
+										valueMinusFees -=
 											(convertedValue / 100)
 											* feePercent;
 									}
 
-									displayValue = `${valueMinusFess} ${assetMetadata.symbol} (min. fee)`;
+									// Deduct raffle (game) fee
+									feePercent = parseInt(game.feePercent);
+									if (feePercent) {
+										feeList.push('RF');
+										valueMinusFees -=
+											(convertedValue / 100)
+											* feePercent;
+									}
+
+									// Display value without fees
+									displayValue = `${valueMinusFees} ${assetMetadata.symbol}`;
+
+									// List of fees deducted
+									if (feeList.length) {
+										displayValue += ' -(' + feeList.join(',') + ')';
+									}
 								}
 							}
 						} else if (pot.assetType == 1) {
