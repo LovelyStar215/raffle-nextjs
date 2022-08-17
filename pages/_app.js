@@ -904,8 +904,8 @@ function MyApp({ Component, pageProps }) {
                     <li>Each raffle can be set up to donate an optional fee (RF) (taken from <strong>P#0</strong>, which is the primary ticket pot), at the end of each game.</li>
                     <li>After a game has started, only new prizes can be added. Nothing else can be changed.</li>
                     <li>A winner is guaranteed at the end of every game!</li>
-                    <li>In community raffles; a fee (TF) ({getTreasuryInformation()}, taken from P#0) is taken at the end of the game, before the optional game fee.</li>
-                    <li>A game can only be ended by its owner, or management staff.</li>
+                    <li>In community raffles; a fee (TF) ({getTreasuryInformation()}, from P#0) is taken at the end of the game, before the optional game fee.</li>
+                    <li>A game can only be ended by its owner, or an address with manager role.</li>
                   </ul>
                   <div className="tip">
                     <p>This user interface is still under development, with the aim to eventually deploy it directly onto blockchain storage, for further decentralisation.</p>
