@@ -97,8 +97,7 @@ const GamePots = ({
 						return (
 							<div className="panel" key={`game-${game.gameNumber}-pot-${key}`}>
 								<div className="items">
-									<div>P#{key}</div>
-									<div>{pot.assetType == 1 ? 'NFT' : 'Token'}</div>
+									<div>P#{key} &ndash; {pot.assetType == 1 ? 'NFT' : 'Token'}</div>
 									<div>
 										<a href={`${deployment.explorerAddressURI}${pot.assetAddress}`}>
 											{displayAddress}

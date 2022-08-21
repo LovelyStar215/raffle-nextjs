@@ -608,14 +608,13 @@ ul {
         .items > div {
           width: 50%;
           @media screen and (min-width: 1200px) {
-            width: 15%;
-            &:nth-child(1n+3) {
-              width: 30%;
-            }
-            &:nth-child(1n+4) {
-              width: 40%;
-              text-align: right;
-            }
+            width: 33.3335%;
+            // &:nth-child(1n+2) {
+            //   width: 28%;
+            // }
+            // &:nth-child(1n+4) {
+            //   text-align: right;
+            // }
           }
         }
       }
