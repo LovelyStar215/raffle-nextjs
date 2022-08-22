@@ -10,7 +10,7 @@ const GameMetrics = ({
 		['ticketCount', 'Ticket count', 'Total number of tickets bought by players'],
 		['maxPlayers', 'Max players', 'Maximum number of players allowed'],
 		['maxTicketsPlayer', 'Max tickets per player', 'Maximum number of tickets, a single player can have'],
-		['feePercent', 'Fee percent', 'The amount in percent, that will be deducted from the ticket prize pot'],
+		['feePercent', 'Raffle fee (RF)', 'The amount in percent, that will be deducted from the ticket prize pot'],
 		['feeAddress', 'Fee address', 'The destination address, where the fee percentage will be sent'],
 		['ownerAddress', 'Owner address', 'The user address, that started this game.'],
 		['winnerAddress', 'Winner address', 'The winner address, that won the game pots.']
