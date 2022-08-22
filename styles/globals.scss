@@ -606,7 +606,13 @@ ul {
       }
       &.pots {
         .items > div {
-          width: 50%;
+          width: 100%;
+          @media screen and (min-width: 600px) {
+            width: 50%;
+            &:last-child {
+              width: 100%;
+            }
+          }
           @media screen and (min-width: 1200px) {
             width: 33.3335%;
             // &:nth-child(1n+2) {
@@ -615,6 +621,13 @@ ul {
             // &:nth-child(1n+4) {
             //   text-align: right;
             // }
+            &:first-child {
+              text-align: left;
+            }
+            &:last-child {
+              text-align: right;
+              width: 33.3335%;
+            }
           }
         }
       }
