@@ -1060,10 +1060,10 @@ function MyApp({ Component, pageProps }) {
                 <h1>Start a raffle</h1>
                 <p>Tip: Copy and paste from a trusted source, then verify using a tool such as &quot;Search/Find&quot; to highlight your pasted values against your source. This will ensure there isn&apos;t any malware on your device, potentialy changing addresses!</p>
                 <h3>Adding additional prizes</h3>
-                <p>Once game has started, you can add (and remove) additional prize pots, such as other tokens, or NFTs</p>
+                <p>Once game has started, you can add (which will be unremovable) additional prize pots, such as other tokens, or NFTs</p>
                 <h3>Remember</h3>
                 <p>Always double check the form values, before starting the game. You can not change these parameters after the game has started.</p>
-                <p>Prefer direct contract interaction? <a href={`${deployment.explorerAddressURI}${deployment.addressContractGameMaster}`}>{deployment.addressContractGameMaster}</a></p>
+                <p>Prefer direct contract interaction? <a href={`${deployment.explorerAddressURI}${deployment.addressContractGameMaster}`}>Contract {deployment.addressContractGameMaster}</a></p>
               </div>
               <div className="md-50">
                 <div className="grid">
@@ -1077,7 +1077,7 @@ function MyApp({ Component, pageProps }) {
                       />
                     </div>
                     <div className="md-50">
-                      <label>Fee address</label>
+                      <label>Fee address (optional)</label>
                       <input
                         ref={startCommunityGameFeeAddress}
                         type="text"
@@ -1097,11 +1097,11 @@ function MyApp({ Component, pageProps }) {
                       />
                     </div>
                     <div className="md-50">
-                      <label>Fee percent</label>
+                      <label>Raffle fee percent (optional)</label>
                       <input
                         ref={startCommunityGameFeePercent}
                         type="text"
-                        defaultValue="10"
+                        defaultValue="5"
                         min="0"
                         max="100"
                       />
