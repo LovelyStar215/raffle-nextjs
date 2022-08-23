@@ -145,6 +145,16 @@ const Game = ({
 		return arr.join(' ');
 	}
 
+	const controlsClasses = () => {
+		let arr = [
+			'controls'
+		];
+		if (game.status === "0")
+			arr.push('hide');
+		
+		return arr.join(' ');
+	};
+
 	const buttonApproveClasses = () => {
 		let arr = [
 			'button'
@@ -209,7 +219,7 @@ const Game = ({
 									game={game}
 									deployment={deployment}
 								/>
-								<div className="controls">
+								<div className={controlsClasses()}>
 									<button
 										disabled={gameHasEnded}
 										className={buttonApproveClasses()}
