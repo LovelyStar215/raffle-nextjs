@@ -53,9 +53,14 @@ export const gameMasterABI = [
       {
         "components": [
           {
-            "internalType": "uint248",
-            "name": "value",
-            "type": "uint248"
+            "internalType": "uint128",
+            "name": "erc20AmountOrId",
+            "type": "uint128"
+          },
+          {
+            "internalType": "uint120",
+            "name": "erc1155Amount",
+            "type": "uint120"
           },
           {
             "internalType": "uint8",
@@ -66,6 +71,11 @@ export const gameMasterABI = [
             "internalType": "address",
             "name": "assetAddress",
             "type": "address"
+          },
+          {
+            "internalType": "bytes",
+            "name": "assetData",
+            "type": "bytes"
           }
         ],
         "indexed": false,
@@ -243,8 +253,7 @@ export const gameMasterABI = [
       }
     ],
     "stateMutability": "view",
-    "type": "function",
-    "constant": true
+    "type": "function"
   },
   {
     "inputs": [],
@@ -257,8 +266,7 @@ export const gameMasterABI = [
       }
     ],
     "stateMutability": "view",
-    "type": "function",
-    "constant": true
+    "type": "function"
   },
   {
     "inputs": [],
@@ -271,8 +279,7 @@ export const gameMasterABI = [
       }
     ],
     "stateMutability": "view",
-    "type": "function",
-    "constant": true
+    "type": "function"
   },
   {
     "inputs": [
@@ -291,8 +298,7 @@ export const gameMasterABI = [
       }
     ],
     "stateMutability": "view",
-    "type": "function",
-    "constant": true
+    "type": "function"
   },
   {
     "inputs": [
@@ -334,8 +340,7 @@ export const gameMasterABI = [
       }
     ],
     "stateMutability": "view",
-    "type": "function",
-    "constant": true
+    "type": "function"
   },
   {
     "inputs": [
@@ -496,8 +501,7 @@ export const gameMasterABI = [
       }
     ],
     "stateMutability": "view",
-    "type": "function",
-    "constant": true
+    "type": "function"
   },
   {
     "inputs": [],
@@ -510,8 +514,7 @@ export const gameMasterABI = [
       }
     ],
     "stateMutability": "view",
-    "type": "function",
-    "constant": true
+    "type": "function"
   },
   {
     "inputs": [],
@@ -524,8 +527,7 @@ export const gameMasterABI = [
       }
     ],
     "stateMutability": "view",
-    "type": "function",
-    "constant": true
+    "type": "function"
   },
   {
     "inputs": [],
@@ -538,8 +540,7 @@ export const gameMasterABI = [
       }
     ],
     "stateMutability": "view",
-    "type": "function",
-    "constant": true
+    "type": "function"
   },
   {
     "inputs": [
@@ -558,8 +559,7 @@ export const gameMasterABI = [
       }
     ],
     "stateMutability": "view",
-    "type": "function",
-    "constant": true
+    "type": "function"
   },
   {
     "inputs": [
@@ -634,8 +634,7 @@ export const gameMasterABI = [
       }
     ],
     "stateMutability": "view",
-    "type": "function",
-    "constant": true
+    "type": "function"
   },
   {
     "inputs": [
@@ -664,14 +663,14 @@ export const gameMasterABI = [
         "type": "uint32"
       },
       {
-        "internalType": "uint248",
-        "name": "_assetAmount",
-        "type": "uint248"
-      },
-      {
         "internalType": "address",
         "name": "_assetAddress",
         "type": "address"
+      },
+      {
+        "internalType": "uint128",
+        "name": "_assetAmount",
+        "type": "uint128"
       }
     ],
     "name": "addGamePotERC20Asset",
@@ -687,14 +686,14 @@ export const gameMasterABI = [
         "type": "uint32"
       },
       {
-        "internalType": "uint248",
-        "name": "_assetIndex",
-        "type": "uint248"
-      },
-      {
         "internalType": "address",
         "name": "_assetAddress",
         "type": "address"
+      },
+      {
+        "internalType": "uint128",
+        "name": "_assetTokenId",
+        "type": "uint128"
       }
     ],
     "name": "addGamePotERC721Asset",
@@ -710,14 +709,24 @@ export const gameMasterABI = [
         "type": "uint32"
       },
       {
-        "internalType": "uint248",
-        "name": "_assetAmount",
-        "type": "uint248"
-      },
-      {
         "internalType": "address",
         "name": "_assetAddress",
         "type": "address"
+      },
+      {
+        "internalType": "uint128",
+        "name": "_assetId",
+        "type": "uint128"
+      },
+      {
+        "internalType": "uint120",
+        "name": "_assetAmount",
+        "type": "uint120"
+      },
+      {
+        "internalType": "bytes",
+        "name": "_assetData",
+        "type": "bytes"
       }
     ],
     "name": "addGamePotERC1155Asset",
@@ -742,8 +751,7 @@ export const gameMasterABI = [
       }
     ],
     "stateMutability": "view",
-    "type": "function",
-    "constant": true
+    "type": "function"
   },
   {
     "inputs": [
@@ -763,9 +771,14 @@ export const gameMasterABI = [
       {
         "components": [
           {
-            "internalType": "uint248",
-            "name": "value",
-            "type": "uint248"
+            "internalType": "uint128",
+            "name": "erc20AmountOrId",
+            "type": "uint128"
+          },
+          {
+            "internalType": "uint120",
+            "name": "erc1155Amount",
+            "type": "uint120"
           },
           {
             "internalType": "uint8",
@@ -776,6 +789,11 @@ export const gameMasterABI = [
             "internalType": "address",
             "name": "assetAddress",
             "type": "address"
+          },
+          {
+            "internalType": "bytes",
+            "name": "assetData",
+            "type": "bytes"
           }
         ],
         "internalType": "struct GameMaster.GamePot[]",
@@ -834,8 +852,7 @@ export const gameMasterABI = [
       }
     ],
     "stateMutability": "view",
-    "type": "function",
-    "constant": true
+    "type": "function"
   },
   {
     "inputs": [
@@ -859,8 +876,7 @@ export const gameMasterABI = [
       }
     ],
     "stateMutability": "view",
-    "type": "function",
-    "constant": true
+    "type": "function"
   },
   {
     "inputs": [
