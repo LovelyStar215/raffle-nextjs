@@ -24,7 +24,7 @@ const GamePots = ({
 				<div>
 					{game.pot.map((pot, key) => {
 						// console.log(pot);
-						let displayValue = pot.value;
+						let displayValue = pot.erc20AmountOrId;
 
 						let displayAddress =
 							pot?.assetAddress?.slice(0,6)
@@ -34,12 +34,12 @@ const GamePots = ({
 						if (pot.assetType == 0) {
 							let assetMetadata = getERC20Token(pot.assetAddress);
 							if (assetMetadata) {
-								// console.log('gamePots-getERC20Token');
-								// console.log(token);
+								console.log('gamePots-getERC20Token');
+								console.log(pot.erc20AmountOrId);
 								let convertedValue =
 									assetMetadata.decimals === '18'
-									? Web3.utils.fromWei(pot.value)
-									: pot.value; // game._decimals
+									? Web3.utils.fromWei(pot.erc20AmountOrId)
+									: pot.erc20AmountOrId; // game._decimals
 								
 								displayValue = convertedValue;
 								
@@ -79,14 +79,14 @@ const GamePots = ({
 								}
 							}
 						} else if (pot.assetType == 1) {
-							displayValue = `#${pot.value}`
+							displayValue = `#${pot.erc20AmountOrId}`
 							
 							// let assetMetadata = getERC721Token(pot.assetAddress);
 							// if (assetMetadata) {
 							// 	displayValue += ' ' + assetMetadata.symbol;
 							// }
 						} else if (pot.assetType == 2) {
-							displayValue = `#${pot.value}`
+							displayValue = `#${pot.erc1155Amount}`
 							
 							// let assetMetadata = getERC721Token(pot.assetAddress);
 							// if (assetMetadata) {
