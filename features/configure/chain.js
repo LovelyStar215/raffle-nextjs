@@ -40,16 +40,16 @@ export const getChainDeployment = (_chainId) => {
 				explorerURI: 'https://goerli.etherscan.io/',
 				explorerAddressURI: 'https://goerli.etherscan.io/address/'
 			};
-		// case 11155111:
-		// 	return {
-		// 		status: -1,
-		// 		name: 'Sepolia',
-		// 		addressContractGameMaster: '',
-		// 		addressContractGameTrophy: '',
-		// 		addressContractGameToken: '',
-		// 		explorerURI: 'https://sepolia.etherscan.io/',
-		// 		explorerAddressURI: 'https://sepolia.etherscan.io/address/'
-		// 	};
+		case 11155111:
+			return {
+				status: -1,
+				name: 'Sepolia',
+				addressContractGameMaster: '0xac6afffe6a2b4f99f29578ae725322faea590dd7',
+				addressContractGameTrophy: '',
+				addressContractGameToken: '0x82e21cb34adcdf71c717488617695a3f839a6bde',
+				explorerURI: 'https://sepolia.etherscan.io/',
+				explorerAddressURI: 'https://sepolia.etherscan.io/address/'
+			};
 		// case 4:
 		// 	return {
 		// 		status: -1,
