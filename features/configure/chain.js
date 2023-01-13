@@ -30,16 +30,36 @@ export const getChainDeployment = (_chainId) => {
 		// 		explorerURI: 'https://ftmscan.com/',
 		// 		explorerAddressURI: 'https://ftmscan.com/address/'
 		// 	};
-		case 4:
+		case 5:
 			return {
 				status: -1,
-				name: 'Rinkeby',
-				addressContractGameMaster: '0x35242de9626c603ec5caff32c185550cd4cd40b4',
+				name: 'Goerli',
+				addressContractGameMaster: '0xbf92a8d662dadbc8bcd8b96545b932a8f79f12b3',
 				addressContractGameTrophy: '',
-				addressContractGameToken: '0xbf92a8d662dadbc8bcd8b96545b932a8f79f12b3',
-				explorerURI: 'https://rinkeby.etherscan.io/',
-				explorerAddressURI: 'https://rinkeby.etherscan.io/address/'
+				addressContractGameToken: '0x3ef46b50be7b962c4ffa5c708c67969e20834574',
+				explorerURI: 'https://goerli.etherscan.io/',
+				explorerAddressURI: 'https://goerli.etherscan.io/address/'
 			};
+		// case 11155111:
+		// 	return {
+		// 		status: -1,
+		// 		name: 'Sepolia',
+		// 		addressContractGameMaster: '',
+		// 		addressContractGameTrophy: '',
+		// 		addressContractGameToken: '',
+		// 		explorerURI: 'https://sepolia.etherscan.io/',
+		// 		explorerAddressURI: 'https://sepolia.etherscan.io/address/'
+		// 	};
+		// case 4:
+		// 	return {
+		// 		status: -1,
+		// 		name: 'Rinkeby',
+		// 		addressContractGameMaster: '0x35242de9626c603ec5caff32c185550cd4cd40b4',
+		// 		addressContractGameTrophy: '',
+		// 		addressContractGameToken: '0xbf92a8d662dadbc8bcd8b96545b932a8f79f12b3',
+		// 		explorerURI: 'https://rinkeby.etherscan.io/',
+		// 		explorerAddressURI: 'https://rinkeby.etherscan.io/address/'
+		// 	};
 		case 1337:
 			return {
 				status: -2,
