@@ -180,7 +180,7 @@ const Game = ({
 		if (gameTokenMetadata) {
 			price =
 				gameTokenMetadata.decimals === '18'
-				? Web3.utils.fromWei(game.ticketPrice)
+				? Web3.utils.fromWei(Web3.utils.toBN(game.ticketPrice))
 				: game.ticketPrice;
 
 			if (gameTokenMetadata.symbol)

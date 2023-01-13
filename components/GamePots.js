@@ -34,11 +34,11 @@ const GamePots = ({
 						if (pot.assetType == 0) {
 							let assetMetadata = getERC20Token(pot.assetAddress);
 							if (assetMetadata) {
-								console.log('gamePots-getERC20Token');
-								console.log(pot.erc20AmountOrId);
+								// console.log('gamePots-getERC20Token');
+								// console.log(pot.erc20AmountOrId);
 								let convertedValue =
 									assetMetadata.decimals === '18'
-									? Web3.utils.fromWei(pot.erc20AmountOrId)
+									? Web3.utils.fromWei(Web3.utils.toBN(pot.erc20AmountOrId))
 									: pot.erc20AmountOrId; // game._decimals
 								
 								displayValue = convertedValue;
