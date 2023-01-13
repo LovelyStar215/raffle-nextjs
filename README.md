@@ -30,5 +30,5 @@ aws s3 rm --recursive s3://${BUCKET}
 aws s3 sync ./out s3://${BUCKET}
 ```
 
-### Rinkey based test environment
-If you'd like to trial the UI on a RInkeby deployment, try the following link https://caedmon.s3.eu-west-1.amazonaws.com/index.html
+### Goerli test deployment
+If you'd like to trial the UI on a Goerli deployment, try the following link https://raffle-nextjs-testnet.s3.eu-west-1.amazonaws.com/index.html
