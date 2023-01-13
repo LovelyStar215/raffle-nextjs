@@ -642,8 +642,7 @@ function MyApp({ Component, pageProps }) {
         console.log(error);
         setNotification(
           'game.error',
-          'Unable to start',
-          _gameNumber
+          'Unable to start'
         );
       });
 
